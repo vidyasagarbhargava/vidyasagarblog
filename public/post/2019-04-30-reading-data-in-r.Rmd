@@ -1,0 +1,67 @@
+---
+title: Reading Data in R
+author: Vidyasagar Bhargava
+date: '2019-04-30'
+slug: reading-data-in-r
+categories:
+  - R
+tags:
+  - R
+  - Data
+keywords:
+  - tech
+---
+
+<!--more-->
+
+
+First step of any data science task is to read the data in R. 
+Lets start with most famous file format i.e. csv format. We will read upto 2.5 gb of csv file. 
+
+We will compare following packages and see who is the  winner  
+
+1.baseR  
+2.data.table  
+3.vroom  
+4.fst  
+5.readr  
+6.feather  
+7.ff  
+
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = TRUE)
+library(data.table)
+start_time <- Sys.time()
+df <- fread("D:/bigfile.csv")
+end_time <- Sys.time()
+end_time-start_time
+
+```
+
+
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = TRUE)
+start_time <- Sys.time()
+df <- read.csv("D:/bigfile.csv")
+end_time <- Sys.time()
+end_time-start_time
+```
+
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, error = TRUE)
+library(readr)
+start_time <- Sys.time()
+df <- read_csv("D:/bigfile.csv")
+end_time <- Sys.time()
+end_time-start_time
+```
+
+
+```{r echo=FALSE}
+blogdown::shortcode('tweet', '989470885475008512')
+```
+
+

@@ -1,0 +1,8 @@
+/cn/feed/     /cn/index.xml
+/en/feed/     /en/index.xml
+/xran/*       https://xran.vidyasagar.rbind.io/:splat
+/r/*/index.htm    https://r.vidyasagar.rbind.io/:splat
+/r/*              https://r.vidyasagar.rbind.io/:splat
+https://vidyasagar.netlify.com/*  https://vidyasagar.rbind.io/:splat  301!
+http://vidyasagar.netlify.com/*   https://vidyasagar.rbind.io/:splat  301!
+http://vidyasagar.rbind.io/*    https://vidyasagar.rbind.io/:splat  301!
