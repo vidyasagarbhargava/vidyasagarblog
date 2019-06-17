@@ -1,0 +1,1907 @@
+---
+title: Tidyverse Style titanic kaggle competition
+author: Vidyasagaar Bhargava
+date: '2019-06-03'
+slug: tidyverse-style-titanic-kaggle-competition
+categories:
+  - R
+  - Classification
+  - Machine learning
+tags:
+  - R
+  - Classification
+  - Tidyverse
+  - Tidymodels
+keywords:
+  - tech
+#thumbnailImagePosition: top
+#thumbnailImage: /img/titanic.gif
+---
+
+
+
+<!--more-->
+<p>This tutorial is an effort of showing a new approach of modelling in R using tidyverse and tidymodels. In this tutorial we are using titanic dataset from <a href="https://www.kaggle.com/">Kaggle</a> competition.</p>
+<p><br>
+<strong>Modelling Process and packages involves :-</strong></p>
+<p>In R we can use following tidyverse packages to make machine learning model process streamline.</p>
+<ol style="list-style-type: decimal">
+<li>Data import/export :- <a href="https://cran.r-project.org/web/packages/readr/index.html">readr</a><br />
+</li>
+<li>Exploratory Data Analysis (Data cleaning and exploration and visualization) : <a href="https://cran.r-project.org/web/packages/tidyverse/index.html">tidyverse</a><br />
+</li>
+<li>Resampling (e.g. Bootstrap,Cross Validation) and Parameter tuning :- <a href="https://cran.r-project.org/web/packages/rsample/index.html">rsample</a><br />
+</li>
+<li>Preprocessing and feature engineering :- <a href="https://cran.r-project.org/web/packages/recipes/index.html">recipes</a><br />
+</li>
+<li>Model building :- <a href="https://cran.r-project.org/web/packages/parsnip/index.html">parsnip</a><br />
+</li>
+<li>Model evaluation :- <a href="https://cran.r-project.org/web/packages/yardstick/index.html">yardstick</a></li>
+</ol>
+<hr />
+<div id="table-of-contents--" class="section level3">
+<h3>Table of Contents :-</h3>
+<ol style="list-style-type: decimal">
+<li><p><a href="#understanding-the-business-problem"><strong>Understanding Business Problem</strong></a></p></li>
+<li><p><a href="#hypothesis-generation"><strong>Hypothesis Generation</strong></a></p></li>
+<li><p><a href="#setup-and-data-import"><strong>Setup and Data import</strong></a></p>
+<ul>
+<li><a href="#loading-libraries-and-setting-up-path">Loading libraries and Setting up path</a><br />
+</li>
+<li><a href="#loading-the-datasets">Loading the datasets</a><br />
+</li>
+<li><a href="#setting-theme-for-visualization">Setting theme for visualization</a></li>
+</ul></li>
+<li><p><a href="#exploratory-data-analysis"><strong>Exploratory Data Analysis</strong></a></p>
+<ul>
+<li><a href="#variable-identification">Variable Identification</a><br />
+</li>
+<li><a href="#univariate-analysis">Univariate Analysis</a><br />
+</li>
+<li><a href="#bivariate-analysis">Bi-variate Analysis</a></li>
+<li><a href="#multivariate-analysis">Multi-variate Analysis</a></li>
+<li><a href="#missing-value-treatment">Missing Value Treatment</a><br />
+</li>
+<li><a href="#outlier-treatment">Outlier Treatment</a></li>
+</ul></li>
+<li><p><a href="#feature-engineering"><strong>Feature Engineering</strong></a></p>
+<ul>
+<li><a href="#feature-transformation">Feature Transformation</a><br />
+</li>
+<li><a href="#feature-creation">Feature Creation</a><br />
+</li>
+<li><a href="#feature-selection">Feature Selection</a></li>
+</ul></li>
+<li><p><a href="#model-building"><strong>Model Building</strong></a></p>
+<ul>
+<li><a href="#splitting-datasets">Splitting Datasets</a><br />
+</li>
+<li><a href="#training-base-models">Training Base models(Logistic, Decision Tree, SVM)</a><br />
+</li>
+<li><a href="#model-evaluation">Model Evaluation</a></li>
+</ul></li>
+</ol>
+<hr />
+</div>
+<div id="titanic-machine-learning-from-disaster" class="section level2">
+<h2>Titanic: Machine Learning from Disaster</h2>
+<hr />
+<div id="understanding-business-problem" class="section level3">
+<h3><a id="understanding-the-business-problem"></a>1. Understanding Business Problem</h3>
+<p>The very step in a machine learning project to understand the business problem we are trying to solve.Get the domain knowledge and look for the metrics which can help in solving that problem.</p>
+<p><em>Consider a business problem of measuring the customer loyalty since it is not measurable quantity we can look for metric like <a href="https://en.wikipedia.org/wiki/Net_Promoter">Net Promoter Score</a> which captures this.</em></p>
+<p>In our problem we need to find survival chances of an individual on the titanic. The feature i.e. Survived tells us whether the particular individual survived or not.Its very simple to determine in this case since its toy dataset problem. However real world business problems are more complex and need more brainstorming session to convert a business problem into analytical problem.</p>
+</div>
+<div id="hypothesis-generation" class="section level3">
+<h3><a id="hypothesis-generation"></a>2. Hypothesis Generation</h3>
+<p>During hypothesis generation we create a set of features which could impact the target variable.We should do this before getting the data so as to avoid the biased thoughts.
+This step also help in creating new features.</p>
+<p>Some of factor which I think of that directly influence the target variable as i know this disaster is famous for saving women and children first :-</p>
+<ul>
+<li>Sex<br />
+</li>
+<li>Age<br />
+</li>
+<li>Fare<br />
+</li>
+<li>Ticket Class<br />
+</li>
+<li>Travelling with or without family</li>
+</ul>
+</div>
+<div id="setup-and-data-import" class="section level3">
+<h3><a id="setup-and-data-import"></a>3. Setup and Data import</h3>
+<p>Next thing is to setup your path to the location where data is stored and then import dataset into R. We will use readr package of
+tidyverse family to read data into R. There are some other packages as well which read csv data faster than readr package. Some of them
+are:- <a href="https://cran.r-project.org/web/packages/data.table/">data.table</a> and <a href="https://cran.r-project.org/web/packages/vroom/index.html">Vroom</a></p>
+<p>Since we are not dealing with very huge amount of data we don’t require to load those package for this tutorial. But when size of csv goes greater than 2 gb or so you should refer vroom and data.table.</p>
+<p><a id="loading-libraries-and-setting-up-path"></a><strong>Loading libraries and Setting up path</strong></p>
+<pre class="r"><code>setwd(&quot;D:/kaggle/titanic&quot;)
+library(tidymodels) #for modelling
+library(tidyverse)  # for data cleaning and processing
+library(gridExtra)  # for plotting multiple graphs 
+library(mice)       # for missing value treatment
+library(moments)    # for calculating skewness and kurtosis
+library(outliers)   # for outlier detection
+library(gganimate)  # for animation</code></pre>
+<p><a id = "loading-the-datasets"></a><strong>Loading the dataset</strong></p>
+<p>You can download the dataset from <a href="https://www.kaggle.com/c/titanic/data">here</a>. I stored the dataset in my D drive in titanic folder which is inside the kaggle folder and hence provided
+that path for data reading.</p>
+<pre class="r"><code>train &lt;- readr::read_csv(&quot;train.csv&quot;)
+test &lt;- readr::read_csv(&quot;test.csv&quot;) </code></pre>
+<p><a id = "setting-theme-for-visualization"></a><strong>Setting theme for visualization</strong></p>
+<pre class="r"><code>mytheme &lt;- function(...){
+                 theme(legend.position = &quot;bottom&quot;, 
+                 legend.text = element_text(size = 8),
+                 panel.background = element_rect(fill = &quot;white&quot;),
+                 strip.background = element_rect(fill = &quot;white&quot;),
+                 axis.line.x = element_line(color=&quot;black&quot;),
+                 axis.line.y = element_line(color=&quot;black&quot;))
+}</code></pre>
+<hr />
+</div>
+<div id="exploratory-data-analysis" class="section level3">
+<h3><a id = "exploratory-data-analysis"></a>4. Exploratory Data Analysis</h3>
+<p>Exploratory Data Analysis in short known as EDA is way of summarizing, interpreting and visualizing the information hidden in rows and column format. Simply EDA is the key to getting insights from data.</p>
+<blockquote>
+<p>Why EDA is important ?</p>
+</blockquote>
+<p>Usually we start any data science project with understanding the business problem and then we genrate hypothesis. During hypothesis generation we look for factors which influence our dependent variable. EDA helps in confirming and validating those hypothesis.</p>
+<p>It helps to find out unexpected pattern in data which must be taken into account, thereby suggesting some changes in planned analysis.</p>
+<p>Deliver data driven insights to business stakeholders by confirming they are asking the right questions and not biasing the investigation with their assumptions.</p>
+<p><em>Practitioners say a good data exploration strategy can solve even complicated problems in a few hours.</em><br />
+<br></p>
+<p><a id = "variable-identification"></a> <strong>Variable Identification</strong><br />
+<br></p>
+<p>The first step of EDA is Variable identification here we identify Predictor (Input) and Target (Output) Variables. Also we identify
+datatype and category of the variables.</p>
+<pre class="r"><code>#Check the dimension of test and train dataset
+cat(&quot;There are &quot;, dim(train)[1], &quot;rows and &quot;,dim(train)[2],&quot;columns in train dataset&quot;)</code></pre>
+<pre><code>## There are  891 rows and  12 columns in train dataset</code></pre>
+<pre class="r"><code>cat(&quot;There are &quot;, dim(test)[1], &quot;rows and &quot;,dim(test)[2],&quot;columns in test dataset&quot;)</code></pre>
+<pre><code>## There are  418 rows and  11 columns in test dataset</code></pre>
+<p>Lets see variables in train set and thier datatype</p>
+<pre class="r"><code>train %&gt;% 
+  glimpse()</code></pre>
+<pre><code>## Observations: 891
+## Variables: 12
+## $ PassengerId &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,...
+## $ Survived    &lt;dbl&gt; 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0,...
+## $ Pclass      &lt;dbl&gt; 3, 1, 3, 1, 3, 3, 1, 3, 3, 2, 3, 1, 3, 3, 3, 2, 3,...
+## $ Name        &lt;chr&gt; &quot;Braund, Mr. Owen Harris&quot;, &quot;Cumings, Mrs. John Bra...
+## $ Sex         &lt;chr&gt; &quot;male&quot;, &quot;female&quot;, &quot;female&quot;, &quot;female&quot;, &quot;male&quot;, &quot;mal...
+## $ Age         &lt;dbl&gt; 22, 38, 26, 35, 35, NA, 54, 2, 27, 14, 4, 58, 20, ...
+## $ SibSp       &lt;dbl&gt; 1, 1, 0, 1, 0, 0, 0, 3, 0, 1, 1, 0, 0, 1, 0, 0, 4,...
+## $ Parch       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 1, 0, 0, 5, 0, 0, 1,...
+## $ Ticket      &lt;chr&gt; &quot;A/5 21171&quot;, &quot;PC 17599&quot;, &quot;STON/O2. 3101282&quot;, &quot;1138...
+## $ Fare        &lt;dbl&gt; 7.2500, 71.2833, 7.9250, 53.1000, 8.0500, 8.4583, ...
+## $ Cabin       &lt;chr&gt; NA, &quot;C85&quot;, NA, &quot;C123&quot;, NA, NA, &quot;E46&quot;, NA, NA, NA, ...
+## $ Embarked    &lt;chr&gt; &quot;S&quot;, &quot;C&quot;, &quot;S&quot;, &quot;S&quot;, &quot;S&quot;, &quot;Q&quot;, &quot;S&quot;, &quot;S&quot;, &quot;S&quot;, &quot;C&quot;, ...</code></pre>
+<p>Now Lets see variable in test set and their datatypes</p>
+<pre class="r"><code>test %&gt;% 
+  glimpse()</code></pre>
+<pre><code>## Observations: 418
+## Variables: 11
+## $ PassengerId &lt;dbl&gt; 892, 893, 894, 895, 896, 897, 898, 899, 900, 901, ...
+## $ Pclass      &lt;dbl&gt; 3, 3, 2, 3, 3, 3, 3, 2, 3, 3, 3, 1, 1, 2, 1, 2, 2,...
+## $ Name        &lt;chr&gt; &quot;Kelly, Mr. James&quot;, &quot;Wilkes, Mrs. James (Ellen Nee...
+## $ Sex         &lt;chr&gt; &quot;male&quot;, &quot;female&quot;, &quot;male&quot;, &quot;male&quot;, &quot;female&quot;, &quot;male&quot;...
+## $ Age         &lt;dbl&gt; 34.5, 47.0, 62.0, 27.0, 22.0, 14.0, 30.0, 26.0, 18...
+## $ SibSp       &lt;dbl&gt; 0, 1, 0, 0, 1, 0, 0, 1, 0, 2, 0, 0, 1, 1, 1, 1, 0,...
+## $ Parch       &lt;dbl&gt; 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ Ticket      &lt;chr&gt; &quot;330911&quot;, &quot;363272&quot;, &quot;240276&quot;, &quot;315154&quot;, &quot;3101298&quot;,...
+## $ Fare        &lt;dbl&gt; 7.8292, 7.0000, 9.6875, 8.6625, 12.2875, 9.2250, 7...
+## $ Cabin       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, &quot;B...
+## $ Embarked    &lt;chr&gt; &quot;Q&quot;, &quot;S&quot;, &quot;Q&quot;, &quot;S&quot;, &quot;S&quot;, &quot;S&quot;, &quot;Q&quot;, &quot;S&quot;, &quot;C&quot;, &quot;S&quot;, ...</code></pre>
+<p>For exploratory data analysis and feature engineering we need complete dataset. So lets combined the train and test dataset</p>
+<pre class="r"><code>df &lt;- bind_rows(train, test)</code></pre>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observations :-</p>
+<ul>
+<li>Variable not present in our test dataset is Target variable i.e. Survived. Whether the passenger survived or not.<br />
+</li>
+<li>All Other Variables are predictor Variables.<br />
+</li>
+<li>Here the problem is a classification problem since we have to predicted whether the passenger will survive or not.</li>
+</ul>
+</div>
+<p><br><br></p>
+<p><a id = "univariate-analysis"></a> <strong>Univariate Analysis</strong><br />
+<br></p>
+<p>In univariate analysis stage we explore each variables one by one. Now the method to do univariate analysis depend on variable type.</p>
+<ul>
+<li><strong>Continuos Variable </strong><br />
+</li>
+<li><strong>Categorical Variable</strong></li>
+</ul>
+<p>Before that lets first convert Pclass, Embarked, Survived and Sex into factors this will better represent different levels and drop passengerid as it is not required.</p>
+<pre class="r"><code>df %&gt;% 
+  mutate(Pclass = factor(Pclass),
+         Embarked = factor(Embarked),
+         Survived = factor(Survived),
+         Sex = factor(Sex))-&gt;  df
+df$PassengerId &lt;- NULL
+df %&gt;% glimpse()</code></pre>
+<pre><code>## Observations: 1,309
+## Variables: 11
+## $ Survived &lt;fct&gt; 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1,...
+## $ Pclass   &lt;fct&gt; 3, 1, 3, 1, 3, 3, 1, 3, 3, 2, 3, 1, 3, 3, 3, 2, 3, 2,...
+## $ Name     &lt;chr&gt; &quot;Braund, Mr. Owen Harris&quot;, &quot;Cumings, Mrs. John Bradle...
+## $ Sex      &lt;fct&gt; male, female, female, female, male, male, male, male,...
+## $ Age      &lt;dbl&gt; 22, 38, 26, 35, 35, NA, 54, 2, 27, 14, 4, 58, 20, 39,...
+## $ SibSp    &lt;dbl&gt; 1, 1, 0, 1, 0, 0, 0, 3, 0, 1, 1, 0, 0, 1, 0, 0, 4, 0,...
+## $ Parch    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 1, 0, 0, 5, 0, 0, 1, 0,...
+## $ Ticket   &lt;chr&gt; &quot;A/5 21171&quot;, &quot;PC 17599&quot;, &quot;STON/O2. 3101282&quot;, &quot;113803&quot;...
+## $ Fare     &lt;dbl&gt; 7.2500, 71.2833, 7.9250, 53.1000, 8.0500, 8.4583, 51....
+## $ Cabin    &lt;chr&gt; NA, &quot;C85&quot;, NA, &quot;C123&quot;, NA, NA, &quot;E46&quot;, NA, NA, NA, &quot;G6...
+## $ Embarked &lt;fct&gt; S, C, S, S, S, Q, S, S, S, C, S, S, S, S, S, S, Q, S,...</code></pre>
+<p><br></p>
+<p><strong>Univariate Analysis of Continuos variable</strong></p>
+<p>Methods used in univariate analysis of continous variable are :-</p>
+<ol style="list-style-type: decimal">
+<li>Central Tendency -&gt; What are the most typical values ? (Mean Median Mode Min and Max)<br />
+</li>
+<li>Spread or dispersion -&gt; How do the values vary? (Range Quartile IQR Variance Std.Deviation )<br />
+</li>
+<li>Shape -&gt; To check the values are symmetrically or assymetrically distributed(Skewness and Kurtosis)<br />
+</li>
+<li>Outliers : To check abnormalities in the data<br />
+</li>
+<li>Visualization Methods</li>
+</ol>
+<p><br></p>
+<pre class="r"><code>#Selecting only continuous variables 
+num_vars &lt;- df %&gt;% 
+  select_if(is.numeric)
+num_vars %&gt;% glimpse()</code></pre>
+<pre><code>## Observations: 1,309
+## Variables: 4
+## $ Age   &lt;dbl&gt; 22, 38, 26, 35, 35, NA, 54, 2, 27, 14, 4, 58, 20, 39, 14...
+## $ SibSp &lt;dbl&gt; 1, 1, 0, 1, 0, 0, 0, 3, 0, 1, 1, 0, 0, 1, 0, 0, 4, 0, 1,...
+## $ Parch &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 1, 0, 0, 5, 0, 0, 1, 0, 0,...
+## $ Fare  &lt;dbl&gt; 7.2500, 71.2833, 7.9250, 53.1000, 8.0500, 8.4583, 51.862...</code></pre>
+<p><strong>Central Tendency</strong></p>
+<p>One short way to get the min, mean, median, max and quantiles is using summary function from base package.</p>
+<pre class="r"><code>summary(num_vars)</code></pre>
+<pre><code>##       Age            SibSp            Parch            Fare        
+##  Min.   : 0.17   Min.   :0.0000   Min.   :0.000   Min.   :  0.000  
+##  1st Qu.:21.00   1st Qu.:0.0000   1st Qu.:0.000   1st Qu.:  7.896  
+##  Median :28.00   Median :0.0000   Median :0.000   Median : 14.454  
+##  Mean   :29.88   Mean   :0.4989   Mean   :0.385   Mean   : 33.295  
+##  3rd Qu.:39.00   3rd Qu.:1.0000   3rd Qu.:0.000   3rd Qu.: 31.275  
+##  Max.   :80.00   Max.   :8.0000   Max.   :9.000   Max.   :512.329  
+##  NA&#39;s   :263                                      NA&#39;s   :1</code></pre>
+<p><em>summary functions tells us about the central tendency of the variable. However if you want more details summary of variable please</em>
+<em>check out describe function from <a href="https://cran.r-project.org/web/packages/Hmisc/index.html">Hmisc</a> package. or <a href="https://cran.r-project.org/web/packages/psych/index.html">Psych</a></em> .<em>Also <a href="https://cran.r-project.org/web/packages/skimr/vignettes/Using_skimr.html">skimr</a> package is worth checking out.</em></p>
+<p>Unfortunately there is not a built in function to compute mode of a variable.</p>
+<p>However we can create a function that takes the vector as an input and gives the mode value as an output:</p>
+<pre class="r"><code>#Showing as an example
+get_mode &lt;- function(v) {
+        unique_value &lt;- unique(v)
+        unique_value[which.max(tabulate(match(v, unique_value)))]
+}
+get_mode(num_vars$Fare)</code></pre>
+<pre><code>## [1] 8.05</code></pre>
+<p><br></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observations from Central Tendency :-</p>
+<ul>
+<li>For Fare mean(33.295) is higher than median(14.454). This shows that Fares were skewed more towards lower fares, as most of the people were on the 3rd Class.<br />
+</li>
+<li>For Age mean (29.88) is almost equal to median(28.00). This shows that data is evenly distributed on the right and left side of the median.<br />
+</li>
+<li>For SibSp, the mean is (0.4989) is higher than the median(0.0000). The skew is to the left as many passengers were travelling without a spouse or sibling. Almost the same observation can be made for Parch as many passengers did not have a parent or child onboard.</li>
+</ul>
+</div>
+<p><br></p>
+<p><strong>Spread</strong></p>
+<ul>
+<li>Range :- Provide measure of variability<br />
+</li>
+<li>Percentile :- provide an understanding of divisions of the data<br />
+</li>
+<li>Variance :- to summarize variability</li>
+</ul>
+<p>Range</p>
+<pre class="r"><code>num_vars %&gt;% 
+  map(~range(., na.rm = TRUE))</code></pre>
+<pre><code>## $Age
+## [1]  0.17 80.00
+## 
+## $SibSp
+## [1] 0 8
+## 
+## $Parch
+## [1] 0 9
+## 
+## $Fare
+## [1]   0.0000 512.3292</code></pre>
+<p><br></p>
+<p><strong>Percentile</strong> :-</p>
+<pre class="r"><code>num_vars %&gt;% 
+  map(~quantile(., na.rm = TRUE))</code></pre>
+<pre><code>## $Age
+##    0%   25%   50%   75%  100% 
+##  0.17 21.00 28.00 39.00 80.00 
+## 
+## $SibSp
+##   0%  25%  50%  75% 100% 
+##    0    0    0    1    8 
+## 
+## $Parch
+##   0%  25%  50%  75% 100% 
+##    0    0    0    0    9 
+## 
+## $Fare
+##       0%      25%      50%      75%     100% 
+##   0.0000   7.8958  14.4542  31.2750 512.3292</code></pre>
+<p><em>The nth percentile of an observation variable is the value that cuts off the first n percent of the data values when it is sorted in ascending order.</em></p>
+<p><br></p>
+<p><strong>IQR</strong> :-</p>
+<pre class="r"><code>num_vars %&gt;% 
+  map(~IQR(., na.rm = TRUE))</code></pre>
+<pre><code>## $Age
+## [1] 18
+## 
+## $SibSp
+## [1] 1
+## 
+## $Parch
+## [1] 0
+## 
+## $Fare
+## [1] 23.3792</code></pre>
+<p><em>The interquartile range of an observation variable is the difference of its upper and lower quartiles. It is a measure of how far apart the middle portion of data spreads in value.</em></p>
+<p><br></p>
+<p><strong>Variance</strong></p>
+<p>Variance is average of the squared differences from the mean.</p>
+<pre class="r"><code>num_vars %&gt;% 
+  map(~var(., na.rm = TRUE))</code></pre>
+<pre><code>## $Age
+## [1] 207.7488
+## 
+## $SibSp
+## [1] 1.085052
+## 
+## $Parch
+## [1] 0.7491946
+## 
+## $Fare
+## [1] 2678.96</code></pre>
+<p><br></p>
+<p><strong>Standard Deviation</strong></p>
+<p>The standard deviation is a measure of how spread out values are.</p>
+<pre class="r"><code>num_vars %&gt;% 
+  map(~sd(., na.rm = TRUE))</code></pre>
+<pre><code>## $Age
+## [1] 14.41349
+## 
+## $SibSp
+## [1] 1.041658
+## 
+## $Parch
+## [1] 0.8655603
+## 
+## $Fare
+## [1] 51.75867</code></pre>
+<p><br>
+<strong>Shape</strong></p>
+<ul>
+<li>Skewness :- Skewness is a measure of symmetry for a distribution<br />
+</li>
+<li>Kurtosis :- Kurtosis is a measure of peakedness for a distribution</li>
+</ul>
+<p><br></p>
+<p><strong>Skewness</strong> :-</p>
+<p>Negative values represent a left-skewed distribution where there are more extreme values to the left causing the mean to be less than the median. Positive values represent a right-skewed distribution where there are more extreme values to the right causing the mean to be more than the median.</p>
+<blockquote>
+<p>A symmetrical distribution has a skewness of zero</p>
+</blockquote>
+<p>If the skewness is greater than 1.0 (or less than -1.0), the skewness is substantial and the distribution is far from symmetrical.</p>
+<pre class="r"><code>num_vars %&gt;% 
+  map_dbl(~skewness(.,na.rm = TRUE))</code></pre>
+<pre><code>##       Age     SibSp     Parch      Fare 
+## 0.4070897 3.8398138 3.6648724 4.3626987</code></pre>
+<p><br></p>
+<p><strong>Kurtosis</strong> :-</p>
+<p>Negative values indicate a flat (platykurtic) distribution, positive values indicate a peaked (leptokurtic) distribution, and a near-zero value indicates a normal (mesokurtic) distribution.</p>
+<blockquote>
+<p>Kurtosis basically tells where does your variance comes from ?</p>
+</blockquote>
+<p>If your data is not peaky, the variance is distributed throughout, if your data is peaky, you have little variance close to the “center” and the origin of the variance is from the “sides” or what we call tails.</p>
+<pre class="r"><code>num_vars %&gt;% 
+  map_dbl(~kurtosis(.,na.rm = TRUE))</code></pre>
+<pre><code>##       Age     SibSp     Parch      Fare 
+##  3.140515 22.962194 24.454306 29.920195</code></pre>
+<p><br></p>
+<p><strong>Outliers </strong></p>
+<p>An outlier is an observation that is numerically distant from the rest of the data.<br />
+Outlier can be of two types: Univariate and Multivariate.</p>
+<p>To detect outliers :-</p>
+<ul>
+<li>Any value, which is beyond the range of -1.5 x IQR to 1.5 x IQR<br />
+</li>
+<li>Any value which out of range of 5th and 95th percentile can be considered as outlier<br />
+</li>
+<li>Data points, three or more standard deviation away from mean are considered outlier<br />
+</li>
+<li>Bivariate and multivariate outliers are typically measured using either an index of influence or leverage, or distance. Popular indices such as Mahalanobis’ distance and Cook’s D are frequently used to detect outliers.</li>
+</ul>
+<p>More about outliers we will see in outlier treatment section.<br />
+<br></p>
+</div>
+<div id="visualizing-continuous-variable" class="section level3">
+<h3>Visualizing continuous Variable</h3>
+<p>Visualization Age with different plots</p>
+<ul>
+<li><strong>Density Plots</strong><br />
+</li>
+<li><strong>Boxplots</strong></li>
+</ul>
+<blockquote>
+<p>Density plots are effective way to visualize distribution of variable.</p>
+</blockquote>
+<p>Density plot can be use to look for :-</p>
+<ul>
+<li>Skewness<br />
+</li>
+<li>Outliers<br />
+</li>
+<li>Data that is not normally distributed<br />
+</li>
+<li>Other unusual properties</li>
+</ul>
+<pre class="r"><code>num_vars %&gt;% 
+  gather(&quot;variable&quot;, &quot;value&quot;, 1:4) %&gt;% 
+  ggplot(aes(x= value, fill = variable))+
+  geom_density(alpha = 0.5)+
+  facet_wrap(~variable, scales = &quot;free&quot;)+
+  mytheme()+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><br></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observation from Density plots :-</p>
+<ul>
+<li>Age has unimodal distribution but has slightly right skewed.<br />
+</li>
+<li>SibSp, Parch and Fare has multimodal distribution which has again right skewed.</li>
+</ul>
+</div>
+<p><br></p>
+<p>Boxplot :-<br />
+It gives a nice summary of one or several numeric variables. The line that divides the box into 2 parts represents the median of the data. The end of the box shows the upper and lower quartiles. The extreme lines shows the highest and lowest value excluding outliers.</p>
+<pre class="r"><code>num_vars %&gt;% 
+  gather(&quot;variable&quot;, &quot;value&quot;, 1:4) %&gt;% 
+  ggplot(aes(y = value, fill = variable))+
+  geom_boxplot()+
+  mytheme()+
+  facet_wrap(~variable, scales = &quot;free&quot;)+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<pre class="r"><code>#ggplot(num_vars, aes(x = SibSp,y = Age))+
+#  geom_boxplot(fill=I(rgb(0.1,0.2,0.4,0.6)))+
+##  geom_text(aes(label = outlier), na.rm = TRUE, hjust = -0.3)+
+  #mytheme()</code></pre>
+</div>
+<div id="univariate-analysis-of-categorical-variable" class="section level3">
+<h3>Univariate Analysis of Categorical variable</h3>
+<ul>
+<li>Frequencies<br />
+</li>
+<li>Proportions<br />
+</li>
+<li>Bar chart for visualization</li>
+</ul>
+<p>Selecting categorical variables</p>
+<pre class="r"><code>cat_vars &lt;- df %&gt;% 
+  select_if(~!is.numeric(.))
+cat_vars %&gt;% head</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##   Survived Pclass Name                      Sex   Ticket     Cabin Embarked
+##   &lt;fct&gt;    &lt;fct&gt;  &lt;chr&gt;                     &lt;fct&gt; &lt;chr&gt;      &lt;chr&gt; &lt;fct&gt;   
+## 1 0        3      Braund, Mr. Owen Harris   male  A/5 21171  &lt;NA&gt;  S       
+## 2 1        1      Cumings, Mrs. John Bradl~ fema~ PC 17599   C85   C       
+## 3 1        3      Heikkinen, Miss. Laina    fema~ STON/O2. ~ &lt;NA&gt;  S       
+## 4 1        1      Futrelle, Mrs. Jacques H~ fema~ 113803     C123  S       
+## 5 0        3      Allen, Mr. William Henry  male  373450     &lt;NA&gt;  S       
+## 6 0        3      Moran, Mr. James          male  330877     &lt;NA&gt;  Q</code></pre>
+<p><strong>Frequencies and Proportions</strong></p>
+<p>Survived</p>
+<pre class="r"><code>cat_vars %&gt;% 
+  filter(!is.na(Survived)) %&gt;% 
+  count(Survived) %&gt;% 
+  mutate(prop = n/sum(n)) %&gt;% 
+  arrange(desc(prop))</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##   Survived     n  prop
+##   &lt;fct&gt;    &lt;int&gt; &lt;dbl&gt;
+## 1 0          549 0.616
+## 2 1          342 0.384</code></pre>
+<p><br></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>The survival rate among the train set was only 38.38% .</p>
+</div>
+<p><br></p>
+<p>Sex</p>
+<pre class="r"><code>cat_vars %&gt;% 
+  count(Sex) %&gt;% 
+  mutate(prop = n/sum(n)) %&gt;% 
+  arrange(desc(prop))</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##   Sex        n  prop
+##   &lt;fct&gt;  &lt;int&gt; &lt;dbl&gt;
+## 1 male     843 0.644
+## 2 female   466 0.356</code></pre>
+<br>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>On ship there were approx 64% were men and 36% were women.</p>
+</div>
+<p><br></p>
+<p>Ticket</p>
+<pre class="r"><code>cat_vars %&gt;% 
+  count(Ticket) %&gt;% 
+  mutate(prop = n/sum(n)) %&gt;% 
+  arrange(desc(prop))</code></pre>
+<pre><code>## # A tibble: 929 x 3
+##    Ticket           n    prop
+##    &lt;chr&gt;        &lt;int&gt;   &lt;dbl&gt;
+##  1 CA. 2343        11 0.00840
+##  2 1601             8 0.00611
+##  3 CA 2144          8 0.00611
+##  4 3101295          7 0.00535
+##  5 347077           7 0.00535
+##  6 347082           7 0.00535
+##  7 PC 17608         7 0.00535
+##  8 S.O.C. 14879     7 0.00535
+##  9 113781           6 0.00458
+## 10 19950            6 0.00458
+## # ... with 919 more rows</code></pre>
+<p>Cabin</p>
+<pre class="r"><code>cat_vars %&gt;% 
+  count(Cabin) %&gt;% 
+  mutate(prop = n/sum(n)) %&gt;% 
+  arrange(desc(prop)) %&gt;% 
+  head</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Cabin               n    prop
+##   &lt;chr&gt;           &lt;int&gt;   &lt;dbl&gt;
+## 1 &lt;NA&gt;             1014 0.775  
+## 2 C23 C25 C27         6 0.00458
+## 3 B57 B59 B63 B66     5 0.00382
+## 4 G6                  5 0.00382
+## 5 B96 B98             4 0.00306
+## 6 C22 C26             4 0.00306</code></pre>
+<br>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<ul>
+<li>Around 77% values in Cabin column were missing so its better to drop this feature from our analysis.<br />
+</li>
+</ul>
+</div>
+<p><br></p>
+<p>Embarked</p>
+<pre class="r"><code>cat_vars %&gt;% 
+  count(Embarked) %&gt;% 
+  mutate(prop = n/sum(n)) %&gt;% 
+  arrange(desc(prop))</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   Embarked     n    prop
+##   &lt;fct&gt;    &lt;int&gt;   &lt;dbl&gt;
+## 1 S          914 0.698  
+## 2 C          270 0.206  
+## 3 Q          123 0.0940 
+## 4 &lt;NA&gt;         2 0.00153</code></pre>
+<p><br></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<ul>
+<li>Around 70% of passenger were embarked from Southampton and 20 % from Cherbourg and remaining from Queenstown.<br />
+</li>
+</ul>
+</div>
+<p><br></p>
+<p><strong>Barcharts for visualization</strong></p>
+<pre class="r"><code>cat_vars %&gt;%
+  subset(!is.na(Survived)) %&gt;% 
+  select(Pclass, Sex,Embarked, Survived) %&gt;% 
+  gather(&quot;variable&quot;, &quot;value&quot;, 1:4) %&gt;% 
+  ggplot(aes(y= variable, x = value, fill = variable))+
+  geom_col()+
+  mytheme()+
+  facet_wrap(~variable, scales = &quot;free&quot;)+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p><br><br></p>
+</div>
+<div id="bi-variate-analysis" class="section level3">
+<h3><a id = "bivariate-analysis"></a> Bi-variate Analysis</h3>
+<p>Here we look for relationship between two variables.There are 3 kinds of combination for bivariate analysis for continuos and
+categorical variable.</p>
+<p><strong>Continuos-Continuos</strong></p>
+<ul>
+<li>Correlation :- It find the strength of relationship (-1 Perfect Negative Correlation, 1 perfect Positive Correlation, 0 No Correlation )</li>
+<li>Scatter plot :- It shows relationship between 2 variable.(linear or nonlinear)</li>
+</ul>
+<p><strong>Categorical- Categorical</strong></p>
+<ul>
+<li>Two way table :- Show the relationship by creating a two-way table of count and count%<br />
+</li>
+<li>Stacked Column Chart:- A visual form of Two-way table<br />
+</li>
+<li>Chi-Square test:-</li>
+</ul>
+<p><strong>Categorical-Continuos</strong></p>
+<ul>
+<li>Visualization methods<br />
+</li>
+<li>Z-test/T-test<br />
+</li>
+<li>ANOVA</li>
+</ul>
+<p><br>
+Ok lets start Bivariate Analysis with continuos-continuos variable.</p>
+<p><strong>Correlation</strong> :-</p>
+<pre class="r"><code>library(corrplot)
+df %&gt;% 
+  select(-Name, -Cabin, -Ticket) %&gt;% 
+  mutate(Sex = fct_recode(Sex, &quot;0&quot; = &quot;male&quot;, &quot;1&quot; =&quot;female&quot;)) %&gt;% 
+  mutate(Survived = as.integer(Survived),
+         Sex = as.integer(Sex),
+         Pclass = as.integer(Pclass),
+         Embarked = as.integer(Embarked)) %&gt;% 
+  cor(use = &quot;complete.obs&quot;) %&gt;% 
+  corrplot(type =&quot;lower&quot;, diag = FALSE)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p><br></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observations:-</p>
+<ul>
+<li>Survived is correlate most to Sex, and then to Pclass.<br />
+</li>
+<li>Fare and Embarked might play a secondary role; the other features are pretty weak.</li>
+<li>Fare and Pclass are strongly related (1st-class cabins will be more expensive)</li>
+<li>A correlation of SibSp and Parch makes intuitive sense (both indicate family size)<br />
+</li>
+<li>Pclass and Age seem related (richer people are on average older? not inconceivable)</li>
+</ul>
+</div>
+<p>From above overview plot we would like to study in more details following relationships wrt to target variable under <a id="multivariate-analysis"></a> multivariate analysis :-</p>
+<ul>
+<li>Pclass vs Fare</li>
+<li>Pclass vs Age</li>
+<li>Pclass vs Embarked</li>
+<li>Sex vs Parch</li>
+<li>Age vs Sibsp</li>
+<li>Sibsp Vs Parch</li>
+<li>Fare vs Embarked</li>
+</ul>
+<p><br></p>
+<p><strong>Categorical - Categorical</strong><br />
+1.Two way table</p>
+<pre class="r"><code>cat_vars %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##   Survived Pclass Name                      Sex   Ticket     Cabin Embarked
+##   &lt;fct&gt;    &lt;fct&gt;  &lt;chr&gt;                     &lt;fct&gt; &lt;chr&gt;      &lt;chr&gt; &lt;fct&gt;   
+## 1 0        3      Braund, Mr. Owen Harris   male  A/5 21171  &lt;NA&gt;  S       
+## 2 1        1      Cumings, Mrs. John Bradl~ fema~ PC 17599   C85   C       
+## 3 1        3      Heikkinen, Miss. Laina    fema~ STON/O2. ~ &lt;NA&gt;  S       
+## 4 1        1      Futrelle, Mrs. Jacques H~ fema~ 113803     C123  S       
+## 5 0        3      Allen, Mr. William Henry  male  373450     &lt;NA&gt;  S       
+## 6 0        3      Moran, Mr. James          male  330877     &lt;NA&gt;  Q</code></pre>
+<pre class="r"><code>table(cat_vars$Survived, cat_vars$Pclass)</code></pre>
+<pre><code>##    
+##       1   2   3
+##   0  80  97 372
+##   1 136  87 119</code></pre>
+<pre class="r"><code>mytable &lt;- table(cat_vars$Survived, cat_vars$Pclass)
+prop.table(mytable,2)</code></pre>
+<pre><code>##    
+##             1         2         3
+##   0 0.3703704 0.5271739 0.7576375
+##   1 0.6296296 0.4728261 0.2423625</code></pre>
+<pre class="r"><code>prop.table(ftable(table(cat_vars$Pclass,cat_vars$Sex,cat_vars$Survived)),1)*100</code></pre>
+<pre><code>##                   0         1
+##                              
+## 1 female   3.191489 96.808511
+##   male    63.114754 36.885246
+## 2 female   7.894737 92.105263
+##   male    84.259259 15.740741
+## 3 female  50.000000 50.000000
+##   male    86.455331 13.544669</code></pre>
+<pre class="r"><code>xtabs(~Survived+Pclass+Sex, data = cat_vars)</code></pre>
+<pre><code>## , , Sex = female
+## 
+##         Pclass
+## Survived   1   2   3
+##        0   3   6  72
+##        1  91  70  72
+## 
+## , , Sex = male
+## 
+##         Pclass
+## Survived   1   2   3
+##        0  77  91 300
+##        1  45  17  47</code></pre>
+<p>2.Stacked Column Chart</p>
+<ul>
+<li>Sex Vs Survived<br />
+</li>
+<li>Pclass Vs Survived<br />
+</li>
+<li>Parch Vs Survived<br />
+</li>
+<li>SibSp Vs Survived</li>
+<li>Embarked Vs Survived</li>
+</ul>
+<pre class="r"><code>#fill &lt;- c(&quot;#778899&quot;, &quot;#D3D3D3&quot;)
+p3 &lt;- ggplot(subset(df, !is.na(Survived)), aes(x = Sex, fill = Survived))+
+  geom_bar(stat = &quot;count&quot;, position = &quot;fill&quot;)+
+  mytheme()+
+  labs(title = &quot;Sex&quot;)+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)
+
+p4 &lt;- ggplot(subset(df, !is.na(Survived)), aes(x = Pclass, fill = Survived))+
+  geom_bar(stat = &quot;count&quot;, position = &quot;fill&quot;)+
+  mytheme()+
+  theme(legend.position = &quot;none&quot;)+
+  labs(title = &quot;Pclass&quot;)+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)
+
+p5 &lt;- ggplot(subset(df, !is.na(Survived)), aes(x = Parch,fill = Survived))+
+  geom_bar(stat = &quot;count&quot;, position = &quot;fill&quot;)+
+  mytheme()+
+  theme(legend.position = &quot;none&quot;)+
+  labs(title = &quot;Parch&quot;)+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)
+
+p6 &lt;- ggplot(subset(df, !is.na(Survived)), aes(x = SibSp, fill = Survived))+
+  geom_bar(stat = &quot;count&quot;, position = &quot;fill&quot;)+
+  mytheme()+
+  theme(legend.position = &quot;none&quot;)+
+  labs(title = &quot;Sibsp&quot;)+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)
+
+p7 &lt;- ggplot(subset(df, !is.na(Survived)), aes(x = Embarked, fill = Survived))+
+  geom_bar(stat = &quot;count&quot;, position = &quot;fill&quot;)+
+  mytheme()+
+  labs(title = &quot;Embarked&quot;)+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)
+gridExtra::grid.arrange(p3,p4,p5,p6,p7, ncol = 2)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-35-1.png" width="960" /></p>
+<br>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observations :-</p>
+<p><strong>Pclass</strong><br />
+There’s a clear trend that being a 1st class passenger gives you better chances of survival.</p>
+<p><strong>SibSP/Parch</strong><br />
+Having 1-3 siblings/spouses/parents/children on board (SibSp = 1-2, Parch = 1-3) suggests proportionally better survival numbers than being alone (SibSp + Parch = 0) or having a large family travelling with you.<br />
+<strong>Embarked</strong><br />
+Well, that does look more interesting than expected. Embarking at “C” resulted in a higher survival rate than embarking at “S”. There might be a correlation with other variables, here though</p>
+</div>
+<p><br></p>
+<p><strong>Categorical- Continuos</strong></p>
+<ol style="list-style-type: decimal">
+<li>Age Vs Survived<br />
+</li>
+<li>Fare Vs Survived</li>
+</ol>
+<pre class="r"><code>#color &lt;- c(&quot;#778899&quot;, &quot;#D3D3D3&quot;)
+p1 &lt;- ggplot(subset(df, !is.na(Survived)), aes(x = Fare, color = Survived))+
+  geom_freqpoly(binwidth =0.05)+
+  scale_x_log10() +
+  guides(fill = FALSE)+
+  theme(legend.position = &quot;none&quot;)+
+  mytheme()+
+  labs(title = &quot;Fare&quot;)+
+  scale_color_brewer(palette = &quot;Dark2&quot;)
+
+p2 &lt;-  ggplot(subset(df, !is.na(Survived)), aes(x = Age, color = Survived))+
+  geom_freqpoly(binwidth =1)+
+  guides(fill = FALSE)+
+  theme(legend.position = &quot;none&quot;)+
+  mytheme()+
+  labs(title = &quot;Age&quot;)+
+  scale_color_brewer(palette = &quot;Dark2&quot;)
+
+gridExtra::grid.arrange(p1,p2, ncol=2)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-36-1.png" width="1248" /></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observations :-</p>
+<p><strong>Age</strong></p>
+<ul>
+<li>Fewer young adults have survived (ages 18 - 30-ish) whereas children younger than 10-ish had better survival rate .<br />
+</li>
+<li>The highest ages are well consistent with the overall distribution</li>
+</ul>
+<p><strong>Fare</strong></p>
+<ul>
+<li>This is case where a linear scaling isn’t of much help because there is a smaller number of more extreme numbers. A natural choice in this case is to use a logarithmic axis.</li>
+<li>The plot tells us that the survival chances were much lower for the cheaper cabins.<br />
+</li>
+<li>One would assume that those cheap cabins were mostly located deeper inside the ship</li>
+</ul>
+</div>
+<p><br></p>
+<p><a id="multivariate-analysis"></a> <strong>Multivariate Analysis</strong></p>
+<p><strong>Pclass vs Fare</strong></p>
+<pre class="r"><code>#fill &lt;- c(&quot;#778899&quot;, &quot;#D3D3D3&quot;)
+ggplot(subset(df, !is.na(Survived)), aes(Pclass, Fare, fill = Survived))+
+  geom_boxplot()+
+  scale_y_log10()+
+  mytheme()+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observations :-</p>
+<ul>
+<li><p>The different Pclass categories are clustered around different average levels of Fare. This is not very surprising, as 1st class tickets are usually more expensive than 3rd class ones.</p></li>
+<li><p>In 2nd Pclass, and especially in 1st, the median Fare for the Survived == 1 passengers is notably higher than for those who died. This suggests that there is a sub-division into more/less expensive cabins (i.e. closer/further from the life boats) even within each Pclass.</p></li>
+</ul>
+</div>
+<p><br></p>
+<p>It’s certainly worth to have a closer look at the Fare distributions depending on Pclass. In order to contrast similar plots for different factor feature levels ggplot2 offers the facet mechanism. Adding facets to a plot allows us to separate it along one or two factor variables. Naturally, this visualisation approach works best for relatively small numbers of factor levels.</p>
+<pre class="r"><code>#fill &lt;- c(&quot;#778899&quot;, &quot;#D3D3D3&quot;, &quot;#ff6347&quot;)
+df %&gt;%
+  subset(!is.na(Survived)) %&gt;% 
+
+  ggplot(aes(Fare, fill=Pclass)) +
+
+  geom_density(alpha = 0.5) +
+
+  scale_x_log10() +
+
+  facet_wrap(~ Survived, ncol = 1)+
+  mytheme()+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<p>Observations :-</p>
+<ol style="list-style-type: decimal">
+<li>There is a suprisingly broad distribution between the 1st class passenger fares</li>
+<li>There’s an interesting bimodality in the 2nd class cabins and a long tail in the 3rd class ones<br />
+</li>
+<li>For each class there is strong evidence that the cheaper cabins were worse for survival. A similar effect can be seen in a boxplot.</li>
+</ol>
+<p><strong>Pclass vs Embarked</strong></p>
+<pre class="r"><code>#fill &lt;- c(&quot;#778899&quot;, &quot;#D3D3D3&quot;, &quot;#ff6347&quot;)
+df %&gt;%
+  subset(!is.na(Survived)) %&gt;% 
+  filter(Embarked %in% c(&quot;S&quot;,&quot;C&quot;,&quot;Q&quot;)) %&gt;%
+  ggplot() +
+  geom_bar(aes(Embarked, fill = Pclass), position = &quot;dodge&quot;) +
+  facet_grid(~ Survived)+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)+
+  mytheme()</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<p>Observations :-</p>
+<ol style="list-style-type: decimal">
+<li>Embarked Q contains most exclusively 3rd class passengers.</li>
+<li>The survival chances for 1st class passengers are better for every port. In contrast, the chances for the 2nd class passengers were relatively worse for Embarked == S whereas the frequencies for Embarked == C look comparable.<br />
+</li>
+<li>3rd class passengers had bad chances everywhere, but the relative difference for Embarked == S looks particularly strong.</li>
+</ol>
+<p><strong>Pclass vs Age</strong></p>
+<pre class="r"><code>#fill &lt;- c(&quot;#778899&quot;,  &quot;#ff6347&quot;)
+df %&gt;%
+  subset(!is.na(Survived)) %&gt;% 
+  filter(Embarked %in% c(&quot;S&quot;,&quot;C&quot;,&quot;Q&quot;)) %&gt;%
+  ggplot(mapping = aes(Age, Fare, color = Survived, shape = Sex)) +
+  geom_point() +
+  scale_y_log10() +
+  facet_grid(Pclass ~ Embarked)+
+  theme_minimal()+
+  scale_color_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<p>Observations :-<br />
+1. Pclass == 1 passengers seem indeed on average older than those in 3rd (and maybe 2nd) class. Not many children seemed to have travelled 1st class.<br />
+2. Most Pclass == 2 children appear to have survived, regardless of Sex.
+3. More men than women seem to have travelled 3rd Pclass, whereas for 1st Pclass the ratio looks comparable. Note, that those are only the ones for which we know the Age, which might introduce a systematic bias.</p>
+<p>Age vs Sex
+This was not in our original list but multi-facet plot above prompt us to examine the interplay between Age and sex.</p>
+<pre class="r"><code>#fill &lt;- c(&quot;#778899&quot;, &quot;#ff6347&quot;)
+ggplot(subset(df,!is.na(Survived)), aes(x=Age)) +
+
+  geom_density(aes(fill = Survived), alpha = 0.5) +
+
+  facet_wrap(~Sex)+
+  mytheme()+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<p>observations :-
+1. Younger boys had a notable survival advantage over male teenagers, whereas the same was not true for girls to nearly the same extent.<br />
+2. Most women over 60 survived, whereas for men the high-Age tail of the distribution falls slower.
+3. Note that those are normalised densities, not histogrammed numbers. Also, remember that Age contains many missing values.</p>
+<p><strong>Pclass vs Sex</strong></p>
+<pre class="r"><code>mosaicplot(table(train$Survived,train$Sex, train$Pclass ),
+           main = &quot;Survival by Pclass and Sex&quot; , shade = TRUE)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<p><br></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observations :-</p>
+<ul>
+<li>Almost all females that died were 3rd Plass passengers.<br />
+</li>
+<li>For the males, being in 3rd Pclass resulted in a significant disadvantage regarding their Survived status.</li>
+</ul>
+</div>
+<p><strong>Parch vs SibSp</strong></p>
+<pre class="r"><code>train %&gt;%
+ggplot(aes(Parch, SibSp, color = as.factor(Survived))) +
+geom_count()+
+mytheme()+
+scale_color_brewer(type = &quot;seq&quot;,palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<p><br></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observations :-<br />
+- A large number of passengers were travelling alone.<br />
+- Passengers with the largest number of parents/children had relatively few siblings on board.<br />
+- Survival was better for smaller families, but not for passengers travelling alone.</p>
+</div>
+<p><strong>Parch vs Sex</strong></p>
+<pre class="r"><code>#fill &lt;- c(&quot;#778899&quot;, &quot;#D3D3D3&quot;)
+train %&gt;%
+
+  ggplot() +
+
+  geom_bar(aes(Parch, fill = Sex), position = &quot;dodge&quot;) +
+
+  scale_y_log10()+
+  mytheme()+
+ scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<p><br></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observations :-</p>
+<ul>
+<li><p>Many more men travelled without parents or children than women did. The difference might look small here but that’s because of the logarithmic y-axis.</p></li>
+<li><p>The log axis helps us to examine the less frequent Parch levels in more detail: Parch == 2,3 still look comparable. Beyond that, it seems that women were somewhat more likely to travel with more relatives. However, beware of small numbers</p></li>
+</ul>
+</div>
+<pre class="r"><code>train %&gt;% 
+  group_by(Parch,Sex) %&gt;% 
+  count</code></pre>
+<pre><code>## # A tibble: 13 x 3
+## # Groups:   Parch, Sex [13]
+##    Parch Sex        n
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;int&gt;
+##  1     0 female   194
+##  2     0 male     484
+##  3     1 female    60
+##  4     1 male      58
+##  5     2 female    49
+##  6     2 male      31
+##  7     3 female     4
+##  8     3 male       1
+##  9     4 female     2
+## 10     4 male       2
+## 11     5 female     4
+## 12     5 male       1
+## 13     6 female     1</code></pre>
+<p><br></p>
+<p><strong>Age Vs SibSp</strong></p>
+<pre class="r"><code>train %&gt;%
+
+  mutate(SibSp = factor(SibSp)) %&gt;%
+
+  ggplot(aes(x=Age, color = SibSp)) +
+
+  geom_density(size = 1.0)+
+  mytheme()+
+  scale_color_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-46-1.png" width="672" />
+Observations :-<br />
+1. The highest SibSp values (4 and 5) are indeed associated with a narrower distribution peaking at a lower Age. Most likely groups of children from large families.</p>
+<hr />
+<p>Some times good graphical animation helpful in telling the data story without saying words. Also to impress the your audience. gganimation package comes very handy here.</p>
+<p><em>To learn more about animation using gganimate package click <a href="http://gganimte.com/">here</a></em></p>
+<p>Here i am showing some demo examples.</p>
+<pre class="r"><code>train %&gt;%
+  mutate(Survived = as.numeric(Survived)) %&gt;% 
+  ggplot( aes(Parch, SibSp ,fill = Survived))+
+  geom_tile(colour  = &quot;white&quot;)+
+  facet_grid(Pclass~Sex)+
+  scale_fill_gradient(low =&quot;tomato&quot;, high = &quot;darkgreen&quot;)+
+  labs(x=&quot;&quot;,
+       y=&quot;&quot;,
+       title = &#39;Fare: {frame_time}&#39;, 
+       subtitle=&quot;Kaggle data&quot;, 
+       fill=&quot;Close&quot;)+
+  transition_time(Fare)+
+  ease_aes(&#39;linear&#39;, interval = 0.00001)+
+  mytheme()</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-47-1.gif" /><!-- --></p>
+<pre class="r"><code>train %&gt;% 
+  ggplot(aes(x = Age, y = Fare))+
+  geom_point(aes(color = Survived), size = 2)+
+  transition_states(Sex,
+                    transition_length = 1,
+                    state_length = 1)+
+  mytheme()+
+  enter_fade() + 
+  labs(x=&quot;Age&quot;,
+       y=&quot;Fare&quot;,
+       title = &quot;{closest_state}&quot;, 
+       subtitle=&quot;Kaggle data&quot;, 
+       fill=&quot;Close&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-48-1.gif" /><!-- --></p>
+<hr />
+</div>
+<div id="missing-values-treatment" class="section level3">
+<h3><a id = "missing-value-treatment"></a>Missing Values Treatment</h3>
+<p>Types of Missing Values :-</p>
+<p>1.Missing Completely at random<br />
+2.Missing at random<br />
+3.Missing that depends on unobserved predictors<br />
+4.Missing that depends on the missing value itself</p>
+<p><strong>1. Missing Completely at random</strong> :-<br />
+A case when the probability of missing variable is same for all observations.</p>
+<p><strong>2. Missing at random</strong> :-<br />
+A case when variable is missing at random and missing ratio varies for different values / level of other input variables. For example: We are collecting data for age and female has higher missing value compare to male.</p>
+<p><strong>3. Missing that depends on unobserved predictors</strong> :-<br />
+A case when the missing values are not random and are related to the unobserved input variable.</p>
+<p><strong>4. Missing that depends on the missing value itself</strong> :-<br />
+A case when the probability of missing value is directly correlated with missing value itself. For example: People with higher or lower income are likely to provide non-response to their earning.</p>
+<div id="treatment-of-missing-values" class="section level5">
+<h5>Treatment of Missing Values</h5>
+<ol style="list-style-type: decimal">
+<li><p><strong>Deletion</strong> :-<br />
+1.1 List wise deletion:- Delete complete observation when there is any of the variable missing.<br />
+1.2 Pair wise deletion:- Perform analysis with all cases in which the variables of interest are present.</p></li>
+<li><p><strong>Imputaton</strong> :-<br />
+2.1 Generalized Imputation :-<br />
+Calculate the mean or median for all non missing values of that variable then replace missing value with mean or median.</p></li>
+</ol>
+<p>2.2 Similar Case Imputation :-<br />
+Calculate mean/median/mode based on some other variable and replace based upon it. For example :- Replacing value of age based on gender.</p>
+<p>Mean :- Replace the missing data for a given attribute (quantitative) by mean when data is not skewed.<br />
+Median :- Replace the missning data for a given attribute(quantitative) by median when data is skewed.<br />
+Mode :- Replace the missing data for a given attribute( Qualitative) by mode.</p>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Prediction Model</strong> :-</li>
+</ol>
+<p>Create a predictive model to estimate values that will substitute the missing data.</p>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>KNN Imputation</strong> :-</li>
+</ol>
+<p>The missing values of an attribute are imputed using the given number of attributes that are most similar to the attribute whose values are missing. The similarity of two attributes is determined using a distance function.</p>
+<p>Lets check for the missing values in the columns</p>
+<pre class="r"><code>df %&gt;%
+    map_df(function(x) sum(is.na(x)))</code></pre>
+<pre><code>## # A tibble: 1 x 11
+##   Survived Pclass  Name   Sex   Age SibSp Parch Ticket  Fare Cabin Embarked
+##      &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;
+## 1      418      0     0     0   263     0     0      0     1  1014        2</code></pre>
+<pre class="r"><code>#df %&gt;% summarise_all(list(~sum(is.na(.)))) </code></pre>
+<p>Following are the observations from the above table:-</p>
+<p>1.The 418 NA in survived column are the observations in test dataset.<br />
+2.Age has 263 missing values.<br />
+3.Cabin has significant number of missing values. i.e. 1014.<br />
+4.Also Embarked Fare has 2 and 1 missing values respectively.</p>
+</div>
+</div>
+<div id="missing-value-imputation" class="section level3 tabset tabset-fade tabset-pills">
+<h3>Missing Value Imputation</h3>
+<div id="age" class="section level4 unnumbered">
+<h4>Age</h4>
+<p>For imputing missing value in age we will use mice package.</p>
+<pre class="r"><code># Make variables factors into factors
+factor_vars &lt;- c(&#39;Pclass&#39;,&#39;Sex&#39;,&#39;Embarked&#39;)
+
+df[factor_vars] &lt;- lapply(df[factor_vars], function(x) as.factor(x))
+
+# Set a random seed
+set.seed(129)
+
+# Perform mice imputation, excluding certain less-than-useful variables:
+mice_mod &lt;- mice(df[, !names(df) %in% c(&#39;Name&#39;,&#39;Ticket&#39;,&#39;Cabin&#39;,&#39;Survived&#39;)], method=&#39;rf&#39;) </code></pre>
+<pre><code>## 
+##  iter imp variable
+##   1   1  Age  Fare  Embarked
+##   1   2  Age  Fare  Embarked
+##   1   3  Age  Fare  Embarked
+##   1   4  Age  Fare  Embarked
+##   1   5  Age  Fare  Embarked
+##   2   1  Age  Fare  Embarked
+##   2   2  Age  Fare  Embarked
+##   2   3  Age  Fare  Embarked
+##   2   4  Age  Fare  Embarked
+##   2   5  Age  Fare  Embarked
+##   3   1  Age  Fare  Embarked
+##   3   2  Age  Fare  Embarked
+##   3   3  Age  Fare  Embarked
+##   3   4  Age  Fare  Embarked
+##   3   5  Age  Fare  Embarked
+##   4   1  Age  Fare  Embarked
+##   4   2  Age  Fare  Embarked
+##   4   3  Age  Fare  Embarked
+##   4   4  Age  Fare  Embarked
+##   4   5  Age  Fare  Embarked
+##   5   1  Age  Fare  Embarked
+##   5   2  Age  Fare  Embarked
+##   5   3  Age  Fare  Embarked
+##   5   4  Age  Fare  Embarked
+##   5   5  Age  Fare  Embarked</code></pre>
+<pre class="r"><code># Save the complete output 
+mice_output &lt;- complete(mice_mod)</code></pre>
+<pre class="r"><code>summary(df)</code></pre>
+<pre><code>##  Survived   Pclass      Name               Sex           Age       
+##  0   :549   1:323   Length:1309        female:466   Min.   : 0.17  
+##  1   :342   2:277   Class :character   male  :843   1st Qu.:21.00  
+##  NA&#39;s:418   3:709   Mode  :character                Median :28.00  
+##                                                     Mean   :29.88  
+##                                                     3rd Qu.:39.00  
+##                                                     Max.   :80.00  
+##                                                     NA&#39;s   :263    
+##      SibSp            Parch          Ticket               Fare        
+##  Min.   :0.0000   Min.   :0.000   Length:1309        Min.   :  0.000  
+##  1st Qu.:0.0000   1st Qu.:0.000   Class :character   1st Qu.:  7.896  
+##  Median :0.0000   Median :0.000   Mode  :character   Median : 14.454  
+##  Mean   :0.4989   Mean   :0.385                      Mean   : 33.295  
+##  3rd Qu.:1.0000   3rd Qu.:0.000                      3rd Qu.: 31.275  
+##  Max.   :8.0000   Max.   :9.000                      Max.   :512.329  
+##                                                      NA&#39;s   :1        
+##     Cabin           Embarked  
+##  Length:1309        C   :270  
+##  Class :character   Q   :123  
+##  Mode  :character   S   :914  
+##                     NA&#39;s:  2  
+##                               
+##                               
+## </code></pre>
+<pre class="r"><code>summary(mice_output)</code></pre>
+<pre><code>##  Pclass      Sex           Age            SibSp            Parch      
+##  1:323   female:466   Min.   : 0.17   Min.   :0.0000   Min.   :0.000  
+##  2:277   male  :843   1st Qu.:21.00   1st Qu.:0.0000   1st Qu.:0.000  
+##  3:709                Median :28.00   Median :0.0000   Median :0.000  
+##                       Mean   :29.55   Mean   :0.4989   Mean   :0.385  
+##                       3rd Qu.:38.00   3rd Qu.:1.0000   3rd Qu.:0.000  
+##                       Max.   :80.00   Max.   :8.0000   Max.   :9.000  
+##       Fare         Embarked
+##  Min.   :  0.000   C:270   
+##  1st Qu.:  7.896   Q:124   
+##  Median : 14.454   S:915   
+##  Mean   : 33.281           
+##  3rd Qu.: 31.275           
+##  Max.   :512.329</code></pre>
+<pre class="r"><code>summary(df$Age)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##    0.17   21.00   28.00   29.88   39.00   80.00     263</code></pre>
+<pre class="r"><code># Plot age distributions
+par(mfrow=c(1,2))
+hist(df$Age, freq=F, main=&#39;Age: Original Data&#39;, 
+  col=&#39;#D95F02&#39;, ylim=c(0,0.04))
+hist(mice_output$Age, freq=F, main=&#39;Age: MICE Output&#39;, 
+  col=&quot;#1B9E77&quot;, ylim=c(0,0.04))</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<pre class="r"><code># Replace Age variable from the mice model.
+df$Age &lt;- mice_output$Age
+
+# Show new number of missing Age values
+sum(is.na(df$Age))</code></pre>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div id="cabin" class="section level4 unnumbered">
+<h4>Cabin</h4>
+<pre class="r"><code>df %&gt;% filter(is.na(Cabin))</code></pre>
+<pre><code>## # A tibble: 1,014 x 11
+##    Survived Pclass Name  Sex     Age SibSp Parch Ticket  Fare Cabin
+##    &lt;fct&gt;    &lt;fct&gt;  &lt;chr&gt; &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;
+##  1 0        3      Brau~ male     22     1     0 A/5 2~  7.25 &lt;NA&gt; 
+##  2 1        3      Heik~ fema~    26     0     0 STON/~  7.92 &lt;NA&gt; 
+##  3 0        3      Alle~ male     35     0     0 373450  8.05 &lt;NA&gt; 
+##  4 0        3      Mora~ male     19     0     0 330877  8.46 &lt;NA&gt; 
+##  5 0        3      Pals~ male      2     3     1 349909 21.1  &lt;NA&gt; 
+##  6 1        3      John~ fema~    27     0     2 347742 11.1  &lt;NA&gt; 
+##  7 1        2      Nass~ fema~    14     1     0 237736 30.1  &lt;NA&gt; 
+##  8 0        3      Saun~ male     20     0     0 A/5. ~  8.05 &lt;NA&gt; 
+##  9 0        3      Ande~ male     39     1     5 347082 31.3  &lt;NA&gt; 
+## 10 0        3      Vest~ fema~    14     0     0 350406  7.85 &lt;NA&gt; 
+## # ... with 1,004 more rows, and 1 more variable: Embarked &lt;fct&gt;</code></pre>
+<p>Cabin has lot of missing value so its better to drop this variable.</p>
+<pre class="r"><code>df$Cabin &lt;- NULL</code></pre>
+</div>
+<div id="embarked" class="section level4 unnumbered">
+<h4>Embarked</h4>
+<pre class="r"><code>df %&gt;% filter(is.na(Embarked))</code></pre>
+<pre><code>## # A tibble: 2 x 10
+##   Survived Pclass Name        Sex     Age SibSp Parch Ticket  Fare Embarked
+##   &lt;fct&gt;    &lt;fct&gt;  &lt;chr&gt;       &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt;   
+## 1 1        1      Icard, Mis~ fema~    38     0     0 113572    80 &lt;NA&gt;    
+## 2 1        1      Stone, Mrs~ fema~    62     0     0 113572    80 &lt;NA&gt;</code></pre>
+<p>So here there are two females one adult and other Senior for whom Embarked feature has missing values.Both the females are from first class with same fare ($80) and had stayed in same cabin (B28). This makes high chance of both embarked from the same port.</p>
+<p>if we look the frequency of ports of embarkation of first class passenger.</p>
+<pre class="r"><code>df %&gt;% filter(Pclass==1) %&gt;% count(Embarked)</code></pre>
+<pre><code>## # A tibble: 4 x 2
+##   Embarked     n
+##   &lt;fct&gt;    &lt;int&gt;
+## 1 C          141
+## 2 Q            3
+## 3 S          177
+## 4 &lt;NA&gt;         2</code></pre>
+<p><em>The Southampton port is the most frequent port of embarkation with 177 ports and it is followed by the Cherbourg port with 141. But still we cannot decide to impute two missing values by the most frequent port of embarkation which is the Southampton port.</em></p>
+<pre class="r"><code>ggplot(filter(df, is.na(Embarked)==FALSE &amp; Embarked!=&#39;&#39; &amp; Pclass==1), 
+       aes(Embarked, Fare)) +     
+  geom_boxplot(aes( fill= Embarked)) +
+  geom_hline(aes(yintercept=80), colour=&#39;red&#39;, linetype=&#39;dashed&#39;, size=2) +
+  ggtitle(&quot;Fare distribution of first class passengers&quot;) +
+  mytheme() + 
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-61-1.png" width="672" /></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>From the plot we can see that median fare for Cherbourg port passenger and the two missing embarkment feature passenger’s
+fare i.e. $80 concide. Therefore i am deciding to impute the missing Embarked values by the Cherbourg port.</p>
+</div>
+<p><br></p>
+<pre class="r"><code>df &lt;- df %&gt;% 
+  mutate(Embarked = ifelse(is.na(Embarked), &quot;C&quot;, Embarked))</code></pre>
+<pre class="r"><code># Replace Embarked variable from the mice model.
+#df$Embarked &lt;- mice_output$Embarked
+# Show new number of missing Embarked values
+#sum(is.na(df$Embarked))</code></pre>
+</div>
+<div id="fare" class="section level4 unnumbered">
+<h4>Fare</h4>
+<pre class="r"><code>df %&gt;% filter(is.na(Fare))</code></pre>
+<pre><code>## # A tibble: 1 x 10
+##   Survived Pclass Name        Sex     Age SibSp Parch Ticket  Fare Embarked
+##   &lt;fct&gt;    &lt;fct&gt;  &lt;chr&gt;       &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;   
+## 1 &lt;NA&gt;     3      Storey, Mr~ male   60.5     0     0 3701      NA 3</code></pre>
+<p>So this male Mr.Thomas was from third class who embarked from southampton port. So let’s look at the distribution of
+third class passengers embarked from Southampton port.</p>
+<pre class="r"><code>#df$Fare &lt;- mice_output$Fare
+# Show new number of missing Fare values
+#sum(is.na(df$Fare))
+
+ggplot(filter(df, Pclass==3 &amp; Embarked==&quot;S&quot;), aes(Fare)) +                       
+  geom_density(fill=&quot;#D95F02&quot;, alpha=0.5) +
+  geom_vline(aes(xintercept=median(Fare, na.rm=T)), colour=&#39;darkblue&#39;, linetype=&#39;dashed&#39;, size=2) +
+  geom_vline(aes(xintercept=mean(Fare, na.rm=T)), colour=&#39;tomato&#39;, linetype=&#39;dashed&#39;, size=2) +
+  ggtitle(&quot;Fare distribution of third class passengers \n embarked from Southampton port&quot;) +
+  mytheme() +
+  theme(plot.title = element_text(hjust = 0.5))+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Here the mean and median are not close. The porportion of passengers with fare around median is very high whereas it is not so high around the mean. So its not good idea to impute the missing value with mean of all fares. Rather we will impute missing value with median fare of third class passengers embarked from Southampton port.</p>
+</div>
+<p><br></p>
+<pre class="r"><code>#imputing missing Fare value by median fare of third class passengers embarked from Southampton port
+
+df &lt;- df %&gt;% 
+  mutate(Fare = ifelse(is.na(Fare), median(Fare, na.rm = TRUE), Fare))
+
+#checking 
+
+df %&gt;% filter(is.na(Fare))</code></pre>
+<pre><code>## # A tibble: 0 x 10
+## # ... with 10 variables: Survived &lt;fct&gt;, Pclass &lt;fct&gt;, Name &lt;chr&gt;,
+## #   Sex &lt;fct&gt;, Age &lt;dbl&gt;, SibSp &lt;dbl&gt;, Parch &lt;dbl&gt;, Ticket &lt;chr&gt;,
+## #   Fare &lt;dbl&gt;, Embarked &lt;chr&gt;</code></pre>
+</div>
+</div>
+<div id="feature-engineering" class="section level3">
+<h3><a id="feature-engineering"></a>3. Feature Engineering</h3>
+<p>Its time for feature engineering.The motive of feature engineering is to create new features which can help make predictions better. The ideas for new features usually develop during the data exploration and hypothesis generation stages.</p>
+<p>A good approach to list all the new features that we define together in one place. We derive new feature in whole dataset.</p>
+<blockquote>
+<p>In any data science competition the three things that distinguish winners from other in most of the cases : Feature transformation, Feature Creation and Feature Selection</p>
+</blockquote>
+<p><a id="feature-transformation"></a> <strong>Feature transformation</strong></p>
+<p>Reason for transformation of data</p>
+<ul>
+<li>Some models like K-NN, SVMs, PLS, Neural networks require that the predictor variables have the same units. <strong>Centring</strong> and <strong>Scaling</strong>
+the predictors can be used for this purpose.<br />
+</li>
+<li>Other models are very sensitive to correlations between the predictors and <strong>filters</strong> or <strong>PCA Signal extraction</strong> can improve the model.<br />
+</li>
+<li>Changing the scale of the predictors using <strong>transformation</strong> can lead to a big improvement.</li>
+<li>In some cases data can be encoded in a way that maximizes its effect on the model.</li>
+</ul>
+<p><br></p>
+<p><strong>Preprocessing of categorical data</strong></p>
+<ul>
+<li>Dummy Variable</li>
+</ul>
+<p>Dummy variable is common technique in modelling to create numeric representation of categorical data.<br />
+There are many ways to create dummy variables in R.</p>
+<p><strong>Infrequent Levels in categorical factors</strong>
+A zero variance predictor that has only a single value (Zero) would be the result.<br />
+Many models like linear or logistic etc. would find this numerically problematic and issue a warning and NA values for that coefficient. Trees and similar models would not notice.</p>
+<p>Main approach to deal with this issue :-</p>
+<ul>
+<li>Run a filter on the training set predictors prior to running the model and remove zero variance predictors.<br />
+</li>
+<li>Recode the factors so that infrequently occuring predictors are pooled into the other categories.</li>
+</ul>
+<p><em>Since here we are trying multiple models like logistic decision tree and svm we will apply these transformation during model building process</em></p>
+<p><a id="feature-creation"></a><strong>Feature Creation</strong></p>
+<p>Here we will be creating new features which will be useful in improving our accuracy of models. Also will explore it at same time.</p>
+<p>From messy Name variable we are going to create following new features :-</p>
+<ul>
+<li>Title<br />
+</li>
+<li>Mother<br />
+</li>
+<li>Surname<br />
+</li>
+<li>Solo<br />
+</li>
+<li>FamilySize<br />
+</li>
+<li>FamilyType</li>
+</ul>
+<p>Also From Age variable we will create a new feature as <strong>stageoflife</strong> based on age group.</p>
+<p><strong>Title</strong></p>
+<p>Names has various title included we just extracted them using regular expression.</p>
+<pre class="r"><code>library(stringr)
+df &lt;- mutate(df, Title = str_sub(Name, str_locate(Name, &quot;,&quot;)[,1] + 2, str_locate(Name, &quot;\\.&quot;)[,1]-1))
+df %&gt;% group_by(Title) %&gt;%
+              summarise(count = n()) %&gt;%
+              arrange(desc(count))</code></pre>
+<pre><code>## # A tibble: 18 x 2
+##    Title        count
+##    &lt;chr&gt;        &lt;int&gt;
+##  1 Mr             757
+##  2 Miss           260
+##  3 Mrs            197
+##  4 Master          61
+##  5 Dr               8
+##  6 Rev              8
+##  7 Col              4
+##  8 Major            2
+##  9 Mlle             2
+## 10 Ms               2
+## 11 Capt             1
+## 12 Don              1
+## 13 Dona             1
+## 14 Jonkheer         1
+## 15 Lady             1
+## 16 Mme              1
+## 17 Sir              1
+## 18 the Countess     1</code></pre>
+<p>Tidy up the Title variable by adding a couple of groups and combining the other 14 titles accordingly.</p>
+<pre class="r"><code>df &lt;- df %&gt;%
+          mutate(Title = factor(Title)) %&gt;%
+          mutate(Title = fct_collapse(Title, &quot;Miss&quot; = c(&quot;Mlle&quot;, &quot;Ms&quot;), &quot;Mrs&quot; = &quot;Mme&quot;, 
+                                      &quot;Ranked&quot; = c( &quot;Major&quot;, &quot;Dr&quot;, &quot;Capt&quot;, &quot;Col&quot;, &quot;Rev&quot;),
+                                      &quot;Royalty&quot; = c(&quot;Lady&quot;, &quot;Dona&quot;, &quot;the Countess&quot;, &quot;Don&quot;, &quot;Sir&quot;, &quot;Jonkheer&quot;))) 
+
+ggplot(df[1:891,], aes(x = Title, fill = Survived)) +
+          geom_bar(position = &quot;fill&quot;) +
+          ylab(&quot;Survival Rate&quot;) +
+          geom_hline(yintercept = (sum(train$Survived)/nrow(train)), col = &quot;white&quot;, lty = 2) +
+          ggtitle(&quot;Survival Rate by Title&quot;)+
+  mytheme()+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-68-1.png" width="672" /></p>
+<p><strong>Mother</strong>
+Identify mothers travelling with their children, using their Title and the Parch variable</p>
+<pre class="r"><code>df &lt;- df %&gt;%
+          mutate(Mother = factor(ifelse(c(df$Title == &quot;Mrs&quot; | df$Title == &quot;Mme&quot; | df$Title == &quot;the Countess&quot; | df$Title == &quot;Dona&quot; | df$Title == &quot;Lady&quot;) &amp; df$Parch &gt; 0, &quot;Yes&quot;, &quot;No&quot;))) 
+ggplot(df[1:891,], aes(x = Mother, fill = Survived)) +
+          geom_bar(position = &quot;fill&quot;) +
+          ylab(&quot;Survival Rate&quot;) +
+          geom_hline(yintercept = (sum(train$Survived)/nrow(train)), col = &quot;white&quot;, lty = 2) +
+          ggtitle(&quot;Survival Rate by Motherhood Status&quot;)+
+  mytheme()+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-69-1.png" width="672" /></p>
+<blockquote>
+<p><em>The survival chances of mothers was over twice as good as that of the other passengers.</em></p>
+</blockquote>
+<p><strong>Surname</strong></p>
+<p>Extracted surname from Name feature.</p>
+<pre class="r"><code>library(qdap)
+df &lt;- df %&gt;%
+  mutate(Surname = factor(beg2char(Name, &quot;,&quot;))) %&gt;% 
+  glimpse()</code></pre>
+<pre><code>## Observations: 1,309
+## Variables: 13
+## $ Survived &lt;fct&gt; 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1,...
+## $ Pclass   &lt;fct&gt; 3, 1, 3, 1, 3, 3, 1, 3, 3, 2, 3, 1, 3, 3, 3, 2, 3, 2,...
+## $ Name     &lt;chr&gt; &quot;Braund, Mr. Owen Harris&quot;, &quot;Cumings, Mrs. John Bradle...
+## $ Sex      &lt;fct&gt; male, female, female, female, male, male, male, male,...
+## $ Age      &lt;dbl&gt; 22, 38, 26, 35, 35, 19, 54, 2, 27, 14, 4, 58, 20, 39,...
+## $ SibSp    &lt;dbl&gt; 1, 1, 0, 1, 0, 0, 0, 3, 0, 1, 1, 0, 0, 1, 0, 0, 4, 0,...
+## $ Parch    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 1, 0, 0, 5, 0, 0, 1, 0,...
+## $ Ticket   &lt;chr&gt; &quot;A/5 21171&quot;, &quot;PC 17599&quot;, &quot;STON/O2. 3101282&quot;, &quot;113803&quot;...
+## $ Fare     &lt;dbl&gt; 7.2500, 71.2833, 7.9250, 53.1000, 8.0500, 8.4583, 51....
+## $ Embarked &lt;chr&gt; &quot;3&quot;, &quot;1&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;2&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;1&quot;, &quot;3&quot;...
+## $ Title    &lt;fct&gt; Mr, Mrs, Miss, Mrs, Mr, Mr, Mr, Master, Mrs, Mrs, Mis...
+## $ Mother   &lt;fct&gt; No, No, No, No, No, No, No, No, Yes, No, No, No, No, ...
+## $ Surname  &lt;fct&gt; Braund, Cumings, Heikkinen, Futrelle, Allen, Moran, M...</code></pre>
+<p><strong>Solo</strong></p>
+<p>we can identify those who weren’t travelling as part of a family group.</p>
+<pre class="r"><code>library(see)
+df &lt;- mutate(df, Solo = factor(ifelse(SibSp + Parch + 1 == 1, &quot;Yes&quot;, &quot;No&quot;)))
+
+ggplot(df[1:891,], aes(x = Solo, fill=Survived)) +
+          geom_bar(position = &quot;fill&quot;) +
+          ylab(&quot;Survival Rate&quot;) +
+          geom_hline(yintercept = (sum(train$Survived)/nrow(train)), col = &quot;white&quot;, lty = 2) +
+          ggtitle(&quot;Survival Rate by Solo Passenger Status&quot;)+
+  mytheme()+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-71-1.png" width="672" /></p>
+<p><em>Those who weren’t part of a family group had notably worse survival chances.</em></p>
+<p><strong>Family Size and Family type</strong> :-<br />
+we can also determine family sizes using SibSp (the number of siblings/spouses aboard) and Parch.Then decided the family type based on number of people in family.</p>
+<p>a large family as one that has more than 4 people<br />
+a medium family as one that has more than 1 but fewer than 5<br />
+single people as 1</p>
+<pre class="r"><code>df &lt;- df %&gt;% 
+              mutate(FamilySize = SibSp + Parch + 1) %&gt;% 
+              mutate(FamilyType = factor(ifelse(FamilySize &gt; 4, &quot;Large&quot;, ifelse(FamilySize == 1, &quot;Single&quot;, &quot;Medium&quot;))))
+
+ggplot(df[1:891,], aes(x = FamilyType, fill = Survived)) +
+          geom_bar(position = &quot;fill&quot;) +
+          ylab(&quot;Survival Rate&quot;) +
+          geom_hline(yintercept = (sum(train$Survived)/nrow(train)), col = &quot;white&quot;, lty = 2) + 
+          ggtitle (&quot;Survival Rate by Family Group Size&quot;)+
+  mytheme()+
+    scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(df[1:891,], aes(x = Age, fill = Survived)) +
+      geom_density(alpha = 0.4)  + 
+      ggtitle(&quot;Density Plot of Age related to Survival&quot;)+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)+ mytheme()</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-73-1.png" width="672" /></p>
+<p>Here we see that survival rates were good up until around the age of 18, with a poor survival rate for 20-35 year olds and few survivors over the age of 60. For simplicity, let’s break this down into three groups: Child (under-18), Adult and OAP (over-60).</p>
+<pre class="r"><code>df &lt;- mutate(df, LifeStage = factor(ifelse(Age &lt; 18, &quot;Child&quot;, ifelse(Age &lt;= 60, &quot;Adult&quot;, &quot;OAP&quot;))))
+
+ggplot(df[1:891,], aes(x = LifeStage, fill = Survived)) +
+      geom_bar(position = &quot;fill&quot;) +
+      ylab(&quot;Survival Rate&quot;) +
+      geom_hline(yintercept = (sum(train$Survived)/nrow(train)), col = &quot;white&quot;, lty = 2) +
+      ggtitle(&quot;Survival Rates by Life Stage&quot;)+
+   scale_fill_brewer(palette = &quot;Dark2&quot;)+
+   mytheme()</code></pre>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-74-1.png" width="672" /></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observations from Feature engineering :-</p>
+</div>
+<p><a id="feature-selection"></a> <strong>Feature selection</strong></p>
+<p>Main reason to use feature selection :-</p>
+<ul>
+<li>Faster training<br />
+</li>
+<li>reduces complexity of model and makes it easy for interpretation<br />
+</li>
+<li>reduces overfitting<br />
+</li>
+<li>it also improves the accuracy of model if right subset of feature is choosen</li>
+</ul>
+<p>Next we look into different methods for feature selection.</p>
+<ul>
+<li>Filter methods</li>
+<li>Wrapper methods</li>
+<li>Embedded methods</li>
+</ul>
+<p><strong>Filter methods</strong> :-</p>
+<ul>
+<li>Generally used in preprocessing step.<br />
+</li>
+<li>Features are selected on the basis of their scores in various statistical tests for their correlation with the outcome variable.<br />
+</li>
+<li>Some of these test are <a href="https://www.youtube.com/watch?v=2B_UW-RweSE">Pearson’ Correlation</a>, <a href="https://www.saedsayad.com/lda.htm">LDA</a>, <a href="https://www.analyticsvidhya.com/blog/2018/01/anova-analysis-of-variance/">ANOVA</a>, <a href="https://www.youtube.com/watch?v=1Ldl5Zfcm1Y">Chi-Square</a></li>
+</ul>
+<p><strong>Wrapper methods</strong> :-</p>
+<p>Here we use to train model on subset of feature and draw inference and then we decide to add or remove features from subset. This is like a search problem and hence usually computationally expensive. Some common examples of wrapper methods are forward feature selection, backward feature elimination, recursive feature elimination, etc.</p>
+<ul>
+<li><p><strong>Forward Selection</strong> : Its an iterative method where we start with no feature and with each iteration we keep adding the feature which best improves are model till an addition of
+a new feature does not improvement performance of model.</p></li>
+<li><p><strong>Backward Elimination</strong> : Here we start with all the features and removes the least significant feature at each iteration which improves the performance of the model. We repeat this until no improvement is observed on removal of features.</p></li>
+<li><p><strong>Recursive Feature elimination</strong> : A greedy optimization algorithm which aims to find the best performing feature subset.It repeatedly creates models and keeps aside the best or the worst performing feature at each iteration. It constructs the next model with the left features until all the features are exhausted. It then ranks the features based on the order of their elimination.</p></li>
+</ul>
+<blockquote>
+<p>One of the best ways for implementing feature selection with wrapper methods is to use <a href="https://cran.r-project.org/web/packages/Boruta/index.html">Boruta</a> package that finds the importance of a feature by creating shadow features.</p>
+</blockquote>
+<p>To learn more about boruta package and how it works click <a href="https://www.analyticsvidhya.com/blog/2016/03/select-important-variables-boruta-package/">here</a></p>
+<p><strong>Embedded Methods </strong> :-</p>
+<p>Embedded methods combine the qualities’ of filter and wrapper methods. It’s implemented by algorithms that have their own built-in feature selection methods.<br />
+Some of the most popular examples of these methods are LASSO and RIDGE regression which have inbuilt penalization functions to reduce overfitting.</p>
+<ul>
+<li><p>Lasso regression performs L1 regularization which adds penalty equivalent to absolute value of the magnitude of coefficients.<br />
+</p></li>
+<li><p>Ridge regression performs L2 regularization which adds penalty equivalent to square of the magnitude of coefficients.</p></li>
+<li><p>for lasso and ridge understanding click <a href="https://www.analyticsvidhya.com/blog/2016/01/complete-tutorial-ridge-lasso-regression-python/">here</a>.*</p></li>
+</ul>
+<p>So before moving to modelling section i drop the following features :-</p>
+<ul>
+<li><strong>Name</strong> as i created a new feature title from it and title has more predictive power than just name.<br />
+</li>
+<li><strong>Ticket</strong> as i think it doesn’t have any predictive power on survival of passenger.<br />
+</li>
+<li><strong>Surname</strong> as it has too many levels to be used for model like random forest.</li>
+</ul>
+<pre class="r"><code>df &lt;- select(df, -c(Name, Ticket, Surname,FamilySize)) %&gt;%
+              glimpse()</code></pre>
+<pre><code>## Observations: 1,309
+## Variables: 13
+## $ Survived   &lt;fct&gt; 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, ...
+## $ Pclass     &lt;fct&gt; 3, 1, 3, 1, 3, 3, 1, 3, 3, 2, 3, 1, 3, 3, 3, 2, 3, ...
+## $ Sex        &lt;fct&gt; male, female, female, female, male, male, male, mal...
+## $ Age        &lt;dbl&gt; 22, 38, 26, 35, 35, 19, 54, 2, 27, 14, 4, 58, 20, 3...
+## $ SibSp      &lt;dbl&gt; 1, 1, 0, 1, 0, 0, 0, 3, 0, 1, 1, 0, 0, 1, 0, 0, 4, ...
+## $ Parch      &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 1, 0, 0, 5, 0, 0, 1, ...
+## $ Fare       &lt;dbl&gt; 7.2500, 71.2833, 7.9250, 53.1000, 8.0500, 8.4583, 5...
+## $ Embarked   &lt;chr&gt; &quot;3&quot;, &quot;1&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;2&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;1&quot;, &quot;...
+## $ Title      &lt;fct&gt; Mr, Mrs, Miss, Mrs, Mr, Mr, Mr, Master, Mrs, Mrs, M...
+## $ Mother     &lt;fct&gt; No, No, No, No, No, No, No, No, Yes, No, No, No, No...
+## $ Solo       &lt;fct&gt; No, No, Yes, No, Yes, Yes, Yes, No, No, No, No, Yes...
+## $ FamilyType &lt;fct&gt; Medium, Medium, Single, Medium, Single, Single, Sin...
+## $ LifeStage  &lt;fct&gt; Adult, Adult, Adult, Adult, Adult, Adult, Adult, Ch...</code></pre>
+</div>
+<div id="model-building" class="section level3">
+<h3><a id="model-building"></a> Model Building</h3>
+<p>Parsnip package in action. It consist of following parts for modelling in R.</p>
+<ul>
+<li>Create Specification<br />
+</li>
+<li>Set the engine<br />
+</li>
+<li>Fit the model</li>
+</ul>
+<p><br>
+First lets separate the datasets which we combined for eda and feature enggineering.</p>
+<pre class="r"><code>train &lt;- df %&gt;% filter(!is.na(Survived))
+
+test &lt;- df %&gt;% filter(is.na(Survived))</code></pre>
+<p><br></p>
+<p><a id="splitting-datasets"></a><strong>Splitting Datasets</strong></p>
+<pre class="r"><code>train_test_split &lt;- initial_split(train, prop = 0.8)
+titanic_train &lt;- training(train_test_split)
+titanic_test &lt;- testing(train_test_split) </code></pre>
+<p><br></p>
+<p><a id="training-base-models"></a> <strong>Training Base Models</strong><br />
+We will discuss below Base Models.</p>
+<ul>
+<li>Decision Tree<br />
+</li>
+<li>Logistic Regression<br />
+</li>
+<li>Support Vector Machine</li>
+</ul>
+<p><strong>Decision Tree model</strong></p>
+<p>Decision Trees are a non-parametric supervised learning method used for both classification and regression tasks. The goal is to create a model that predicts the value of a target variable by learning simple decision rules inferred from the data features.</p>
+<p>The decision rules are generally in form of if-then-else statements. The deeper the tree, the more complex the rules and fitter the model.</p>
+<p>To learn more about tree based models you can click <a href="https://www.analyticsvidhya.com/blog/2016/04/complete-tutorial-tree-based-modeling-scratch-in-python/">here</a>.</p>
+<pre class="r"><code>titanic_train</code></pre>
+<pre><code>## # A tibble: 713 x 13
+##    Survived Pclass Sex     Age SibSp Parch  Fare Embarked Title Mother
+##    &lt;fct&gt;    &lt;fct&gt;  &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;fct&gt; &lt;fct&gt; 
+##  1 0        3      male     22     1     0  7.25 3        Mr    No    
+##  2 1        1      fema~    38     1     0 71.3  1        Mrs   No    
+##  3 1        3      fema~    26     0     0  7.92 3        Miss  No    
+##  4 1        1      fema~    35     1     0 53.1  3        Mrs   No    
+##  5 0        3      male     35     0     0  8.05 3        Mr    No    
+##  6 0        1      male     54     0     0 51.9  3        Mr    No    
+##  7 0        3      male      2     3     1 21.1  3        Mast~ No    
+##  8 1        3      fema~    27     0     2 11.1  3        Mrs   Yes   
+##  9 1        2      fema~    14     1     0 30.1  1        Mrs   No    
+## 10 1        3      fema~     4     1     1 16.7  3        Miss  No    
+## # ... with 703 more rows, and 3 more variables: Solo &lt;fct&gt;,
+## #   FamilyType &lt;fct&gt;, LifeStage &lt;fct&gt;</code></pre>
+<pre class="r"><code>set.seed(1344)
+
+titanic_train$Survived = factor(titanic_train$Survived, labels = c(&quot;no&quot;, &quot;yes&quot;))
+titanic_test$Survived = factor(titanic_test$Survived, labels = c(&quot;no&quot;, &quot;yes&quot;))
+
+model_dt &lt;- parsnip::decision_tree(mode = &quot;classification&quot;) %&gt;% #Create a specification  
+  set_engine(&quot;rpart&quot;) %&gt;%  #Set the engine  
+  fit(as.factor(Survived) ~ ., data = titanic_train)  #fit the model  
+model_dt</code></pre>
+<pre><code>## parsnip model object
+## 
+## n= 713 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+##  1) root 713 261 no (0.63394109 0.36605891)  
+##    2) Title=Ranked,Mr 443  67 no (0.84875847 0.15124153) *
+##    3) Title=Royalty,Master,Miss,Mrs 270  76 yes (0.28148148 0.71851852)  
+##      6) Pclass=3 128  62 no (0.51562500 0.48437500)  
+##       12) Fare&gt;=23.35 34   4 no (0.88235294 0.11764706) *
+##       13) Fare&lt; 23.35 94  36 yes (0.38297872 0.61702128)  
+##         26) Age&gt;=27.5 21   8 no (0.61904762 0.38095238) *
+##         27) Age&lt; 27.5 73  23 yes (0.31506849 0.68493151) *
+##      7) Pclass=1,2 142  10 yes (0.07042254 0.92957746) *</code></pre>
+<p><br></p>
+<p><strong>Logistic Regression</strong></p>
+<p>Logistic Regression is a binary classification algorithm used when the response variable is dichotomous (1 or 0). Inherently, it returns the set of probabilities of target class. But, we can also obtain response labels using a probability threshold value.</p>
+<p>But Wait we cannot simply blindly fit the logistic regression. We need to check the assumptions.Let’s check logistic
+regression assumption :-</p>
+<ul>
+<li>Features should be independent from each other<br />
+</li>
+<li>Residual should not be autocorrelated</li>
+</ul>
+<pre class="r"><code>titanic_train %&gt;% select_if(is.numeric)</code></pre>
+<pre><code>## # A tibble: 713 x 4
+##      Age SibSp Parch  Fare
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1    22     1     0  7.25
+##  2    38     1     0 71.3 
+##  3    26     0     0  7.92
+##  4    35     1     0 53.1 
+##  5    35     0     0  8.05
+##  6    54     0     0 51.9 
+##  7     2     3     1 21.1 
+##  8    27     0     2 11.1 
+##  9    14     1     0 30.1 
+## 10     4     1     1 16.7 
+## # ... with 703 more rows</code></pre>
+<pre class="r"><code>cor(train[,unlist(lapply(titanic_train,is.numeric))])</code></pre>
+<pre><code>##              Age      SibSp      Parch      Fare
+## Age    1.0000000 -0.2453464 -0.1872954 0.1034598
+## SibSp -0.2453464  1.0000000  0.4148377 0.1596510
+## Parch -0.1872954  0.4148377  1.0000000 0.2162249
+## Fare   0.1034598  0.1596510  0.2162249 1.0000000</code></pre>
+<p>In statistics if the correlation coefficient is either greater than 0.75 (some say 0.70 and some even say 0.8) or less than -0.75 is considered as strong correlation. We can see that sibsp and parch are highly correlated and we will drop FamilySize.</p>
+<pre class="r"><code>titanic_test$FamilySize &lt;- NULL
+df$FamilySize &lt;- NULL
+titanic_train$FamilySize &lt;- NULL
+#and lets check again</code></pre>
+<pre class="r"><code>titanic_train %&gt;% select_if(is.numeric) %&gt;% cor()</code></pre>
+<pre><code>##              Age      SibSp      Parch      Fare
+## Age    1.0000000 -0.2664636 -0.1865875 0.1020015
+## SibSp -0.2664636  1.0000000  0.4253868 0.1720741
+## Parch -0.1865875  0.4253868  1.0000000 0.2417257
+## Fare   0.1020015  0.1720741  0.2417257 1.0000000</code></pre>
+<p>Now none of the numeric features are strongly correlated. Hence, the Multicollinearity (a given feature in the model can be approximated by a linear combination of the other features in the model) does not exist among numeric features.</p>
+<p>For categorical variables we will use chisquare test to test the independence of factors/categorical variables.</p>
+<pre class="r"><code>titanic_train %&gt;% select_if(~!is.numeric(.)) %&gt;% glimpse()</code></pre>
+<pre><code>## Observations: 713
+## Variables: 9
+## $ Survived   &lt;fct&gt; no, yes, yes, yes, no, no, no, yes, yes, yes, yes, ...
+## $ Pclass     &lt;fct&gt; 3, 1, 3, 1, 3, 1, 3, 3, 2, 3, 1, 3, 3, 2, 3, 2, 3, ...
+## $ Sex        &lt;fct&gt; male, female, female, female, male, male, male, fem...
+## $ Embarked   &lt;chr&gt; &quot;3&quot;, &quot;1&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;3&quot;, &quot;1&quot;, &quot;3&quot;, &quot;...
+## $ Title      &lt;fct&gt; Mr, Mrs, Miss, Mrs, Mr, Mr, Master, Mrs, Mrs, Miss,...
+## $ Mother     &lt;fct&gt; No, No, No, No, No, No, No, Yes, No, No, No, No, No...
+## $ Solo       &lt;fct&gt; No, No, Yes, No, Yes, Yes, No, No, No, No, Yes, No,...
+## $ FamilyType &lt;fct&gt; Medium, Medium, Single, Medium, Single, Single, Lar...
+## $ LifeStage  &lt;fct&gt; Adult, Adult, Adult, Adult, Adult, Adult, Child, Ad...</code></pre>
+<pre class="r"><code># Show the p-value of Chi Square tests
+ps = chisq.test(titanic_train$Pclass, titanic_train$Sex)$p.value
+pe = chisq.test(titanic_train$Pclass, titanic_train$Embarked)$p.value
+pt = chisq.test(titanic_train$Pclass, titanic_train$Title)$p.value
+pft = chisq.test(titanic_train$Pclass, titanic_train$FamilyType)$p.value
+pm = chisq.test(titanic_train$Pclass, titanic_train$Mother)$p.value
+pso = chisq.test(titanic_train$Pclass,titanic_train$Solo)$p.value
+pls = chisq.test(titanic_train$Pclass,titanic_train$LifeStage)$p.value
+
+se = chisq.test(titanic_train$Sex, titanic_train$Embarked)$p.value
+st = chisq.test(titanic_train$Sex, titanic_train$Title)$p.value
+sft = chisq.test(titanic_train$Sex, titanic_train$FamilyType)$p.value
+sm = chisq.test(titanic_train$Sex, titanic_train$Mother)$p.value
+sso = chisq.test(titanic_train$Sex, titanic_train$Solo)$p.value
+sls = chisq.test(titanic_train$Sex, titanic_train$LifeStage)$p.value
+
+
+
+et = chisq.test(titanic_train$Embarked, titanic_train$Title)$p.value
+eft = chisq.test(titanic_train$Embarked, titanic_train$FamilyType)$p.value
+em = chisq.test(titanic_train$Embarked, titanic_train$Mother)$p.value
+eso = chisq.test(titanic_train$Embarked, titanic_train$Solo)$p.value
+els = chisq.test(titanic_train$Embarked, titanic_train$LifeStage)$p.value
+
+
+
+tf = chisq.test(titanic_train$Title, titanic_train$FamilyType)$p.value
+tm = chisq.test(titanic_train$Title, titanic_train$Mother)$p.value
+tso = chisq.test(titanic_train$Title, titanic_train$Solo)$p.value
+tls = chisq.test(titanic_train$Title, titanic_train$LifeStage)$p.value
+
+
+
+ftm = chisq.test(titanic_train$FamilyType, titanic_train$Mother)$p.value
+ftso = chisq.test(titanic_train$FamilyType, titanic_train$Solo)$p.value
+ftls = chisq.test(titanic_train$FamilyType, titanic_train$LifeStage)$p.value
+
+mso = chisq.test(titanic_train$Mother, titanic_train$Solo)$p.value
+mls = chisq.test(titanic_train$Mother, titanic_train$LifeStage)$p.value
+
+sols = chisq.test(titanic_train$Solo, titanic_train$LifeStage)$p.value
+
+
+
+
+cormatrix = matrix(c(0,  ps,  pe,  pt,  pft,  pm,  pso,  pls,
+                     ps, 0,   se,  st,  sft,  sm,  sso,  sls,
+                     pe, se,  0,   et,  eft,  em,  eso,  els,
+                     pt, st,  et,  0,   tf,   tm,  tso,  tls, 
+                     pft,sft, eft, tf,   0,  ftm, ftso, ftls,
+                     pm,  sm,  em, tm, ftm,    0,  mso,  mls,
+                     pso,sso, eso,tso, ftso, mso,    0, sols,
+                     pls,sls, els,tls, ftls, mls,  sols,   0), 
+                   8, 8, byrow = TRUE)
+
+row.names(cormatrix) = colnames(cormatrix) = c(&quot;Pclass&quot;, &quot;Sex&quot;, &quot;Embarked&quot;, &quot;Title&quot;, &quot;FamilyType&quot;, &quot;Mother&quot;, &quot;Solo&quot;, &quot;LifeStage&quot;)
+cormatrix</code></pre>
+<pre><code>##                  Pclass           Sex     Embarked         Title
+## Pclass     0.000000e+00  7.933846e-05 1.096579e-19  4.540254e-11
+## Sex        7.933846e-05  0.000000e+00 3.750507e-05 1.134004e-150
+## Embarked   1.096579e-19  3.750507e-05 0.000000e+00  2.994070e-06
+## Title      4.540254e-11 1.134004e-150 2.994070e-06  0.000000e+00
+## FamilyType 6.534996e-10  6.505002e-16 4.429834e-05  1.802722e-47
+## Mother     1.408353e-01  2.535110e-21 7.746134e-01  5.178247e-63
+## Solo       1.246114e-03  1.227681e-16 7.775292e-03  1.014950e-38
+## LifeStage  4.911776e-07  2.079754e-04 3.156886e-02  6.382941e-48
+##               FamilyType       Mother          Solo    LifeStage
+## Pclass      6.534996e-10 1.408353e-01  1.246114e-03 4.911776e-07
+## Sex         6.505002e-16 2.535110e-21  1.227681e-16 2.079754e-04
+## Embarked    4.429834e-05 7.746134e-01  7.775292e-03 3.156886e-02
+## Title       1.802722e-47 5.178247e-63  1.014950e-38 6.382941e-48
+## FamilyType  0.000000e+00 9.310864e-17 1.492854e-155 4.240195e-26
+## Mother      9.310864e-17 0.000000e+00  3.574522e-17 5.509061e-02
+## Solo       1.492854e-155 3.574522e-17  0.000000e+00 6.396836e-19
+## LifeStage   4.240195e-26 5.509061e-02  6.396836e-19 0.000000e+00</code></pre>
+<p>Since all the p-values &lt; 0.05, we reject each Ho:Two factors are independent at 5% significance level and indeed at any reasonable level of significance. This violates the independence assumption of features and can be confirmed that multicollinearity does exist among factors.</p>
+<p>We will deal with this issue later.</p>
+<pre class="r"><code>model_log&lt;- parsnip::logistic_reg(mode = &quot;classification&quot;) %&gt;% 
+  set_engine(&quot;glm&quot;) %&gt;% 
+  fit(formula = Survived~.,
+                data = mutate(titanic_train, Survived= factor(Survived, labels = c(&quot;no&quot;, &quot;yes&quot;))))
+
+model_log</code></pre>
+<pre><code>## parsnip model object
+## 
+## 
+## Call:  stats::glm(formula = formula, family = stats::binomial, data = data)
+## 
+## Coefficients:
+##      (Intercept)           Pclass2           Pclass3           Sexmale  
+##        14.250542         -1.454999         -2.395267        -16.326923  
+##              Age             SibSp             Parch              Fare  
+##        -0.020733         -0.204633         -0.014102          0.001747  
+##        Embarked2         Embarked3         EmbarkedC      TitleRoyalty  
+##        -0.056638         -0.355190         12.839950          0.205453  
+##      TitleMaster         TitleMiss          TitleMrs           TitleMr  
+##         4.538363        -12.616712        -12.378551          0.604535  
+##        MotherYes           SoloYes  FamilyTypeMedium  FamilyTypeSingle  
+##         0.070144          2.268958          2.010797                NA  
+##   LifeStageChild      LifeStageOAP  
+##        -0.074196         -0.666036  
+## 
+## Degrees of Freedom: 712 Total (i.e. Null);  692 Residual
+## Null Deviance:       936.6 
+## Residual Deviance: 553.5     AIC: 595.5</code></pre>
+<p>To learn more about logistic regression click <a href="https://www.analyticsvidhya.com/blog/2015/11/beginners-guide-on-logistic-regression-in-r/">here</a>.</p>
+<p><strong>Support Vector Machine</strong></p>
+<p>Support Vector Machine (SVM) is a supervised machine learning algorithm which can be used for both classification or regression challenges. However, it is mostly used in classification problems. In this algorithm, we plot each data item as a point in n-dimensional space (where n is number of features you have) with the value of each feature being the value of a particular coordinate. Then, we perform classification by finding the hyper-plane that differentiate the two classes very well.</p>
+<p>To learn more about SVM click <a href="https://www.analyticsvidhya.com/blog/2017/09/understaing-support-vector-machine-example-code/">here</a></p>
+<pre class="r"><code>model_svm&lt;- parsnip::svm_poly(mode = &quot;classification&quot;) %&gt;% 
+  set_engine(&quot;kernlab&quot;) %&gt;% 
+  fit(formula = Survived~.,
+                data = mutate(titanic_train, Survived= factor(Survived, labels = c(&quot;no&quot;, &quot;yes&quot;))))</code></pre>
+<pre><code>##  Setting default kernel parameters</code></pre>
+<pre class="r"><code>model_svm</code></pre>
+<pre><code>## parsnip model object
+## 
+## Support Vector Machine object of class &quot;ksvm&quot; 
+## 
+## SV type: C-svc  (classification) 
+##  parameter : cost C = 1 
+## 
+## Polynomial kernel function. 
+##  Hyperparameters : degree =  1  scale =  1  offset =  1 
+## 
+## Number of Support Vectors : 307 
+## 
+## Objective Function Value : -241.1986 
+## Training error : 0.168303 
+## Probability model included.</code></pre>
+<p><br></p>
+<p><a id="model-evaluation"></a> <strong>Model Evaluation</strong></p>
+<pre class="r"><code>titanic_train$Survived = factor(titanic_train$Survived, labels = c(&quot;no&quot;, &quot;yes&quot;))
+titanic_test$Survived = factor(titanic_test$Survived, labels = c(&quot;no&quot;, &quot;yes&quot;))
+
+
+predictions_dt &lt;-tibble(
+  actual  = titanic_test$Survived,
+  predicted_dt = predict(model_dt,titanic_test, type = &quot;class&quot;) %&gt;% pull(.pred_class)
+)
+
+
+
+predictions_log &lt;-tibble(
+  actual  = titanic_test$Survived,
+  predicted_log = predict(model_log,titanic_test, type = &quot;class&quot;) %&gt;% pull(.pred_class)
+)
+
+
+
+predictions_svm &lt;-tibble(
+  actual  = titanic_test$Survived,
+  predicted_svm = predict(model_svm,titanic_test, type = &quot;class&quot;) %&gt;% pull(.pred_class)
+)</code></pre>
+<p>The <strong>yardstick</strong> package is a tidy interface for computing measure of performances.<br />
+The individual functions for specific metrics (e.g. accuracy(), rmse() etc.)<br />
+When more than one metric is desired metric_set() can create a new function that wraps them.</p>
+<pre class="r"><code>dt &lt;- yardstick::metrics(predictions_dt, actual, predicted_dt) %&gt;%  mutate(model_type = &quot;decision_tree&quot;) %&gt;% select(model_type, everything(),-.estimator)
+log &lt;- yardstick::metrics(predictions_log, actual, predicted_log) %&gt;% mutate(model_type = &quot;logistic_regression&quot;) %&gt;% select(model_type, everything(), -.estimator)
+svm &lt;- yardstick::metrics(predictions_svm, actual, predicted_svm) %&gt;% mutate(model_type = &quot;svm&quot;)%&gt;% select(model_type, everything(), -.estimator)
+
+rbind(dt,log,svm) %&gt;% spread(.metric, .estimate)</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   model_type          accuracy   kap
+##   &lt;chr&gt;                  &lt;dbl&gt; &lt;dbl&gt;
+## 1 decision_tree          0.803 0.597
+## 2 logistic_regression    0.798 0.591
+## 3 svm                    0.815 0.624</code></pre>
+<p><br></p>
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class="blue">
+<p>Observations :-</p>
+<ul>
+<li>Among three different types of classification models used decision tree gave the best results in terms of accuracy.<br />
+</li>
+<li>Next we will try with ensemble model techniques to improve our results further.</li>
+</ul>
+</div>
+<p><strong>In next blog post we will learn about</strong> :-</p>
+<ul>
+<li>Resampling techniques to get better idea of our model performance<br />
+</li>
+<li>Ensemble modelling techniques to improve our model performance<br />
+</li>
+<li>Interpretating machine learning models</li>
+</ul>
+</div>
+</div>

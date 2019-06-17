@@ -1,0 +1,74 @@
+---
+title: Softmax function from scratch
+author: Vidyasagar Bhargava
+date: '2019-06-14'
+slug: softmax-function-from-scratch
+categories:
+  - R
+  - Softmax
+tags:
+  - Softmax
+keywords:
+  - tech
+---
+
+<!--more-->
+
+#### Softmax Function  :-  
+
+<br>
+
+Softmax is a generalization of logistic regression which can be use for multi-class classification.  
+
+You can refer below video to get understanding of softmax function.  
+
+
+<iframe width="560" height="315" src="http://www.youtube.com/embed/LLux1SW--oM" frameborder="0" allowfullscreen></iframe>
+
+**Softmax using Vectorized Form** :-    
+
+```{r}
+library(testit)
+softmax <- function(k){
+ testit::assert(is.numeric(k))
+  return(exp(k)/sum(exp(k)))
+}
+```
+
+
+
+**Softmax Using Loops** :-  
+
+```{r}
+softmax_loops <-  function(k){
+  testit::assert(is.numeric(k))
+  sum_exp <- sum(exp(k))
+  output <- rep(0,length(k))
+  for (i in seq_along(k)){
+    output[i] <- exp(k[i])/sum_exp
+  }
+  return(output)
+}
+
+```
+
+
+Benchmarking
+
+```{r}
+library(microbenchmark)
+test <- rnorm(n = 1000) + (rnorm(n = 1000) * 2)
+res <- microbenchmark::microbenchmark(softmax_loops(test), softmax(test), times = 100)
+res
+
+```
+```{r}
+boxplot(res)
+
+```
+ 
+
+Benchmark result shows that using Vectorize form running softmax is much more efficient.  
+
+ 
+ 

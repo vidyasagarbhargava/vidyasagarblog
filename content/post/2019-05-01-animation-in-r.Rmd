@@ -1,0 +1,251 @@
+---
+title: Animation in R
+author: Vidyasagar Bhargava
+date: '2019-05-01'
+slug: animation-in-r
+categories:
+  - Animation
+tags:
+  - R
+  - Animation
+keywords:
+  - tech
+---
+
+<!--more-->
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, error = FALSE, warning=FALSE)
+```
+
+In this tutorial we will learn about animation in R using gganimate package. Before learning about animation its important to have understanding of grammar of graphics using ggplot2.  
+
+
+**About gganimate package** :-  
+
+
+```{r} gganimate ```package is helpful in creating animation by extending the grammar of graphics which was implemented by ```{r} ggplot2```. So it provides a new feature or grammar of graphics to plot object.
+
+-  ```{r} transition_*() ```:-  So this new grammar defines how the data should be spread out and how it relates to data itself.   
+-  ```{r} view_* ()```  :- it defines that how the positional scales should change along the animation.   
+-  ```{r} shadow_*()``` :- defines how data from other points in time should be presented in the given point in time.  
+-  ```{r} enter_*()```/```{r} exit``` :- defines how new data should appear and how old data should disappear during the course of the animation.  
+-  ```{r} ease_aes()``` :- defines how different aesthetics should be eased during transitions.  
+
+
+#### Examples  
+
+
+```{r}
+#loading libaries and setting up theme setting 
+library(ggplot2)
+library(gganimate)
+mytheme <- function(...){
+                 theme(legend.position = "bottom", 
+                 legend.text = element_text(size = 8),
+                 panel.background = element_rect(fill = "white"),
+                 strip.background = element_rect(fill = "white"),
+                 axis.line.x = element_line(color="black"),
+                 axis.line.y = element_line(color="black"))
+}
+```
+
+
+
+
+
+lets draw a simple plot first without any animation  
+
+```{r}
+p <- ggplot(iris, aes(x = Petal.Width, y = Petal.Length))+
+  geom_point(aes(color = Species))+
+  mytheme()+
+  scale_color_brewer(palette = "Dark2")
+plot(p)
+```
+
+
+By simply addition type transition we can generate complex animation.  
+
+
+```{r}
+anim <- p + transition_states(Species)
+anim
+```
+
+
+Transitions are functions that interpret the plot data in order to somehow distribute it over a number of frames.  
+
+
+Now we add two other arguements to ```{r}transition_state``` :-
+
+- transition_length :- It is relative length of transition.  
+- state_lenght  :- It is relative length of the pause at the states.    
+
+
+```{r}
+anim <- p + transition_states(Species, 
+                              transition_length = 2,
+                              state_length = 1)
+anim
+```
+
+
+❗ ```{r}transition_states()``` splits up plot data by a discrete variable and animates between the different states.  
+
+Also note :- ```{r}transition_states()``` specifically splits the data into subsets based on a variable in the data (here Species), and calculates intermediary data states that ensures a smooth transition between the states (something referred to as tweening).  
+
+
+#### Easing
+
+When ```{r}transition_states()``` calculates intermediary data for the tweening, it needs to decide how the change from one value to another should progress. This is a concept called easing.   
+
+
+```{r}
+anim+ease_aes('cubic-in-out')
+```
+
+
+❗ ```{r}ease_aes()``` defines the velocity with which aesthetics change during an animation 
+
+```{r}
+anim + ease_aes(y = 'bounce-out')
+```
+
+
+
+
+####Labelling  
+
+Its important to know to what each point relates to in an animation. We can add a set of variables for each
+frame.Glue syntax is really helpful here for inserting into plot labels.  
+
+```{r}
+anim + 
+  ggtitle('Now showing {closest_state}',
+          subtitle = 'Frame {frame} of {nframes}')
+```
+
+
+#### Enter and Exit  
+
+```{r}
+anim + 
+  enter_fade() + 
+  exit_shrink()
+```
+
+
+
+Starting with mtcars fataset
+
+```{r}
+ggplot(mtcars, aes(factor(cyl), mpg))+
+  geom_boxplot(aes(fill = cyl))+
+  mytheme()+
+  scale_color_brewer(palette = "Dark2")+
+  transition_states(gear)
+```
+
+
+
+```{r}
+library(gapminder)
+
+ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
+  geom_point(alpha = 0.7, show.legend = FALSE) +
+  scale_colour_manual(values = country_colors) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  facet_wrap(~continent) +
+  # Here comes the gganimate specific bits
+  labs(title = 'Year: {frame_time}', x = 'GDP per capita', y = 'life expectancy') +
+  transition_time(year) +
+  ease_aes('linear')
+```
+
+
+
+```{r}
+library(tidyverse)
+library(gganimate)
+df <- read.csv("D:/tranquil/Data/world_gdp.csv", stringsAsFactors = FALSE)
+
+```
+
+
+
+```{r}
+library(tidyr)
+df1 <- gather(df,"year", "gdp" ,2:59)
+
+df1 <- df1 %>% arrange(Country.Name, year)
+
+
+df1 <- df1 %>% rename(country =Country.Name)
+df1$year <- as.numeric(gsub("[a-zA-Z ]", "", df1$year))
+
+```
+
+
+
+
+
+```{r}
+s_total <- df1 %>%
+  group_by(country) %>% 
+  count()
+
+```
+
+
+```{r}
+
+
+df1[is.na(df1)] <- 0
+
+
+
+df2<- df1 %>% filter(country%in%c("United States", "China", "India", "United Kingdom","Japan", "France" ,"Germany"))
+
+df2$year <- as.integer(df2$year)
+p <- ggplot(df2, aes(year,gdp, color = country,group = country))+
+  geom_path()+
+  geom_point()+
+  facet_wrap(~country)+
+  theme(legend.position = 'none') +
+  labs(title = 'GDP, Year: {frame_along}') +
+  transition_reveal(along = year) +
+  ease_aes('linear')+
+  view_follow()+
+    mytheme()+
+  scale_color_brewer(palette = "Dark2")
+animate(p, 200, 300)
+
+```
+
+
+
+
+
+
+```{r}
+
+df2<- df1 %>% filter(country%in%c("India","China"))
+df2$year <- as.integer(df2$year)
+
+
+p <- ggplot(df2, aes(year,gdp, color = country,group = country))+
+  geom_path()+
+  geom_point()+
+  labs(title = 'GDP , Year: {frame_along}') +
+  transition_reveal(along = year) +
+  ease_aes('linear')+
+    mytheme()+
+  scale_color_brewer(palette = "Dark2")
+animate(p, 200, 300)
+
+
+```
+

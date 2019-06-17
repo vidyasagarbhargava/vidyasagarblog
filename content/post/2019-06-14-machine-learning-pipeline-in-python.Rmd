@@ -1,0 +1,40 @@
+---
+title: Machine Learning Pipeline in Python
+author: Vidyasagar Bhargava
+date: '2019-06-14'
+slug: machine-learning-pipeline-in-python
+categories:
+  - python
+  - Machine learning
+tags:
+  - machine learning
+  - python
+keywords:
+  - tech
+---
+
+<!--more-->
+
+<style type="text/css">
+   .gist{font-size:13px;line-height:18px;width:60em}
+   .gist pre{font-family:Menlo,Monaco,'Bitstream Vera Sans Mono','Courier New',monospace !important}
+   .gist-meta{font-family:Arial,sans-serif;font-size:13px !important}
+   .gist-meta a{color:#3b5998 !important;font-weight:bold;text-decoration:none}
+   .gist-meta a:hover{text-decoration:underline}
+</style>
+
+
+
+<script src="https://gist.github.com/vidyasagarbhargava/f54a6fcc13e1ec2d32e70ee7fdbd0790.js"></script>
+
+
+
+<br>
+
+
+
+#### Pipeline for regression problem in python    
+
+
+<script src="https://gist.github.com/vidyasagarbhargava/41f195a6a037bcdf4ffd522826c42c11.js"></script>
+

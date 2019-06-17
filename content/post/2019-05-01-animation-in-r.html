@@ -1,0 +1,161 @@
+---
+title: Animation in R
+author: Vidyasagar Bhargava
+date: '2019-05-01'
+slug: animation-in-r
+categories:
+  - Animation
+tags:
+  - R
+  - Animation
+keywords:
+  - tech
+---
+
+
+
+<!--more-->
+<p>In this tutorial we will learn about animation in R using gganimate package. Before learning about animation its important to have understanding of grammar of graphics using ggplot2.</p>
+<p><strong>About gganimate package</strong> :-</p>
+<p><code>{r} gganimate</code>package is helpful in creating animation by extending the grammar of graphics which was implemented by <code>{r} ggplot2</code>. So it provides a new feature or grammar of graphics to plot object.</p>
+<ul>
+<li><code>{r} transition_*()</code>:- So this new grammar defines how the data should be spread out and how it relates to data itself.<br />
+</li>
+<li><code>{r} view_* ()</code> :- it defines that how the positional scales should change along the animation.<br />
+</li>
+<li><code>{r} shadow_*()</code> :- defines how data from other points in time should be presented in the given point in time.<br />
+</li>
+<li><code>{r} enter_*()</code>/<code>{r} exit</code> :- defines how new data should appear and how old data should disappear during the course of the animation.<br />
+</li>
+<li><code>{r} ease_aes()</code> :- defines how different aesthetics should be eased during transitions.</li>
+</ul>
+<div id="examples" class="section level4">
+<h4>Examples</h4>
+<pre class="r"><code>#loading libaries and setting up theme setting 
+library(ggplot2)
+library(gganimate)
+mytheme &lt;- function(...){
+                 theme(legend.position = &quot;bottom&quot;, 
+                 legend.text = element_text(size = 8),
+                 panel.background = element_rect(fill = &quot;white&quot;),
+                 strip.background = element_rect(fill = &quot;white&quot;),
+                 axis.line.x = element_line(color=&quot;black&quot;),
+                 axis.line.y = element_line(color=&quot;black&quot;))
+}</code></pre>
+<p>lets draw a simple plot first without any animation</p>
+<pre class="r"><code>p &lt;- ggplot(iris, aes(x = Petal.Width, y = Petal.Length))+
+  geom_point(aes(color = Species))+
+  mytheme()+
+  scale_color_brewer(palette = &quot;Dark2&quot;)
+plot(p)</code></pre>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>By simply addition type transition we can generate complex animation.</p>
+<pre class="r"><code>anim &lt;- p + transition_states(Species)
+anim</code></pre>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-3-1.gif" /><!-- --></p>
+<p>Transitions are functions that interpret the plot data in order to somehow distribute it over a number of frames.</p>
+<p>Now we add two other arguements to <code>{r}transition_state</code> :-</p>
+<ul>
+<li>transition_length :- It is relative length of transition.<br />
+</li>
+<li>state_lenght :- It is relative length of the pause at the states.</li>
+</ul>
+<pre class="r"><code>anim &lt;- p + transition_states(Species, 
+                              transition_length = 2,
+                              state_length = 1)
+anim</code></pre>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-4-1.gif" /><!-- --></p>
+<p>❗ <code>{r}transition_states()</code> splits up plot data by a discrete variable and animates between the different states.</p>
+<p>Also note :- <code>{r}transition_states()</code> specifically splits the data into subsets based on a variable in the data (here Species), and calculates intermediary data states that ensures a smooth transition between the states (something referred to as tweening).</p>
+</div>
+<div id="easing" class="section level4">
+<h4>Easing</h4>
+<p>When <code>{r}transition_states()</code> calculates intermediary data for the tweening, it needs to decide how the change from one value to another should progress. This is a concept called easing.</p>
+<pre class="r"><code>anim+ease_aes(&#39;cubic-in-out&#39;)</code></pre>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-5-1.gif" /><!-- --></p>
+<p>❗ <code>{r}ease_aes()</code> defines the velocity with which aesthetics change during an animation</p>
+<pre class="r"><code>anim + ease_aes(y = &#39;bounce-out&#39;)</code></pre>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-6-1.gif" /><!-- --></p>
+<p>####Labelling</p>
+<p>Its important to know to what each point relates to in an animation. We can add a set of variables for each
+frame.Glue syntax is really helpful here for inserting into plot labels.</p>
+<pre class="r"><code>anim + 
+  ggtitle(&#39;Now showing {closest_state}&#39;,
+          subtitle = &#39;Frame {frame} of {nframes}&#39;)</code></pre>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-7-1.gif" /><!-- --></p>
+</div>
+<div id="enter-and-exit" class="section level4">
+<h4>Enter and Exit</h4>
+<pre class="r"><code>anim + 
+  enter_fade() + 
+  exit_shrink()</code></pre>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-8-1.gif" /><!-- --></p>
+<p>Starting with mtcars fataset</p>
+<pre class="r"><code>ggplot(mtcars, aes(factor(cyl), mpg))+
+  geom_boxplot(aes(fill = cyl))+
+  mytheme()+
+  scale_color_brewer(palette = &quot;Dark2&quot;)+
+  transition_states(gear)</code></pre>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-9-1.gif" /><!-- --></p>
+<pre class="r"><code>library(gapminder)
+
+ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
+  geom_point(alpha = 0.7, show.legend = FALSE) +
+  scale_colour_manual(values = country_colors) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  facet_wrap(~continent) +
+  # Here comes the gganimate specific bits
+  labs(title = &#39;Year: {frame_time}&#39;, x = &#39;GDP per capita&#39;, y = &#39;life expectancy&#39;) +
+  transition_time(year) +
+  ease_aes(&#39;linear&#39;)</code></pre>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-10-1.gif" /><!-- --></p>
+<pre class="r"><code>library(tidyverse)
+library(gganimate)
+df &lt;- read.csv(&quot;D:/tranquil/Data/world_gdp.csv&quot;, stringsAsFactors = FALSE)</code></pre>
+<pre class="r"><code>library(tidyr)
+df1 &lt;- gather(df,&quot;year&quot;, &quot;gdp&quot; ,2:59)
+
+df1 &lt;- df1 %&gt;% arrange(Country.Name, year)
+
+
+df1 &lt;- df1 %&gt;% rename(country =Country.Name)
+df1$year &lt;- as.numeric(gsub(&quot;[a-zA-Z ]&quot;, &quot;&quot;, df1$year))</code></pre>
+<pre class="r"><code>s_total &lt;- df1 %&gt;%
+  group_by(country) %&gt;% 
+  count()</code></pre>
+<pre class="r"><code>df1[is.na(df1)] &lt;- 0
+
+
+
+df2&lt;- df1 %&gt;% filter(country%in%c(&quot;United States&quot;, &quot;China&quot;, &quot;India&quot;, &quot;United Kingdom&quot;,&quot;Japan&quot;, &quot;France&quot; ,&quot;Germany&quot;))
+
+df2$year &lt;- as.integer(df2$year)
+p &lt;- ggplot(df2, aes(year,gdp, color = country,group = country))+
+  geom_path()+
+  geom_point()+
+  facet_wrap(~country)+
+  theme(legend.position = &#39;none&#39;) +
+  labs(title = &#39;GDP, Year: {frame_along}&#39;) +
+  transition_reveal(along = year) +
+  ease_aes(&#39;linear&#39;)+
+  view_follow()+
+    mytheme()+
+  scale_color_brewer(palette = &quot;Dark2&quot;)
+animate(p, 200, 300)</code></pre>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-14-1.gif" /><!-- --></p>
+<pre class="r"><code>df2&lt;- df1 %&gt;% filter(country%in%c(&quot;India&quot;,&quot;China&quot;))
+df2$year &lt;- as.integer(df2$year)
+
+
+p &lt;- ggplot(df2, aes(year,gdp, color = country,group = country))+
+  geom_path()+
+  geom_point()+
+  labs(title = &#39;GDP , Year: {frame_along}&#39;) +
+  transition_reveal(along = year) +
+  ease_aes(&#39;linear&#39;)+
+    mytheme()+
+  scale_color_brewer(palette = &quot;Dark2&quot;)
+animate(p, 200, 300)</code></pre>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-15-1.gif" /><!-- --></p>
+</div>

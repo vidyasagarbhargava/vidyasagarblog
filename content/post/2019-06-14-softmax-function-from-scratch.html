@@ -1,0 +1,56 @@
+---
+title: Softmax function from scratch
+author: Vidyasagar Bhargava
+date: '2019-06-14'
+slug: softmax-function-from-scratch
+categories:
+  - R
+  - Softmax
+tags:
+  - Softmax
+keywords:
+  - tech
+---
+
+
+
+<!--more-->
+<div id="softmax-function--" class="section level4">
+<h4>Softmax Function :-</h4>
+<p><br></p>
+<p>Softmax is a generalization of logistic regression which can be use for multi-class classification.</p>
+<p>You can refer below video to get understanding of softmax function.</p>
+<iframe width="560" height="315" src="http://www.youtube.com/embed/LLux1SW--oM" frameborder="0" allowfullscreen>
+</iframe>
+<p><strong>Softmax using Vectorized Form</strong> :-</p>
+<pre class="r"><code>library(testit)
+softmax &lt;- function(k){
+ testit::assert(is.numeric(k))
+  return(exp(k)/sum(exp(k)))
+}</code></pre>
+<p><strong>Softmax Using Loops</strong> :-</p>
+<pre class="r"><code>softmax_loops &lt;-  function(k){
+  testit::assert(is.numeric(k))
+  sum_exp &lt;- sum(exp(k))
+  output &lt;- rep(0,length(k))
+  for (i in seq_along(k)){
+    output[i] &lt;- exp(k[i])/sum_exp
+  }
+  return(output)
+}</code></pre>
+<p>Benchmarking</p>
+<pre class="r"><code>library(microbenchmark)
+test &lt;- rnorm(n = 1000) + (rnorm(n = 1000) * 2)
+res &lt;- microbenchmark::microbenchmark(softmax_loops(test), softmax(test), times = 100)
+res</code></pre>
+<pre><code>## Unit: microseconds
+##                 expr     min       lq     mean   median       uq      max
+##  softmax_loops(test) 209.181 216.7325 330.0789 236.7445 356.0600 5092.070
+##        softmax(test) 127.245 132.9095 212.0884 145.1810 190.6795 3423.158
+##  neval
+##    100
+##    100</code></pre>
+<pre class="r"><code>boxplot(res)</code></pre>
+<p><img src="/post/2019-06-14-softmax-function-from-scratch_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Benchmark result shows that using Vectorize form running softmax is much more efficient.</p>
+</div>
