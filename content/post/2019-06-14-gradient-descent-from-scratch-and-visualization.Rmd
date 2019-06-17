@@ -22,17 +22,17 @@ keywords:
 knitr::opts_chunk$set(message = FALSE, error = FALSE, warning=FALSE)
 ```
 
-![Gradient Descent](/img/gd.png)
+
 
 Gradient descent is an optimization algorithm used to find the values of parameters (coefficients) of a function (f) that minimizes a cost function (cost).  
 
 
 
 
-Here is video to learn about gradient descent algorithm.  
+Here is an video from Andrew NG famous machine learning course to learn about gradient descent algorithm.  
 <br>
 
-<iframe width="560" height="315" src="http://www.youtube.com/embed/sDv4f4s2SB8" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/sDv4f4s2SB8" frameborder="0" allowfullscreen></iframe>
 
 
 
