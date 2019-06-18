@@ -15,7 +15,8 @@ keywords:
 #thumbnailImage: /img/gd.png
 ---
 
-<!--more-->
+Gradient descent is an optimization algorithm used to find the values of parameters (coefficients) of a function (f) that minimizes a cost function. There are alot of blogs and videos on youtube about this topic. So therefore we are not going into theory here.  
+
 
 
 ```{r setup, include=FALSE}
@@ -23,13 +24,7 @@ knitr::opts_chunk$set(message = FALSE, error = FALSE, warning=FALSE)
 ```
 
 
-
-Gradient descent is an optimization algorithm used to find the values of parameters (coefficients) of a function (f) that minimizes a cost function (cost).  
-
-
-
-
-Here is an video from Andrew NG famous machine learning course to learn about gradient descent algorithm.  
+In this video from coursera machine learning course Andrew NG discusses about gradient descent algorithm. Its good have spend some time on this video and get intuition about it before we start writing code for it.   
 <br>
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/sDv4f4s2SB8" frameborder="0" allowfullscreen></iframe>

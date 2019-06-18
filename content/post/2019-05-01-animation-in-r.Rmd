@@ -12,14 +12,19 @@ keywords:
   - tech
 ---
 
-<!--more-->
+Nowadays many data scientist are beginning to think about how to make their visualization more compelling with animation. Animation might help a viewer work through the logic behind an
+idea by showing the intermediate steps and transitions, or show how data collected over time changes. A moving image might offer a fresh perspective, or invite users to look deeper into the data presented. An animation might also smooth the change between two views, even if there is no temporal component to the data.    
+
 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE, error = FALSE, warning=FALSE)
 ```
 
-In this tutorial we will learn about animation in R using gganimate package. Before learning about animation its important to have understanding of grammar of graphics using ggplot2.  
+
+<br> 
+
+In this post we will learn about animation in R using gganimate package. Before learning about animation its important to have understanding of grammar of graphics using ggplot2.  
 
 
 **About gganimate package** :-  
@@ -170,7 +175,7 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
 ```{r}
 library(tidyverse)
 library(gganimate)
-df <- read.csv("D:/tranquil/Data/world_gdp.csv", stringsAsFactors = FALSE)
+df <- read.csv("D:/git/vidyasagarblog/Data/world_gdp.csv", stringsAsFactors = FALSE)
 
 ```
 

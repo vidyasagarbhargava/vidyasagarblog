@@ -17,10 +17,7 @@
       <pubDate>Mon, 03 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>/2019/06/tidyverse-style-titanic-kaggle-competition/</guid>
-      <description>
-
-
-</description>
+      <description>This post is an effort of showing a new approach of modelling in R using tidyverse and tidymodels.We will go through step by step from data import to final model evaluation process in machine learning. We will not just focus on coding part but also the statistical aspect should be taken into account behind the modelling process. In this tutorial we are using titanic dataset from Kaggle competition.</description>
     </item>
     
     <item>
@@ -29,10 +26,7 @@
       <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/2019/05/animation-in-r/</guid>
-      <description>
-
-
-</description>
+      <description>Nowadays many data scientist are beginning to think about how to make their visualization more compelling with animation. Animation might help a viewer work through the logic behind anidea by showing the intermediate steps and transitions, or show how data collected over time changes. A moving image might offer a fresh perspective, or invite users to look deeper into the data presented. An animation might also smooth the change between two views, even if there is no temporal component to the data.</description>
     </item>
     
   </channel>

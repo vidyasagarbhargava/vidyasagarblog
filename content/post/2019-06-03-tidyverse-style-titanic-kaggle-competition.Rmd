@@ -14,20 +14,21 @@ tags:
   - Tidymodels
 keywords:
   - tech
-#thumbnailImagePosition: top
-#thumbnailImage: /img/titanic.gif
+thumbnailImagePosition: top
+thumbnailImage: /img/titanic2.jpg
 ---
 
+This post is an effort of showing a new approach of modelling in R using tidyverse and tidymodels.We will go through step by step from data import to final model evaluation process in machine learning. We will not just focus on coding part but also the statistical aspect should be taken into account behind the modelling process. In this tutorial we are using titanic dataset from [Kaggle](https://www.kaggle.com/) competition.  
 
 
-This tutorial is an effort of showing a new approach of modelling in R using tidyverse and tidymodels. In this tutorial we are using titanic dataset from [Kaggle](https://www.kaggle.com/) competition.  
+
+<br>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE, error = FALSE, warning=FALSE)
 ```
 
 
-<br>
 **Modelling Process and packages involves :-**  
 
 In R we can use following tidyverse packages to make machine learning model process streamline. 

@@ -12,7 +12,10 @@ keywords:
   - tech
 ---
 
-<!--more-->
+
+Softmax is a generalization of logistic regression which can be use for multi-class classification. The softmax function squashes the outputs of each unit to be between 0 and 1, just like a sigmoid function. But it also divides each output such that the total sum of the outputs is equal to 1.  
+
+
 
 #### Softmax Function  :-  
 

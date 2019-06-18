@@ -17,10 +17,7 @@
       <pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>/2019/06/machine-learning-pipeline-in-python/</guid>
-      <description>
-
-
-</description>
+      <description>In this blog post we will see introduction to machine learning using python. We will code two different type of machinelearning pipe line one for classifier and other for regression on toy datasets. These both pipelines can be used as a template for machine learning problem. A part from that we will learn about scikit-learn library. In the coming post we will use pipeline on more complex dataset from kaggle.</description>
     </item>
     
   </channel>

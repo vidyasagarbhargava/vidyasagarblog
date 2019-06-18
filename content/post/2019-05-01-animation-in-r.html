@@ -14,8 +14,10 @@ keywords:
 
 
 
-<!--more-->
-<p>In this tutorial we will learn about animation in R using gganimate package. Before learning about animation its important to have understanding of grammar of graphics using ggplot2.</p>
+<p>Nowadays many data scientist are beginning to think about how to make their visualization more compelling with animation. Animation might help a viewer work through the logic behind an
+idea by showing the intermediate steps and transitions, or show how data collected over time changes. A moving image might offer a fresh perspective, or invite users to look deeper into the data presented. An animation might also smooth the change between two views, even if there is no temporal component to the data.</p>
+<p><br></p>
+<p>In this post we will learn about animation in R using gganimate package. Before learning about animation its important to have understanding of grammar of graphics using ggplot2.</p>
 <p><strong>About gganimate package</strong> :-</p>
 <p><code>{r} gganimate</code>package is helpful in creating animation by extending the grammar of graphics which was implemented by <code>{r} ggplot2</code>. So it provides a new feature or grammar of graphics to plot object.</p>
 <ul>
@@ -112,7 +114,7 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
 <p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-10-1.gif" /><!-- --></p>
 <pre class="r"><code>library(tidyverse)
 library(gganimate)
-df &lt;- read.csv(&quot;D:/tranquil/Data/world_gdp.csv&quot;, stringsAsFactors = FALSE)</code></pre>
+df &lt;- read.csv(&quot;D:/git/vidyasagarblog/Data/world_gdp.csv&quot;, stringsAsFactors = FALSE)</code></pre>
 <pre class="r"><code>library(tidyr)
 df1 &lt;- gather(df,&quot;year&quot;, &quot;gdp&quot; ,2:59)
 
