@@ -18,15 +18,13 @@ keywords:
 #thumbnailImage: /img/titanic.gif
 ---
 
-<!--more-->
+
+
+This tutorial is an effort of showing a new approach of modelling in R using tidyverse and tidymodels. In this tutorial we are using titanic dataset from [Kaggle](https://www.kaggle.com/) competition.  
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE, error = FALSE, warning=FALSE)
 ```
-
-
-
-This tutorial is an effort of showing a new approach of modelling in R using tidyverse and tidymodels. In this tutorial we are using titanic dataset from [Kaggle](https://www.kaggle.com/) competition.  
 
 
 <br>
