@@ -32,6 +32,9 @@ In this blog post we will see introduction to machine learning using python. We 
 
 
 
+
+
+
 <br>
 
 
@@ -39,5 +42,15 @@ In this blog post we will see introduction to machine learning using python. We 
 #### Pipeline for regression problem in python    
 
 
+
 <script src="https://gist.github.com/vidyasagarbhargava/41f195a6a037bcdf4ffd522826c42c11.js"></script>
+
+
+
+
+
+#### Shiny app embeded
+
+
+<iframe width="750" height="800" scrolling="no" frameborder="0" src ="https://hadley.shinyapps.io/cran-downloads/"></iframe>
 

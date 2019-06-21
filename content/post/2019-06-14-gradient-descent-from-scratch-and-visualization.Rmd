@@ -86,5 +86,3 @@ y_on_iteration_i <- val$f_x[i]
 
 ```
 
-
-
