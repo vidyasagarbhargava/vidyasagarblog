@@ -1982,6 +1982,26 @@ Observations :-
 
 
 
+```{r}
+dt_probs<- model_dt %>% 
+  predict(titanic_test, type = "prob") %>% 
+  bind_cols(titanic_test)
+dt_probs %>% glimpse()
+```
+
+
+
+ROC-Curve
+```{r}
+dt_probs %>%
+  roc_curve(Survived, .pred_no) %>% 
+  autoplot()
+```
+
+
+
+
+
 **In next blog post we will learn about** :-    
 
 -  Resampling techniques to get better idea of our model performance   

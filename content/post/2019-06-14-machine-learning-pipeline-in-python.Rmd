@@ -47,6 +47,8 @@ In this blog post we will see introduction to machine learning using python. We 
 
 <br>
 
+
+
 #### Shiny app embeded
 
 
