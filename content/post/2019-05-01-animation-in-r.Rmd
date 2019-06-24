@@ -30,13 +30,13 @@ In this post we will learn about animation in R using gganimate package. Before 
 **About gganimate package** :-  
 
 
-```{r} gganimate ```package is helpful in creating animation by extending the grammar of graphics which was implemented by ```{r} ggplot2```. So it provides a new feature or grammar of graphics to plot object.
+```gganimate ```package is helpful in creating animation by extending the grammar of graphics which was implemented by ```ggplot2```. So it provides a new feature or grammar of graphics to plot object.
 
--  ```{r} transition_*() ```:-  So this new grammar defines how the data should be spread out and how it relates to data itself.   
--  ```{r} view_* ()```  :- it defines that how the positional scales should change along the animation.   
--  ```{r} shadow_*()``` :- defines how data from other points in time should be presented in the given point in time.  
--  ```{r} enter_*()```/```{r} exit``` :- defines how new data should appear and how old data should disappear during the course of the animation.  
--  ```{r} ease_aes()``` :- defines how different aesthetics should be eased during transitions.  
+-  ```transition_*() ```:-  So this new grammar defines how the data should be spread out and how it relates to data itself.   
+-  ```view_* ()```  :- it defines that how the positional scales should change along the animation.   
+-  ```shadow_*()``` :- defines how data from other points in time should be presented in the given point in time.  
+-  ```enter_*()```/```exit``` :- defines how new data should appear and how old data should disappear during the course of the animation.  
+-  ```ease_aes()``` :- defines how different aesthetics should be eased during transitions.  
 
 
 #### Examples  
@@ -83,7 +83,7 @@ anim
 Transitions are functions that interpret the plot data in order to somehow distribute it over a number of frames.  
 
 
-Now we add two other arguements to ```{r}transition_state``` :-
+Now we add two other arguements to ```transition_state``` :-
 
 - transition_length :- It is relative length of transition.  
 - state_lenght  :- It is relative length of the pause at the states.    
@@ -97,14 +97,14 @@ anim
 ```
 
 
-❗ ```{r}transition_states()``` splits up plot data by a discrete variable and animates between the different states.  
+```transition_states()``` splits up plot data by a discrete variable and animates between the different states.  
 
-Also note :- ```{r}transition_states()``` specifically splits the data into subsets based on a variable in the data (here Species), and calculates intermediary data states that ensures a smooth transition between the states (something referred to as tweening).  
+Also note :- ```transition_states()``` specifically splits the data into subsets based on a variable in the data (here Species), and calculates intermediary data states that ensures a smooth transition between the states (something referred to as tweening).  
 
 
 #### Easing
 
-When ```{r}transition_states()``` calculates intermediary data for the tweening, it needs to decide how the change from one value to another should progress. This is a concept called easing.   
+When ```transition_states()``` calculates intermediary data for the tweening, it needs to decide how the change from one value to another should progress. This is a concept called easing.   
 
 
 ```{r}
@@ -112,7 +112,7 @@ anim+ease_aes('cubic-in-out')
 ```
 
 
-❗ ```{r}ease_aes()``` defines the velocity with which aesthetics change during an animation 
+```ease_aes()``` defines the velocity with which aesthetics change during an animation 
 
 ```{r}
 anim + ease_aes(y = 'bounce-out')
@@ -121,7 +121,7 @@ anim + ease_aes(y = 'bounce-out')
 
 
 
-####Labelling  
+#### Labelling  
 
 Its important to know to what each point relates to in an animation. We can add a set of variables for each
 frame.Glue syntax is really helpful here for inserting into plot labels.  
@@ -171,6 +171,7 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
 ```
 
 
+#### More Animation Examples   
 
 ```{r}
 library(tidyverse)
@@ -182,7 +183,7 @@ df <- read.csv("D:/git/vidyasagarblog/Data/world_gdp.csv", stringsAsFactors = FA
 
 
 ```{r}
-library(tidyr)
+
 df1 <- gather(df,"year", "gdp" ,2:59)
 
 df1 <- df1 %>% arrange(Country.Name, year)
@@ -230,9 +231,9 @@ animate(p, 200, 300)
 
 ```
 
+<br>
 
-
-
+#### China Vs India GDP Comparison over the years    
 
 
 ```{r}

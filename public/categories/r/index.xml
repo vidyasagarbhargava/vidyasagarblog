@@ -17,8 +17,8 @@
       <pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>/2019/06/gradient-descent-from-scratch-and-visualization/</guid>
-      <description>Gradient descent is an optimization algorithm used to find the values of parameters (coefficients) of a function (f) that minimizes a cost function. There are alot of blogs and videos on youtube about this topic. So therefore we are not going into theory here.
-Below video discusses about gradient descent algorithm. Its good have spend some time on this video and get intuition about it before we start writing code for it.</description>
+      <description>Gradient descent is an optimization algorithm used to minimize some function by iteratively moving in the direction of steepest descent as defined by the negative of the gradient. In machine learning, we use gradient descent to update the parameters of our model. Parameters refer to coefficients in Linear Regression and weights in neural networks.
+Below video discusses about gradient descent algorithm. Its good to spend some time on this video and get intuition about it before we start writing code for it.</description>
     </item>
     
     <item>

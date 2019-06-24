@@ -258,17 +258,17 @@ idea by showing the intermediate steps and transitions, or show how data collect
 <p><br></p>
 <p>In this post we will learn about animation in R using gganimate package. Before learning about animation its important to have understanding of grammar of graphics using ggplot2.</p>
 <p><strong>About gganimate package</strong> :-</p>
-<p><code>{r} gganimate</code>package is helpful in creating animation by extending the grammar of graphics which was implemented by <code>{r} ggplot2</code>. So it provides a new feature or grammar of graphics to plot object.</p>
+<p><code>gganimate</code>package is helpful in creating animation by extending the grammar of graphics which was implemented by <code>ggplot2</code>. So it provides a new feature or grammar of graphics to plot object.</p>
 <ul>
-<li><code>{r} transition_*()</code>:- So this new grammar defines how the data should be spread out and how it relates to data itself.<br />
+<li><code>transition_*()</code>:- So this new grammar defines how the data should be spread out and how it relates to data itself.<br />
 </li>
-<li><code>{r} view_* ()</code> :- it defines that how the positional scales should change along the animation.<br />
+<li><code>view_* ()</code> :- it defines that how the positional scales should change along the animation.<br />
 </li>
-<li><code>{r} shadow_*()</code> :- defines how data from other points in time should be presented in the given point in time.<br />
+<li><code>shadow_*()</code> :- defines how data from other points in time should be presented in the given point in time.<br />
 </li>
-<li><code>{r} enter_*()</code>/<code>{r} exit</code> :- defines how new data should appear and how old data should disappear during the course of the animation.<br />
+<li><code>enter_*()</code>/<code>exit</code> :- defines how new data should appear and how old data should disappear during the course of the animation.<br />
 </li>
-<li><code>{r} ease_aes()</code> :- defines how different aesthetics should be eased during transitions.</li>
+<li><code>ease_aes()</code> :- defines how different aesthetics should be eased during transitions.</li>
 </ul>
 <div id="examples" class="section level4">
 <h4>Examples</h4>
@@ -295,7 +295,7 @@ plot(p)</code></pre>
 anim</code></pre>
 <p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-3-1.gif" /><!-- --></p>
 <p>Transitions are functions that interpret the plot data in order to somehow distribute it over a number of frames.</p>
-<p>Now we add two other arguements to <code>{r}transition_state</code> :-</p>
+<p>Now we add two other arguements to <code>transition_state</code> :-</p>
 <ul>
 <li>transition_length :- It is relative length of transition.<br />
 </li>
@@ -306,18 +306,20 @@ anim</code></pre>
                               state_length = 1)
 anim</code></pre>
 <p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-4-1.gif" /><!-- --></p>
-<p>❗ <code>{r}transition_states()</code> splits up plot data by a discrete variable and animates between the different states.</p>
-<p>Also note :- <code>{r}transition_states()</code> specifically splits the data into subsets based on a variable in the data (here Species), and calculates intermediary data states that ensures a smooth transition between the states (something referred to as tweening).</p>
+<p><code>transition_states()</code> splits up plot data by a discrete variable and animates between the different states.</p>
+<p>Also note :- <code>transition_states()</code> specifically splits the data into subsets based on a variable in the data (here Species), and calculates intermediary data states that ensures a smooth transition between the states (something referred to as tweening).</p>
 </div>
 <div id="easing" class="section level4">
 <h4>Easing</h4>
-<p>When <code>{r}transition_states()</code> calculates intermediary data for the tweening, it needs to decide how the change from one value to another should progress. This is a concept called easing.</p>
+<p>When <code>transition_states()</code> calculates intermediary data for the tweening, it needs to decide how the change from one value to another should progress. This is a concept called easing.</p>
 <pre class="r"><code>anim+ease_aes(&#39;cubic-in-out&#39;)</code></pre>
 <p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-5-1.gif" /><!-- --></p>
-<p>❗ <code>{r}ease_aes()</code> defines the velocity with which aesthetics change during an animation</p>
+<p><code>ease_aes()</code> defines the velocity with which aesthetics change during an animation</p>
 <pre class="r"><code>anim + ease_aes(y = &#39;bounce-out&#39;)</code></pre>
 <p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-6-1.gif" /><!-- --></p>
-<p>####Labelling</p>
+</div>
+<div id="labelling" class="section level4">
+<h4>Labelling</h4>
 <p>Its important to know to what each point relates to in an animation. We can add a set of variables for each
 frame.Glue syntax is really helpful here for inserting into plot labels.</p>
 <pre class="r"><code>anim + 
@@ -351,11 +353,13 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
   transition_time(year) +
   ease_aes(&#39;linear&#39;)</code></pre>
 <p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-10-1.gif" /><!-- --></p>
+</div>
+<div id="more-animation-examples" class="section level4">
+<h4>More Animation Examples</h4>
 <pre class="r"><code>library(tidyverse)
 library(gganimate)
 df &lt;- read.csv(&quot;D:/git/vidyasagarblog/Data/world_gdp.csv&quot;, stringsAsFactors = FALSE)</code></pre>
-<pre class="r"><code>library(tidyr)
-df1 &lt;- gather(df,&quot;year&quot;, &quot;gdp&quot; ,2:59)
+<pre class="r"><code>df1 &lt;- gather(df,&quot;year&quot;, &quot;gdp&quot; ,2:59)
 
 df1 &lt;- df1 %&gt;% arrange(Country.Name, year)
 
@@ -385,6 +389,10 @@ p &lt;- ggplot(df2, aes(year,gdp, color = country,group = country))+
   scale_color_brewer(palette = &quot;Dark2&quot;)
 animate(p, 200, 300)</code></pre>
 <p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-14-1.gif" /><!-- --></p>
+<p><br></p>
+</div>
+<div id="china-vs-india-gdp-comparison-over-the-years" class="section level4">
+<h4>China Vs India GDP Comparison over the years</h4>
 <pre class="r"><code>df2&lt;- df1 %&gt;% filter(country%in%c(&quot;India&quot;,&quot;China&quot;))
 df2$year &lt;- as.integer(df2$year)
 
@@ -646,8 +654,8 @@ animate(p, 200, 300)</code></pre>
                   Jun 6, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">Gradient descent is an optimization algorithm used to find the values of parameters (coefficients) of a function (f) that minimizes a cost function. There are alot of blogs and videos on youtube about this topic. So therefore we are not going into theory here.
-Below video discusses about gradient descent algorithm. Its good have spend some time on this video and get intuition about it before we start writing code for it.</div>
+              <div class="media-content hide-xs font-merryweather">Gradient descent is an optimization algorithm used to minimize some function by iteratively moving in the direction of steepest descent as defined by the negative of the gradient. In machine learning, we use gradient descent to update the parameters of our model. Parameters refer to coefficients in Linear Regression and weights in neural networks.
+Below video discusses about gradient descent algorithm. Its good to spend some time on this video and get intuition about it before we start writing code for it.</div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -656,15 +664,15 @@ Below video discusses about gradient descent algorithm. Its good have spend some
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="/2019/06/machine-learning-pipeline-in-python/">
-                <h3 class="media-heading">Machine Learning Pipeline in Python</h3>
+              <a class="link-unstyled" href="/2019/06/machine-learning-in-python/">
+                <h3 class="media-heading">Machine Learning in Python</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
                   Jun 6, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">In this blog post we will see introduction to machine learning using python. We will code two different type of machinelearning pipe line one for classifier and other for regression on toy datasets. These both pipelines can be used as a template for machine learning problem. A part from that we will learn about scikit-learn library. In the coming post we will use pipeline on more complex dataset from kaggle.</div>
+              <div class="media-content hide-xs font-merryweather">In this blog post we will see introduction to machine learning using python. We will train model on two different datasets using two different type of machine learning algorithm one for classifier and other for regression.The learning algorithm finds the pattern in the training data which maps the input data features to target variable and it outputs an machine learning model that captures these patterns. Also we will learn about scikit-learn library in detail (coming soon).</div>
             </div>
             <div style="clear:both;"></div>
             <hr>
