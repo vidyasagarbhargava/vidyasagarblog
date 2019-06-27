@@ -26,6 +26,12 @@ The new approach however has this philosphy that there is only one statistical t
 
 <br>
 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, error = FALSE, warning=FALSE)
+```
+
+
 So here is the framework for conducting any hypothetical test :-    
 
 **Step 1** :-   
