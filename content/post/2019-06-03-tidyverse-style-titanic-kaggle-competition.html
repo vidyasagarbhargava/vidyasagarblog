@@ -1,8 +1,8 @@
 ---
-title: Tidyverse Style titanic kaggle competition
+title: Learn Machine Learning using Kaggle Competition titanic dataset  
 author: Vidyasagaar Bhargava
 date: '2019-06-03'
-slug: tidyverse-style-titanic-kaggle-competition
+slug: learn-machine-learning-using-kaggle-competition-titanic-dataset
 categories:
   - R
   - Classification
@@ -20,7 +20,7 @@ thumbnailImage: /img/titanic2.jpg
 
 
 
-<p>This post is an effort of showing a new approach of modelling in R using tidyverse and tidymodels.We will go through step by step from data import to final model evaluation process in machine learning. We will not just focus on coding part but also the statistical aspect should be taken into account behind the modelling process. In this tutorial we are using titanic dataset from <a href="https://www.kaggle.com/">Kaggle</a> competition.</p>
+<p>This post is an effort of showing an approach of Machine learning in R using tidyverse and tidymodels. We will go through step by step from data import to final model evaluation process in machine learning. We will not just focus on coding part but also the statistical aspect should be taken into account behind the modelling process. In this tutorial we are using titanic dataset from <a href="https://www.kaggle.com/">Kaggle</a> competition.</p>
 <p><br></p>
 <p><strong>Modelling Process and packages involves :-</strong></p>
 <p>In R we can use following tidyverse packages to make machine learning model process streamline.</p>
@@ -850,6 +850,54 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 <li>One would assume that those cheap cabins were mostly located deeper inside the ship</li>
 </ul>
 </div>
+<p><strong>Z-test</strong> :-</p>
+<p>Lets say we want to check the significance of a variable Pclass. Let’s assume that upper class has better chances of survival
+than its population.</p>
+<p>To verify this we will use z-test.</p>
+<p>H0 :- There is no significant difference between chances of survival of lower and upper class.</p>
+<p>HA :- There is better chances of survival of upper class.</p>
+<pre class="r"><code>train$Survived &lt;- as.numeric(train$Survived)
+new_train &lt;-  subset(train, train$Pclass == 1)</code></pre>
+<pre class="r"><code>#function for z test
+
+z.test2 = function(a, b, n){
+ sample_mean = mean(a)
+ pop_mean = mean(b)
+ c = nrow(n)
+ var_b = var(b)
+ zeta = (sample_mean - pop_mean) / (sqrt(var_b/c))
+ return(zeta)
+}
+
+z.test2(new_train$Survived, train$Survived, new_train)</code></pre>
+<pre><code>## [1] 7.423828</code></pre>
+<blockquote>
+<p>If |z| &lt; 1.96 then difference is not significant at 5%. and if |z|&gt;= 1.96 then difference is significant at 5%.</p>
+</blockquote>
+<p>Our Z value comes out to be 7.42 which affirms our suggestion that upper class has better chances of survival than its population.</p>
+<p><strong>Chi Square Test</strong> :-</p>
+<pre class="r"><code>chisq.test(train$Survived, train$Sex)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+## 
+## data:  train$Survived and train$Sex
+## X-squared = 260.72, df = 1, p-value &lt; 2.2e-16</code></pre>
+<pre class="r"><code>summary(table(train$Survived, train$Pclass))</code></pre>
+<pre><code>## Number of cases in table: 891 
+## Number of factors: 2 
+## Test for independence of all factors:
+##  Chisq = 102.89, df = 2, p-value = 4.549e-23</code></pre>
+<p>Since -P-value is less than 0.05 we can infer that Sex and Pclass are highly significant variables and must be included in the modelling.</p>
+<p><strong>Anova</strong>:-</p>
+<ul>
+<li>Anova simply check if atleast one of two or more groups have statistically differnt means.<br />
+</li>
+<li>We use ANOVA test to understand the correlation between atleast one categorical variable with two or more factor levels and continuos response variable.<br />
+</li>
+<li>Anova is measured using a statistic known as F-ratio. It is defined as the ratio of mean square between groups to the mean square with in group.<br />
+</li>
+<li>Anova is used in Machine learning modelling to identify whether a categorical variable is relevant to a continuos variable. Also whether a treatment is effective to model or not.</li>
+</ul>
 <p><br></p>
 <p><a id="multivariate-analysis"></a> <strong>Multivariate Analysis</strong></p>
 <p><strong>Pclass vs Fare</strong></p>
@@ -859,7 +907,7 @@ ggplot(subset(df, !is.na(Survived)), aes(Pclass, Fare, fill = Survived))+
   scale_y_log10()+
   mytheme()+
   scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
 <style>
 div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 </style>
@@ -885,7 +933,7 @@ df %&gt;%
   facet_wrap(~ Survived, ncol = 1)+
   mytheme()+
   scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
 <p>Observations :-</p>
 <ol style="list-style-type: decimal">
 <li>There is a suprisingly broad distribution between the 1st class passenger fares</li>
@@ -903,7 +951,7 @@ df %&gt;%
   facet_grid(~ Survived)+
   scale_fill_brewer(palette = &quot;Dark2&quot;)+
   mytheme()</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
 <p>Observations :-</p>
 <ol style="list-style-type: decimal">
 <li>Embarked Q contains most exclusively 3rd class passengers.</li>
@@ -922,7 +970,7 @@ df %&gt;%
   facet_grid(Pclass ~ Embarked)+
   theme_minimal()+
   scale_color_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
 <p>Observations :-<br />
 1. Pclass == 1 passengers seem indeed on average older than those in 3rd (and maybe 2nd) class. Not many children seemed to have travelled 1st class.<br />
 2. Most Pclass == 2 children appear to have survived, regardless of Sex.
@@ -937,7 +985,7 @@ ggplot(subset(df,!is.na(Survived)), aes(x=Age)) +
   facet_wrap(~Sex)+
   mytheme()+
   scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
 <p>observations :-
 1. Younger boys had a notable survival advantage over male teenagers, whereas the same was not true for girls to nearly the same extent.<br />
 2. Most women over 60 survived, whereas for men the high-Age tail of the distribution falls slower.
@@ -945,7 +993,7 @@ ggplot(subset(df,!is.na(Survived)), aes(x=Age)) +
 <p><strong>Pclass vs Sex</strong></p>
 <pre class="r"><code>mosaicplot(table(train$Survived,train$Sex, train$Pclass ),
            main = &quot;Survival by Pclass and Sex&quot; , shade = TRUE)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
 <p><br></p>
 <style>
 div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
@@ -964,7 +1012,7 @@ ggplot(aes(Parch, SibSp, color = as.factor(Survived))) +
 geom_count()+
 mytheme()+
 scale_color_brewer(type = &quot;seq&quot;,palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
 <p><br></p>
 <style>
 div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
@@ -986,7 +1034,7 @@ train %&gt;%
   scale_y_log10()+
   mytheme()+
  scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
 <p><br></p>
 <style>
 div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
@@ -1029,7 +1077,7 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
   geom_density(size = 1.0)+
   mytheme()+
   scale_color_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-46-1.png" width="672" />
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-51-1.png" width="672" />
 Observations :-<br />
 1. The highest SibSp values (4 and 5) are indeed associated with a narrower distribution peaking at a lower Age. Most likely groups of children from large families.</p>
 <hr />
@@ -1050,7 +1098,7 @@ Observations :-<br />
   transition_time(Fare)+
   ease_aes(&#39;linear&#39;, interval = 0.00001)+
   mytheme()</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-47-1.gif" /><!-- --></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-52-1.gif" /><!-- --></p>
 <pre class="r"><code>train %&gt;% 
   ggplot(aes(x = Age, y = Fare))+
   geom_point(aes(color = Survived), size = 2)+
@@ -1064,7 +1112,7 @@ Observations :-<br />
        title = &quot;{closest_state}&quot;, 
        subtitle=&quot;Kaggle data&quot;, 
        fill=&quot;Close&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-48-1.gif" /><!-- --></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-53-1.gif" /><!-- --></p>
 <hr />
 </div>
 <div id="missing-values-treatment" class="section level3">
@@ -1213,7 +1261,7 @@ hist(df$Age, freq=F, main=&#39;Age: Original Data&#39;,
   col=&#39;#D95F02&#39;, ylim=c(0,0.04))
 hist(mice_output$Age, freq=F, main=&#39;Age: MICE Output&#39;, 
   col=&quot;#1B9E77&quot;, ylim=c(0,0.04))</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
 <pre class="r"><code># Replace Age variable from the mice model.
 df$Age &lt;- mice_output$Age
 
@@ -1268,7 +1316,7 @@ sum(is.na(df$Age))</code></pre>
   mytheme() + 
   theme(plot.title = element_text(hjust = 0.5))+
   scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-61-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
 <style>
 div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 </style>
@@ -1305,7 +1353,7 @@ ggplot(filter(df, Pclass==3 &amp; Embarked==&quot;S&quot;), aes(Fare)) +
   mytheme() +
   theme(plot.title = element_text(hjust = 0.5))+
   scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
 <style>
 div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 </style>
@@ -1421,7 +1469,7 @@ ggplot(df[1:891,], aes(x = Title, fill = Survived)) +
           ggtitle(&quot;Survival Rate by Title&quot;)+
   mytheme()+
   scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-68-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-73-1.png" width="672" /></p>
 <p><strong>Mother</strong>
 Identify mothers travelling with their children, using their Title and the Parch variable</p>
 <pre class="r"><code>df &lt;- df %&gt;%
@@ -1433,7 +1481,7 @@ ggplot(df[1:891,], aes(x = Mother, fill = Survived)) +
           ggtitle(&quot;Survival Rate by Motherhood Status&quot;)+
   mytheme()+
   scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-69-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-74-1.png" width="672" /></p>
 <blockquote>
 <p><em>The survival chances of mothers was over twice as good as that of the other passengers.</em></p>
 </blockquote>
@@ -1470,7 +1518,7 @@ ggplot(df[1:891,], aes(x = Solo, fill=Survived)) +
           ggtitle(&quot;Survival Rate by Solo Passenger Status&quot;)+
   mytheme()+
   scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-71-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-76-1.png" width="672" /></p>
 <p><em>Those who weren’t part of a family group had notably worse survival chances.</em></p>
 <p><strong>Family Size and Family type</strong> :-<br />
 we can also determine family sizes using SibSp (the number of siblings/spouses aboard) and Parch.Then decided the family type based on number of people in family.</p>
@@ -1488,12 +1536,12 @@ ggplot(df[1:891,], aes(x = FamilyType, fill = Survived)) +
           ggtitle (&quot;Survival Rate by Family Group Size&quot;)+
   mytheme()+
     scale_fill_brewer(palette = &quot;Dark2&quot;)</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-77-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(df[1:891,], aes(x = Age, fill = Survived)) +
       geom_density(alpha = 0.4)  + 
       ggtitle(&quot;Density Plot of Age related to Survival&quot;)+
   scale_fill_brewer(palette = &quot;Dark2&quot;)+ mytheme()</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-73-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-78-1.png" width="672" /></p>
 <p>Here we see that survival rates were good up until around the age of 18, with a poor survival rate for 20-35 year olds and few survivors over the age of 60. For simplicity, let’s break this down into three groups: Child (under-18), Adult and OAP (over-60).</p>
 <pre class="r"><code>df &lt;- mutate(df, LifeStage = factor(ifelse(Age &lt; 18, &quot;Child&quot;, ifelse(Age &lt;= 60, &quot;Adult&quot;, &quot;OAP&quot;))))
 
@@ -1504,7 +1552,7 @@ ggplot(df[1:891,], aes(x = LifeStage, fill = Survived)) +
       ggtitle(&quot;Survival Rates by Life Stage&quot;)+
    scale_fill_brewer(palette = &quot;Dark2&quot;)+
    mytheme()</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-74-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
 <style>
 div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 </style>
@@ -1919,7 +1967,7 @@ dt_probs %&gt;% glimpse()</code></pre>
 <pre class="r"><code>dt_probs %&gt;%
   roc_curve(Survived, .pred_no) %&gt;% 
   autoplot()</code></pre>
-<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-91-1.png" width="672" /></p>
+<p><img src="/post/2019-06-03-tidyverse-style-titanic-kaggle-competition_files/figure-html/unnamed-chunk-96-1.png" width="672" /></p>
 <p><strong>In next blog post we will learn about</strong> :-</p>
 <ul>
 <li>Resampling techniques to get better idea of our model performance<br />

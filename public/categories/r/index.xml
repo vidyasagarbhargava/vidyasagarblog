@@ -6,10 +6,21 @@
     <description>Recent content in R on Vidyasagar Bhargava</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 14 Jun 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Jun 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Hypothesis Testing made simple</title>
+      <link>/2019/06/hypothesis-testing-made-simple/</link>
+      <pubDate>Thu, 27 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/06/hypothesis-testing-made-simple/</guid>
+      <description>In this post we will use a very elegant and simple approach to test any hypothesis. The approach is based on growing trend of emphasizingdata and simulations instead of classical probability theory and complex statistical tests. Since We know that its hard to wrap the head around how to reject null hypotheses and interpret p-values.
+
+The new approach however has this philosphy that there is only one statistical test and that at their core, all statistical tests (be they t-tests, chi-squared tests, signed Wilcoxon rank tests, etc.</description>
+    </item>
     
     <item>
       <title>Gradient Descent from scratch and visualization</title>
@@ -33,12 +44,12 @@ Softmax is a generalization of logistic regression which can be use for multi-cl
     </item>
     
     <item>
-      <title>Tidyverse Style titanic kaggle competition</title>
-      <link>/2019/06/tidyverse-style-titanic-kaggle-competition/</link>
+      <title>Learn Machine Learning using Kaggle Competition titanic dataset</title>
+      <link>/2019/06/learn-machine-learning-using-kaggle-competition-titanic-dataset/</link>
       <pubDate>Mon, 03 Jun 2019 00:00:00 +0000</pubDate>
       
-      <guid>/2019/06/tidyverse-style-titanic-kaggle-competition/</guid>
-      <description>This post is an effort of showing a new approach of modelling in R using tidyverse and tidymodels.We will go through step by step from data import to final model evaluation process in machine learning. We will not just focus on coding part but also the statistical aspect should be taken into account behind the modelling process. In this tutorial we are using titanic dataset from Kaggle competition.</description>
+      <guid>/2019/06/learn-machine-learning-using-kaggle-competition-titanic-dataset/</guid>
+      <description>This post is an effort of showing an approach of Machine learning in R using tidyverse and tidymodels. We will go through step by step from data import to final model evaluation process in machine learning. We will not just focus on coding part but also the statistical aspect should be taken into account behind the modelling process. In this tutorial we are using titanic dataset from Kaggle competition.</description>
     </item>
     
   </channel>

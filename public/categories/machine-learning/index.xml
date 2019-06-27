@@ -21,12 +21,12 @@
     </item>
     
     <item>
-      <title>Tidyverse Style titanic kaggle competition</title>
-      <link>/2019/06/tidyverse-style-titanic-kaggle-competition/</link>
+      <title>Learn Machine Learning using Kaggle Competition titanic dataset</title>
+      <link>/2019/06/learn-machine-learning-using-kaggle-competition-titanic-dataset/</link>
       <pubDate>Mon, 03 Jun 2019 00:00:00 +0000</pubDate>
       
-      <guid>/2019/06/tidyverse-style-titanic-kaggle-competition/</guid>
-      <description>This post is an effort of showing a new approach of modelling in R using tidyverse and tidymodels.We will go through step by step from data import to final model evaluation process in machine learning. We will not just focus on coding part but also the statistical aspect should be taken into account behind the modelling process. In this tutorial we are using titanic dataset from Kaggle competition.</description>
+      <guid>/2019/06/learn-machine-learning-using-kaggle-competition-titanic-dataset/</guid>
+      <description>This post is an effort of showing an approach of Machine learning in R using tidyverse and tidymodels. We will go through step by step from data import to final model evaluation process in machine learning. We will not just focus on coding part but also the statistical aspect should be taken into account behind the modelling process. In this tutorial we are using titanic dataset from Kaggle competition.</description>
     </item>
     
   </channel>

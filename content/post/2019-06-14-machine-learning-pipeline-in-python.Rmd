@@ -45,6 +45,28 @@ In this blog post we will see introduction to machine learning using python. We 
 
 
 
+Here another way 1
+```
+{% gist f54a6fcc13e1ec2d32e70ee7fdbd0790 [ml_pipeline.ipynb] %}
+```
+
+
+<br>
+Here another way 2
+```
+{% raw %}
+{% gist f54a6fcc13e1ec2d32e70ee7fdbd0790 ml_pipeline.ipynb %}
+```
+<br>
+ 
+here another way 4
+```
+{% gist f54a6fcc13e1ec2d32e70ee7fdbd0790 vidyasagarbhargava/ml_pipeline.ipynb %}
+
+```
+
+
+
 ```{r, include= FALSE}
 #### Shiny app embeded
 

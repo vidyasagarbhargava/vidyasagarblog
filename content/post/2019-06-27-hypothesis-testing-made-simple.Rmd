@@ -1,0 +1,180 @@
+---
+title: Hypothesis Testing made simple
+author: Vidyasagar Bhargava
+date: '2019-06-27'
+slug: hypothesis-testing-made-simple
+categories:
+  - R
+  - hypothesis testing
+  - simulation
+tags:
+  - R
+  - hypothesis testing
+keywords:
+  - tech
+---
+
+
+
+In this post we will use a very elegant and simple approach to test any hypothesis. The approach is based on growing trend of emphasizing 
+data and simulations instead of classical probability theory and complex statistical tests. Since We know that its hard to wrap the head around how to reject null hypotheses and interpret p-values. 
+
+<br>
+
+
+The new approach however has this philosphy that there is only one statistical test and that at their core, all statistical tests (be they t-tests, chi-squared tests, signed Wilcoxon rank tests, etc.) follow the same universal pattern.  
+
+<br>
+
+So here is the framework for conducting any hypothetical test :-    
+
+**Step 1** :-   
+
+Calculate the sample statistic (e.g. difference in means, average, median, proportions, difference in proportions, chi-square value). This is basically statistic from observed data.  
+
+
+
+**Step 2** :-  
+
+Now you define your null hypothesis and simulate a world for the null hypothesis. For example, if you think there might be a difference between two groups, the null hypothesis would assume that there is no difference.   
+
+Note:-  Your model of the null hypothesis should be capable of generating random datasets similar to the original dataset.  
+
+
+**Step 3** :-  
+
+After that compute the same sample statistic for your simulated datasets.
+
+**Step 4** :-  
+
+Calculate the probability (i.e. p-value) that sample statistic could exist in null world i.e. Count the fraction of times the sample statistic from simulated datasets exceed sample statistic from observed data. This fraction is approximates the p-value.  
+
+**Step 5** :-  
+
+Decide if sample statistic is statistically significant by choosing some thresholds. Some thresholds are (from least to rigorous) 0.1 , 0.05, 0.01  
+If it's sufficiently small, you can conclude that the apparent effect is unlikely to be due to chance.  
+
+
+ 
+These are the only 5 steps we need to test any hypothesis no need to remember any flowchart or the statistical test.  
+
+
+Specify Statistic --> Generate Data --> Calculate Statistic ---> Visualize  
+
+
+Now we use  `infer` package for the above framework. Below are the steps :-  
+
+
+
+
+-  `specify` :- the response and explanatory variable `(y~x)`  
+-  `hypothesize` :- what the null hypothesis is ?  
+-  `generate` :- Generate new samples under the null hypothesis model.   
+                 resample from our original data without replacement, each time shuffling the `group` `(type = "permute")`  
+-  `calculate` :- the statistic `(stat = "diff in props")` for each of the reps.  
+
+
+
+
+Now let's take an example  
+------------------------------------------------------------------------------------------------
+
+
+Question:- Is an automatic or manual transmission better for mpg ?
+
+
+
+Dataset  
+
+```{r warning=FALSE}
+library(tidyverse)
+library(ggridges)
+library(scales)
+library(infer)
+mtcars %>% mutate(type = ifelse(am == 1, "manual", "automatic")) %>% glimpse() ->mtcars_dataset
+```
+<br>
+
+First we just look at the ridge plot to see if there is a differnce in distribution of car_type in automatic and manual.  We include `quantile_lines = TRUE` and `quantiles = 2` to draw the median of each distribution.  
+
+
+
+```{r}
+ggplot(mtcars_dataset, aes(x = mpg, y = type, fill = type)) +
+  stat_density_ridges(quantile_lines = TRUE, quantiles = 2, scale = 3, color = "black") + 
+  scale_fill_manual(values = c("#98823c", "#9a5ea1"), guide = FALSE) +
+  labs(x = "mpg for type of cars", y = NULL) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank())
+```
+
+
+Null Hypothesis :- The median of mpg of automatic and manual transmission cars are same.  
+
+
+Step 1: -  
+We can use the infer package to determine the exact difference in the medians of these distributions. 
+
+
+```{r}
+(diff_prop <- mtcars_dataset %>% 
+  specify(mpg~type) %>% 
+  calculate("diff in medians",
+            order = c("manual", "automatic")))
+```
+
+5.5 is our sample statistic value.  
+
+
+>  The question is whether this difference is statistically significant?   
+
+
+
+Step 2 :-  
+
+simulate the world where the actual difference between the automatic and manual car is zero and calculate the sample statistic for each simulated dataset.  
+
+```{r warning=FALSE}
+mtcars_null_dataset <- mtcars_dataset %>% 
+  specify(mpg~type) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 5000) %>% 
+  calculate("diff in medians", order = c("manual", "automatic"))
+```
+
+
+Visualize  
+
+```{r}
+mtcars_null_dataset %>% 
+  visualize(obs_stat = diff_prop)+
+  theme_minimal()+
+  theme(panel.grid.minor = element_blank())
+```
+
+Note that red line is pretty far in the right tail of the distribution and seems atypical.  We can calculate the probability of seeing a difference as big as 5.5 with the `get_value()` function.  
+
+Here we specify the `direction = "both"` to get two tailed p-value since we care about only the difference between mean or median(as difference could be negative if flip the order).  
+
+
+
+```{r}
+mtcars_null_dataset %>% 
+  get_pvalue(obs_stat = diff_prop, direction = "both")
+```
+
+
+The point here is that there is only 0.88% of chance of seeing  a difference at least as large as 5.5 in a world there is no difference. Its pretty strong evidence and we feel confident that there's a statistically significant difference  between mpg of automatic and manual where manual cars give more mpg than automatic cars.    
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,145 @@
+---
+title: Hypothesis Testing made simple
+author: Vidyasagar Bhargava
+date: '2019-06-27'
+slug: hypothesis-testing-made-simple
+categories:
+  - R
+  - hypothesis testing
+  - simulation
+tags:
+  - R
+  - hypothesis testing
+keywords:
+  - tech
+---
+
+
+
+<p>In this post we will use a very elegant and simple approach to test any hypothesis. The approach is based on growing trend of emphasizing
+data and simulations instead of classical probability theory and complex statistical tests. Since We know that its hard to wrap the head around how to reject null hypotheses and interpret p-values.</p>
+<p><br></p>
+<p>The new approach however has this philosphy that there is only one statistical test and that at their core, all statistical tests (be they t-tests, chi-squared tests, signed Wilcoxon rank tests, etc.) follow the same universal pattern.</p>
+<p><br></p>
+<p>So here is the framework for conducting any hypothetical test :-</p>
+<p><strong>Step 1</strong> :-</p>
+<p>Calculate the sample statistic (e.g. difference in means, average, median, proportions, difference in proportions, chi-square value). This is basically statistic from observed data.</p>
+<p><strong>Step 2</strong> :-</p>
+<p>Now you define your null hypothesis and simulate a world for the null hypothesis. For example, if you think there might be a difference between two groups, the null hypothesis would assume that there is no difference.</p>
+<p>Note:- Your model of the null hypothesis should be capable of generating random datasets similar to the original dataset.</p>
+<p><strong>Step 3</strong> :-</p>
+<p>After that compute the same sample statistic for your simulated datasets.</p>
+<p><strong>Step 4</strong> :-</p>
+<p>Calculate the probability (i.e. p-value) that sample statistic could exist in null world i.e. Count the fraction of times the sample statistic from simulated datasets exceed sample statistic from observed data. This fraction is approximates the p-value.</p>
+<p><strong>Step 5</strong> :-</p>
+<p>Decide if sample statistic is statistically significant by choosing some thresholds. Some thresholds are (from least to rigorous) 0.1 , 0.05, 0.01<br />
+If it’s sufficiently small, you can conclude that the apparent effect is unlikely to be due to chance.</p>
+<p>These are the only 5 steps we need to test any hypothesis no need to remember any flowchart or the statistical test.</p>
+<p>Specify Statistic –&gt; Generate Data –&gt; Calculate Statistic —&gt; Visualize</p>
+<p>Now we use <code>infer</code> package for the above framework. Below are the steps :-</p>
+<ul>
+<li><code>specify</code> :- the response and explanatory variable <code>(y~x)</code><br />
+</li>
+<li><code>hypothesize</code> :- what the null hypothesis is ?<br />
+</li>
+<li><code>generate</code> :- Generate new samples under the null hypothesis model.<br />
+resample from our original data without replacement, each time shuffling the <code>group</code> <code>(type = "permute")</code><br />
+</li>
+<li><code>calculate</code> :- the statistic <code>(stat = "diff in props")</code> for each of the reps.</li>
+</ul>
+<div id="now-lets-take-an-example" class="section level2">
+<h2>Now let’s take an example</h2>
+<p>Question:- Is an automatic or manual transmission better for mpg ?</p>
+<p>Dataset</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## -- Attaching packages ---------------------------- tidyverse 1.2.1 --</code></pre>
+<pre><code>## v ggplot2 3.2.0     v purrr   0.3.2
+## v tibble  2.1.3     v dplyr   0.8.1
+## v tidyr   0.8.3     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.4.0</code></pre>
+<pre><code>## -- Conflicts ------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(ggridges)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;ggridges&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     scale_discrete_manual</code></pre>
+<pre class="r"><code>library(scales)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;scales&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     discard</code></pre>
+<pre><code>## The following object is masked from &#39;package:readr&#39;:
+## 
+##     col_factor</code></pre>
+<pre class="r"><code>library(infer)
+mtcars %&gt;% mutate(type = ifelse(am == 1, &quot;manual&quot;, &quot;automatic&quot;)) %&gt;% glimpse() -&gt;mtcars_dataset</code></pre>
+<pre><code>## Observations: 32
+## Variables: 12
+## $ mpg  &lt;dbl&gt; 21.0, 21.0, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19....
+## $ cyl  &lt;dbl&gt; 6, 6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, 8, 8, 8, 8, 4, 4, ...
+## $ disp &lt;dbl&gt; 160.0, 160.0, 108.0, 258.0, 360.0, 225.0, 360.0, 146.7, 1...
+## $ hp   &lt;dbl&gt; 110, 110, 93, 110, 175, 105, 245, 62, 95, 123, 123, 180, ...
+## $ drat &lt;dbl&gt; 3.90, 3.90, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 3.9...
+## $ wt   &lt;dbl&gt; 2.620, 2.875, 2.320, 3.215, 3.440, 3.460, 3.570, 3.190, 3...
+## $ qsec &lt;dbl&gt; 16.46, 17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20.00, 2...
+## $ vs   &lt;dbl&gt; 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, ...
+## $ am   &lt;dbl&gt; 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, ...
+## $ gear &lt;dbl&gt; 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, ...
+## $ carb &lt;dbl&gt; 4, 4, 1, 1, 2, 1, 4, 2, 2, 4, 4, 3, 3, 3, 4, 4, 4, 1, 2, ...
+## $ type &lt;chr&gt; &quot;manual&quot;, &quot;manual&quot;, &quot;manual&quot;, &quot;automatic&quot;, &quot;automatic&quot;, &quot;...</code></pre>
+<p><br></p>
+<p>First we just look at the ridge plot to see if there is a differnce in distribution of car_type in automatic and manual. We include <code>quantile_lines = TRUE</code> and <code>quantiles = 2</code> to draw the median of each distribution.</p>
+<pre class="r"><code>ggplot(mtcars_dataset, aes(x = mpg, y = type, fill = type)) +
+  stat_density_ridges(quantile_lines = TRUE, quantiles = 2, scale = 3, color = &quot;black&quot;) + 
+  scale_fill_manual(values = c(&quot;#98823c&quot;, &quot;#9a5ea1&quot;), guide = FALSE) +
+  labs(x = &quot;mpg for type of cars&quot;, y = NULL) +
+  theme_minimal() +
+  theme(panel.grid.minor = element_blank())</code></pre>
+<pre><code>## Picking joint bandwidth of 2.45</code></pre>
+<p><img src="/post/2019-06-27-hypothesis-testing-made-simple_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Null Hypothesis :- The median of mpg of automatic and manual transmission cars are same.</p>
+<p>Step 1: -<br />
+We can use the infer package to determine the exact difference in the medians of these distributions.</p>
+<pre class="r"><code>(diff_prop &lt;- mtcars_dataset %&gt;% 
+  specify(mpg~type) %&gt;% 
+  calculate(&quot;diff in medians&quot;,
+            order = c(&quot;manual&quot;, &quot;automatic&quot;)))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##    stat
+##   &lt;dbl&gt;
+## 1   5.5</code></pre>
+<p>5.5 is our sample statistic value.</p>
+<blockquote>
+<p>The question is whether this difference is statistically significant?</p>
+</blockquote>
+<p>Step 2 :-</p>
+<p>simulate the world where the actual difference between the automatic and manual car is zero and calculate the sample statistic for each simulated dataset.</p>
+<pre class="r"><code>mtcars_null_dataset &lt;- mtcars_dataset %&gt;% 
+  specify(mpg~type) %&gt;% 
+  hypothesize(null = &quot;independence&quot;) %&gt;% 
+  generate(reps = 5000) %&gt;% 
+  calculate(&quot;diff in medians&quot;, order = c(&quot;manual&quot;, &quot;automatic&quot;))</code></pre>
+<pre><code>## Setting `type = &quot;permute&quot;` in `generate()`.</code></pre>
+<p>Visualize</p>
+<pre class="r"><code>mtcars_null_dataset %&gt;% 
+  visualize(obs_stat = diff_prop)+
+  theme_minimal()+
+  theme(panel.grid.minor = element_blank())</code></pre>
+<pre><code>## Warning: `visualize()` shouldn&#39;t be used to plot p-value. Arguments
+## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
+## deprecated. Use `shade_p_value()` instead.</code></pre>
+<p><img src="/post/2019-06-27-hypothesis-testing-made-simple_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Note that red line is pretty far in the right tail of the distribution and seems atypical. We can calculate the probability of seeing a difference as big as 5.5 with the <code>get_value()</code> function.</p>
+<p>Here we specify the <code>direction = "both"</code> to get two tailed p-value since we care about only the difference between mean or median(as difference could be negative if flip the order).</p>
+<pre class="r"><code>mtcars_null_dataset %&gt;% 
+  get_pvalue(obs_stat = diff_prop, direction = &quot;both&quot;)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1   0.008</code></pre>
+<p>The point here is that there is only 0.88% of chance of seeing a difference at least as large as 5.5 in a world there is no difference. Its pretty strong evidence and we feel confident that there’s a statistically significant difference between mpg of automatic and manual where manual cars give more mpg than automatic cars.</p>
+</div>

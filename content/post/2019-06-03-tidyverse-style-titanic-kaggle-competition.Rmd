@@ -1,8 +1,8 @@
 ---
-title: Tidyverse Style titanic kaggle competition
+title: Learn Machine Learning using Kaggle Competition titanic dataset  
 author: Vidyasagaar Bhargava
 date: '2019-06-03'
-slug: tidyverse-style-titanic-kaggle-competition
+slug: learn-machine-learning-using-kaggle-competition-titanic-dataset
 categories:
   - R
   - Classification
@@ -18,7 +18,7 @@ thumbnailImagePosition: top
 thumbnailImage: /img/titanic2.jpg
 ---
 
-This post is an effort of showing a new approach of modelling in R using tidyverse and tidymodels.We will go through step by step from data import to final model evaluation process in machine learning. We will not just focus on coding part but also the statistical aspect should be taken into account behind the modelling process. In this tutorial we are using titanic dataset from [Kaggle](https://www.kaggle.com/) competition.  
+This post is an effort of showing an approach of Machine learning in R using tidyverse and tidymodels. We will go through step by step from data import to final model evaluation process in machine learning. We will not just focus on coding part but also the statistical aspect should be taken into account behind the modelling process. In this tutorial we are using titanic dataset from [Kaggle](https://www.kaggle.com/) competition.  
 
 
 
@@ -848,6 +848,88 @@ Observations :-
 
 
 </div>
+
+
+**Z-test** :-   
+
+Lets say we want to check the significance of a variable Pclass. Let's assume that upper class has better chances of survival
+than its population.  
+
+To verify this we will use z-test.  
+
+H0 :- There is no significant difference between chances of survival of lower and upper class.  
+
+HA :- There is better chances of survival of upper class.  
+
+
+```{r}
+train$Survived <- as.numeric(train$Survived)
+new_train <-  subset(train, train$Pclass == 1)
+```
+
+
+
+```{r}
+#function for z test
+
+z.test2 = function(a, b, n){
+ sample_mean = mean(a)
+ pop_mean = mean(b)
+ c = nrow(n)
+ var_b = var(b)
+ zeta = (sample_mean - pop_mean) / (sqrt(var_b/c))
+ return(zeta)
+}
+
+z.test2(new_train$Survived, train$Survived, new_train)
+```
+
+> If |z| < 1.96 then difference is not significant at 5%. and if |z|>= 1.96 then difference is significant at 5%.
+
+
+Our Z value comes out to be 7.42 which affirms our suggestion that upper class has better chances of survival than its population.  
+
+
+
+
+**Chi Square Test** :-
+
+```{r}
+chisq.test(train$Survived, train$Sex)
+```
+
+```{r}
+summary(table(train$Survived, train$Pclass))
+```
+
+Since -P-value is less than 0.05 we can  infer that Sex and Pclass are highly significant variables and must be included in the modelling.  
+
+
+
+
+
+**Anova**:-  
+
+-  Anova simply check if atleast one of two or more groups have statistically differnt means.  
+-  We use ANOVA test to understand the correlation between atleast one categorical variable with  two or more factor levels and continuos response variable.  
+-  Anova is measured using a statistic known as F-ratio. It is defined as the ratio of mean square between groups to the mean square with in group.  
+-  Anova is used in Machine learning modelling to identify whether a categorical variable is relevant  to a continuos variable. Also whether a treatment is effective to model or not.  
+
+
+
+
+
+
+
+
+```{r}
+
+```
+
+
+
+
+
 
 
 <br>
