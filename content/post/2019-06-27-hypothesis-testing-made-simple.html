@@ -51,31 +51,10 @@ resample from our original data without replacement, each time shuffling the <co
 <h2>Now let’s take an example</h2>
 <p>Question:- Is an automatic or manual transmission better for mpg ?</p>
 <p>Dataset</p>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## -- Attaching packages ---------------------------- tidyverse 1.2.1 --</code></pre>
-<pre><code>## v ggplot2 3.2.0     v purrr   0.3.2
-## v tibble  2.1.3     v dplyr   0.8.1
-## v tidyr   0.8.3     v stringr 1.4.0
-## v readr   1.3.1     v forcats 0.4.0</code></pre>
-<pre><code>## -- Conflicts ------------------------------- tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(ggridges)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;ggridges&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     scale_discrete_manual</code></pre>
-<pre class="r"><code>library(scales)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;scales&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     discard</code></pre>
-<pre><code>## The following object is masked from &#39;package:readr&#39;:
-## 
-##     col_factor</code></pre>
-<pre class="r"><code>library(infer)
+<pre class="r"><code>library(tidyverse)
+library(ggridges)
+library(scales)
+library(infer)
 mtcars %&gt;% mutate(type = ifelse(am == 1, &quot;manual&quot;, &quot;automatic&quot;)) %&gt;% glimpse() -&gt;mtcars_dataset</code></pre>
 <pre><code>## Observations: 32
 ## Variables: 12
@@ -99,7 +78,6 @@ mtcars %&gt;% mutate(type = ifelse(am == 1, &quot;manual&quot;, &quot;automatic&
   labs(x = &quot;mpg for type of cars&quot;, y = NULL) +
   theme_minimal() +
   theme(panel.grid.minor = element_blank())</code></pre>
-<pre><code>## Picking joint bandwidth of 2.45</code></pre>
 <p><img src="/post/2019-06-27-hypothesis-testing-made-simple_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>Null Hypothesis :- The median of mpg of automatic and manual transmission cars are same.</p>
 <p>Step 1: -<br />
@@ -123,15 +101,11 @@ We can use the infer package to determine the exact difference in the medians of
   hypothesize(null = &quot;independence&quot;) %&gt;% 
   generate(reps = 5000) %&gt;% 
   calculate(&quot;diff in medians&quot;, order = c(&quot;manual&quot;, &quot;automatic&quot;))</code></pre>
-<pre><code>## Setting `type = &quot;permute&quot;` in `generate()`.</code></pre>
 <p>Visualize</p>
 <pre class="r"><code>mtcars_null_dataset %&gt;% 
   visualize(obs_stat = diff_prop)+
   theme_minimal()+
   theme(panel.grid.minor = element_blank())</code></pre>
-<pre><code>## Warning: `visualize()` shouldn&#39;t be used to plot p-value. Arguments
-## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
-## deprecated. Use `shade_p_value()` instead.</code></pre>
 <p><img src="/post/2019-06-27-hypothesis-testing-made-simple_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>Note that red line is pretty far in the right tail of the distribution and seems atypical. We can calculate the probability of seeing a difference as big as 5.5 with the <code>get_value()</code> function.</p>
 <p>Here we specify the <code>direction = "both"</code> to get two tailed p-value since we care about only the difference between mean or median(as difference could be negative if flip the order).</p>
@@ -140,6 +114,6 @@ We can use the infer package to determine the exact difference in the medians of
 <pre><code>## # A tibble: 1 x 1
 ##   p_value
 ##     &lt;dbl&gt;
-## 1   0.008</code></pre>
+## 1  0.0076</code></pre>
 <p>The point here is that there is only 0.88% of chance of seeing a difference at least as large as 5.5 in a world there is no difference. Its pretty strong evidence and we feel confident that there’s a statistically significant difference between mpg of automatic and manual where manual cars give more mpg than automatic cars.</p>
 </div>
