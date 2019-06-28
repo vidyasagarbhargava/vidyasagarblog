@@ -78,7 +78,7 @@ mtcars %&gt;% mutate(type = ifelse(am == 1, &quot;manual&quot;, &quot;automatic&
   labs(x = &quot;mpg for type of cars&quot;, y = NULL) +
   theme_minimal() +
   theme(panel.grid.minor = element_blank())</code></pre>
-<p><img src="/post/2019-06-27-hypothesis-testing-made-simple_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="/post/2019-06-27-hypothesis-testing-made-simple_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>Null Hypothesis :- The median of mpg of automatic and manual transmission cars are same.</p>
 <p>Step 1: -<br />
 We can use the infer package to determine the exact difference in the medians of these distributions.</p>
@@ -106,14 +106,14 @@ We can use the infer package to determine the exact difference in the medians of
   visualize(obs_stat = diff_prop)+
   theme_minimal()+
   theme(panel.grid.minor = element_blank())</code></pre>
-<p><img src="/post/2019-06-27-hypothesis-testing-made-simple_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p>Note that red line is pretty far in the right tail of the distribution and seems atypical. We can calculate the probability of seeing a difference as big as 5.5 with the <code>get_value()</code> function.</p>
+<p><img src="/post/2019-06-27-hypothesis-testing-made-simple_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Note that red line is pretty far in the right tail of the distribution and seems atypical. We can calculate the probability of seeing a difference as big as 5.5 with the <code>get_pvalue()</code> function.</p>
 <p>Here we specify the <code>direction = "both"</code> to get two tailed p-value since we care about only the difference between mean or median(as difference could be negative if flip the order).</p>
 <pre class="r"><code>mtcars_null_dataset %&gt;% 
   get_pvalue(obs_stat = diff_prop, direction = &quot;both&quot;)</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##   p_value
 ##     &lt;dbl&gt;
-## 1  0.0076</code></pre>
+## 1 0.00960</code></pre>
 <p>The point here is that there is only 0.88% of chance of seeing a difference at least as large as 5.5 in a world there is no difference. Its pretty strong evidence and we feel confident that there’s a statistically significant difference between mpg of automatic and manual where manual cars give more mpg than automatic cars.</p>
 </div>

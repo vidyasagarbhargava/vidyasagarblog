@@ -15,6 +15,10 @@ keywords:
 ---
 
 
+```{r, echo=FALSE}
+url <- "https://lh5.googleusercontent.com/YZqHavDVw_fUDUJCnobMlDe7swomjSgOcGcNidICV1LObnZblW3zaDP9-Tg=w2400"
+```
+
 
 In this post we will use a very elegant and simple approach to test any hypothesis. The approach is based on growing trend of emphasizing 
 data and simulations instead of classical probability theory and complex statistical tests. Since We know that its hard to wrap the head around how to reject null hypotheses and interpret p-values. 
@@ -158,7 +162,7 @@ mtcars_null_dataset %>%
   theme(panel.grid.minor = element_blank())
 ```
 
-Note that red line is pretty far in the right tail of the distribution and seems atypical.  We can calculate the probability of seeing a difference as big as 5.5 with the `get_value()` function.  
+Note that red line is pretty far in the right tail of the distribution and seems atypical.  We can calculate the probability of seeing a difference as big as 5.5 with the `get_pvalue()` function.  
 
 Here we specify the `direction = "both"` to get two tailed p-value since we care about only the difference between mean or median(as difference could be negative if flip the order).  
 

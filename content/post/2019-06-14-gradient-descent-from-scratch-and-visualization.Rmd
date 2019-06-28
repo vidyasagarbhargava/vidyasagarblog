@@ -11,8 +11,8 @@ tags:
   - gradient descent
 keywords:
   - tech
-#thumbnailImagePosition: top
-#thumbnailImage: /img/gd.png
+thumbnailImagePosition: left
+thumbnailImage: https://lh5.googleusercontent.com/v43yxzm31VVX09EGMcwo-oA1J2BqYRy57wo2CyKVszSKDhaJlSzD0DOmuec=w2400
 ---
 
 Gradient descent is an optimization algorithm used to minimize some function by iteratively moving in the direction of steepest descent as defined by the negative of the gradient. In machine learning, we use gradient descent to update the parameters of our model. Parameters refer to coefficients in Linear Regression and weights in neural networks. 
