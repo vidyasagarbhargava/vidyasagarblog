@@ -19,6 +19,7 @@ keywords:
 
 In this blog post we will see introduction to machine learning using python. We will train model on two different datasets using  two  different type of machine learning algorithm one for classifier and other for regression.The learning algorithm finds the pattern in the training data which maps the input data features to target variable and it outputs an machine learning model that captures these patterns. Also we will learn about scikit-learn library in detail (coming soon). 
 
+
 <style type="text/css">
    .gist{font-size:13px;line-height:18px;width:60em}
    .gist pre{font-family:Menlo,Monaco,'Bitstream Vera Sans Mono','Courier New',monospace !important}
@@ -38,11 +39,13 @@ In this blog post we will see introduction to machine learning using python. We 
 #### Pipeline for regression problem in python    
 
 
-<script src="https://gist.github.com/vidyasagarbhargava/41f195a6a037bcdf4ffd522826c42c11.js"></script>
+<script type="application/javascript" src="https://gist.github.com/vidyasagarbhargava/41f195a6a037bcdf4ffd522826c42c11.js"></script>
 
 
 
 
+
+<iframe src="https://trello.com/b/rbpEfMld/data-science" frameBorder="0" width="100%" height="600"></iframe> 
 
 ```{r, include= FALSE}
 #### Shiny app embeded
@@ -51,8 +54,4 @@ In this blog post we will see introduction to machine learning using python. We 
 #<iframe width="750" height="800" scrolling="no" frameborder="0" src #="https://hadley.shinyapps.io/cran-downloads/"></iframe>
 
 ```
-
-
-
-
 

@@ -12,6 +12,8 @@ tags:
   - hypothesis testing
 keywords:
   - tech
+thumbnailImagePosition: left
+thumbnailImage: https://lh5.googleusercontent.com/PnRQg3Y93lBfp7BjDZc_f6MFQVmMAiisF3TSBFNk9js1TiL0p1I-mTb9K84=w2400
 ---
 
 
