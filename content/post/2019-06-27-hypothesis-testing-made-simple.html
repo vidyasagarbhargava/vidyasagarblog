@@ -18,7 +18,7 @@ thumbnailImage: https://lh5.googleusercontent.com/PnRQg3Y93lBfp7BjDZc_f6MFQVmMAi
 
 
 
-<p>In this post we will use a very elegant and simple approach to test any hypothesis. The approach is based on growing trend of emphasizing
+<p>In this post we will use a very elegant and simple approach to test any hypothesis. This approach is based on growing trend of emphasizing
 data and simulations instead of classical probability theory and complex statistical tests. Since We know that its hard to wrap the head around how to reject null hypotheses and interpret p-values.</p>
 <p><br></p>
 <p>The new approach however has this philosphy that there is only one statistical test and that at their core, all statistical tests (be they t-tests, chi-squared tests, signed Wilcoxon rank tests, etc.) follow the same universal pattern.</p>
@@ -116,6 +116,6 @@ We can use the infer package to determine the exact difference in the medians of
 <pre><code>## # A tibble: 1 x 1
 ##   p_value
 ##     &lt;dbl&gt;
-## 1  0.0064</code></pre>
+## 1    0.01</code></pre>
 <p>The point here is that there is only 0.88% of chance of seeing a difference at least as large as 5.5 in a world there is no difference. Its pretty strong evidence and we feel confident that there’s a statistically significant difference between mpg of automatic and manual where manual cars give more mpg than automatic cars.</p>
 </div>

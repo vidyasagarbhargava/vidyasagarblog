@@ -61,37 +61,43 @@ enableEmojis = true
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-user\"></i>"
   url = "/about"
 
-[[menu.links]]
+[[menu.main]]
   weight = 3
   identifier = "email"
   name = "Email me"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-envelope\"></i>"
   url = "mailto:vsagar19@gmail.com"
 
-[[menu.links]]
+[[menu.main]]
   weight = 4
+  identifier = "speakerdeck"
+  name = "Speaker Deck"
+  pre = "<i class=\"sidebar-button-icon fa fa-lg fa-microphone\"></i>"
+  url = "https://speakerdeck.com/vidyasagarbhargava"
+
+[[menu.main]]
+  weight = 5
   identifier = "github"
   name = "GitHub"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-github\"></i>"
   url = "https://github.com/vidyasagarbhargava"
 
-
-[[menu.links]]
+[[menu.main]]
   weight = 6
   identifier = "linkedin"
   name = "Linkedin"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-linkedin\"></i>"
   url = "https://www.linkedin.com/in/vidyasagarbhargava/"
 
-[[menu.main]]
-  weight = 6
+[[menu.links]]
+  weight = 1
   identifier = "tags"
   name = "Tags"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-tags\"></i>"
   url = "/tags"
   
-[[menu.main]]
-  weight = 7
+[[menu.links]]
+  weight = 2
   identifier = "archives"
   name = "Archives"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-archive\"></i>"
