@@ -1,5 +1,5 @@
 ---
-title: Animation in R
+title: Animation in R 🔥
 author: Vidyasagar Bhargava
 date: '2019-05-01'
 slug: animation-in-r
@@ -49,6 +49,7 @@ In this post we will learn about animation in R using gganimate package. Before 
 ```{r}
 #loading libaries and setting up theme setting 
 library(ggplot2)
+library(tidyverse)
 library(gganimate)
 mytheme <- function(...){
                  theme(legend.position = "bottom", 
@@ -145,9 +146,14 @@ anim +
   exit_shrink()
 ```
 
+<br>
+-------------------------------------------------------------------------------------------------
 
 
-Starting with mtcars fataset
+#### Examples   
+
+
+mtcars dataset  
 
 ```{r}
 ggplot(mtcars, aes(factor(cyl), mpg))+
@@ -157,8 +163,8 @@ ggplot(mtcars, aes(factor(cyl), mpg))+
   transition_states(gear)
 ```
 
-
-
+<br>
+gapminder dataset   
 ```{r}
 library(gapminder)
 
@@ -174,52 +180,25 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
   ease_aes('linear')
 ```
 
-
-#### More Animation Examples   
+<br>
+gdp dataset  
 
 ```{r}
-library(tidyverse)
-library(gganimate)
 df <- read.csv("D:/git/vidyasagarblog/Data/world_gdp.csv", stringsAsFactors = FALSE)
-
-```
-
-
-
-```{r}
-
 df1 <- gather(df,"year", "gdp" ,2:59)
-
 df1 <- df1 %>% arrange(Country.Name, year)
-
-
 df1 <- df1 %>% rename(country =Country.Name)
 df1$year <- as.numeric(gsub("[a-zA-Z ]", "", df1$year))
-
-```
-
-
-
-
-
-```{r}
 s_total <- df1 %>%
   group_by(country) %>% 
   count()
-
+df1[is.na(df1)] <- 0
+df2<- df1 %>% filter(country%in%c("United States", "China", "India", "United Kingdom","Japan", "France" ,"Germany"))
+df2$year <- as.integer(df2$year)
 ```
 
 
 ```{r}
-
-
-df1[is.na(df1)] <- 0
-
-
-
-df2<- df1 %>% filter(country%in%c("United States", "China", "India", "United Kingdom","Japan", "France" ,"Germany"))
-
-df2$year <- as.integer(df2$year)
 p <- ggplot(df2, aes(year,gdp, color = country,group = country))+
   geom_path()+
   geom_point()+
@@ -237,8 +216,8 @@ animate(p, 200, 300)
 
 <br>
 
-#### China Vs India GDP Comparison over the years    
 
+China Vs India GDP Comparison over the years    
 
 ```{r}
 
@@ -258,4 +237,29 @@ animate(p, 200, 300)
 
 
 ```
+
+-------------------------------------------------------------------------------------
+
+rayshader 🔥
+
+rayshader is an open source package for producing 2D and 3D data visualizations in R.It allows the user to translate  ggplot2 objects into beautiful 3D data visualization.  To learn more about this package click [here](https://www.rayshader.com/).  
+
+
+```{r}
+library(rayshader)
+
+gg = ggplot(diamonds, aes(x, depth)) +
+  stat_density_2d(aes(fill = stat(nlevel)), 
+                  geom = "polygon",
+                  n = 100,bins = 10,contour = TRUE) +
+  facet_wrap(clarity~.) +
+  scale_fill_viridis_c(option = "A")#
+
+plot_gg(gg,multicore=TRUE,width=5,height=5,scale=250)
+```
+
+
+![](https://lh6.googleusercontent.com/jOzQoKDN9v754vvHJTDiPyYSo8k73_w0XqtAzurTXXO0W9AEEs45r_N5z5o=w2400)
+
+
 

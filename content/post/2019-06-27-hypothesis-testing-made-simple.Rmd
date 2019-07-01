@@ -67,23 +67,24 @@ Decide if sample statistic is statistically significant by choosing some thresho
 If it's sufficiently small, you can conclude that the apparent effect is unlikely to be due to chance.  
 
 
- 
+> Statistical Significant simply means that the result we see in the sample also exists in the population and hence statistic is reliable.  
+
+
 These are the only 5 steps we need to test any hypothesis no need to remember any flowchart or the statistical test.  
 
 
 Specify Statistic --> Generate Data --> Calculate Statistic ---> Visualize  
 
 
-Now we use  `infer` package for the above framework. Below are the steps :-  
+We will use  `infer` package for the above framework. Below are the important functions of this package:-  
 
 
-
-
--  `specify` :- the response and explanatory variable `(y~x)`  
+-  `specify` :-   the response and explanatory variable `(y~x)`  
 -  `hypothesize` :- what the null hypothesis is ?  
 -  `generate` :- Generate new samples under the null hypothesis model.   
                  resample from our original data without replacement, each time shuffling the `group` `(type = "permute")`  
 -  `calculate` :- the statistic `(stat = "diff in props")` for each of the reps.  
+-  `visualize` :- for visualization   
 
 
 
@@ -103,6 +104,7 @@ library(tidyverse)
 library(ggridges)
 library(scales)
 library(infer)
+set.seed(123) #To make random draws reproducible
 mtcars %>% mutate(type = ifelse(am == 1, "manual", "automatic")) %>% glimpse() ->mtcars_dataset
 ```
 <br>
@@ -142,9 +144,9 @@ We can use the infer package to determine the exact difference in the medians of
 
 
 
-Step 2 :-  
+Step 2 and 3 :-  
 
-simulate the world where the actual difference between the automatic and manual car is zero and calculate the sample statistic for each simulated dataset.  
+Simulate the world where the actual difference between the automatic and manual car is zero and calculate the sample statistic for each simulated dataset.  
 
 ```{r warning=FALSE}
 mtcars_null_dataset <- mtcars_dataset %>% 
@@ -153,9 +155,8 @@ mtcars_null_dataset <- mtcars_dataset %>%
   generate(reps = 5000) %>% 
   calculate("diff in medians", order = c("manual", "automatic"))
 ```
+Step 4 :- 
 
-
-Visualize  
 
 ```{r}
 mtcars_null_dataset %>% 
@@ -168,15 +169,15 @@ Note that red line is pretty far in the right tail of the distribution and seems
 
 Here we specify the `direction = "both"` to get two tailed p-value since we care about only the difference between mean or median(as difference could be negative if flip the order).  
 
-
-
 ```{r}
 mtcars_null_dataset %>% 
   get_pvalue(obs_stat = diff_prop, direction = "both")
 ```
 
 
-The point here is that there is only 0.88% of chance of seeing  a difference at least as large as 5.5 in a world there is no difference. Its pretty strong evidence and we feel confident that there's a statistically significant difference  between mpg of automatic and manual where manual cars give more mpg than automatic cars.    
+Step 5:-  
+
+The point here is that there is only 0.68% of chance of seeing  a difference at least as large as 5.5 in a world there is no difference. Its pretty strong evidence and we feel confident that there's a statistically significant difference  between mpg of automatic and manual where manual cars give more mpg than automatic cars.    
 
 
 

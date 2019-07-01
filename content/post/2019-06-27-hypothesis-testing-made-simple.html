@@ -36,9 +36,12 @@ data and simulations instead of classical probability theory and complex statist
 <p><strong>Step 5</strong> :-</p>
 <p>Decide if sample statistic is statistically significant by choosing some thresholds. Some thresholds are (from least to rigorous) 0.1 , 0.05, 0.01<br />
 If it’s sufficiently small, you can conclude that the apparent effect is unlikely to be due to chance.</p>
+<blockquote>
+<p>Statistical Significant simply means that the result we see in the sample also exists in the population and hence statistic is reliable.</p>
+</blockquote>
 <p>These are the only 5 steps we need to test any hypothesis no need to remember any flowchart or the statistical test.</p>
 <p>Specify Statistic –&gt; Generate Data –&gt; Calculate Statistic —&gt; Visualize</p>
-<p>Now we use <code>infer</code> package for the above framework. Below are the steps :-</p>
+<p>We will use <code>infer</code> package for the above framework. Below are the important functions of this package:-</p>
 <ul>
 <li><code>specify</code> :- the response and explanatory variable <code>(y~x)</code><br />
 </li>
@@ -47,7 +50,9 @@ If it’s sufficiently small, you can conclude that the apparent effect is unlik
 <li><code>generate</code> :- Generate new samples under the null hypothesis model.<br />
 resample from our original data without replacement, each time shuffling the <code>group</code> <code>(type = "permute")</code><br />
 </li>
-<li><code>calculate</code> :- the statistic <code>(stat = "diff in props")</code> for each of the reps.</li>
+<li><code>calculate</code> :- the statistic <code>(stat = "diff in props")</code> for each of the reps.<br />
+</li>
+<li><code>visualize</code> :- for visualization</li>
 </ul>
 <div id="now-lets-take-an-example" class="section level2">
 <h2>Now let’s take an example</h2>
@@ -57,6 +62,7 @@ resample from our original data without replacement, each time shuffling the <co
 library(ggridges)
 library(scales)
 library(infer)
+set.seed(123) #To make random draws reproducible
 mtcars %&gt;% mutate(type = ifelse(am == 1, &quot;manual&quot;, &quot;automatic&quot;)) %&gt;% glimpse() -&gt;mtcars_dataset</code></pre>
 <pre><code>## Observations: 32
 ## Variables: 12
@@ -96,14 +102,14 @@ We can use the infer package to determine the exact difference in the medians of
 <blockquote>
 <p>The question is whether this difference is statistically significant?</p>
 </blockquote>
-<p>Step 2 :-</p>
-<p>simulate the world where the actual difference between the automatic and manual car is zero and calculate the sample statistic for each simulated dataset.</p>
+<p>Step 2 and 3 :-</p>
+<p>Simulate the world where the actual difference between the automatic and manual car is zero and calculate the sample statistic for each simulated dataset.</p>
 <pre class="r"><code>mtcars_null_dataset &lt;- mtcars_dataset %&gt;% 
   specify(mpg~type) %&gt;% 
   hypothesize(null = &quot;independence&quot;) %&gt;% 
   generate(reps = 5000) %&gt;% 
   calculate(&quot;diff in medians&quot;, order = c(&quot;manual&quot;, &quot;automatic&quot;))</code></pre>
-<p>Visualize</p>
+<p>Step 4 :-</p>
 <pre class="r"><code>mtcars_null_dataset %&gt;% 
   visualize(obs_stat = diff_prop)+
   theme_minimal()+
@@ -116,6 +122,7 @@ We can use the infer package to determine the exact difference in the medians of
 <pre><code>## # A tibble: 1 x 1
 ##   p_value
 ##     &lt;dbl&gt;
-## 1    0.01</code></pre>
-<p>The point here is that there is only 0.88% of chance of seeing a difference at least as large as 5.5 in a world there is no difference. Its pretty strong evidence and we feel confident that there’s a statistically significant difference between mpg of automatic and manual where manual cars give more mpg than automatic cars.</p>
+## 1  0.0068</code></pre>
+<p>Step 5:-</p>
+<p>The point here is that there is only 0.68% of chance of seeing a difference at least as large as 5.5 in a world there is no difference. Its pretty strong evidence and we feel confident that there’s a statistically significant difference between mpg of automatic and manual where manual cars give more mpg than automatic cars.</p>
 </div>

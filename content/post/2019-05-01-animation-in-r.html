@@ -1,5 +1,5 @@
 ---
-title: Animation in R
+title: Animation in R 🔥
 author: Vidyasagar Bhargava
 date: '2019-05-01'
 slug: animation-in-r
@@ -39,6 +39,7 @@ idea by showing the intermediate steps and transitions, or show how data collect
 <h4>Examples</h4>
 <pre class="r"><code>#loading libaries and setting up theme setting 
 library(ggplot2)
+library(tidyverse)
 library(gganimate)
 mytheme &lt;- function(...){
                  theme(legend.position = &quot;bottom&quot;, 
@@ -98,13 +99,20 @@ frame.Glue syntax is really helpful here for inserting into plot labels.</p>
   enter_fade() + 
   exit_shrink()</code></pre>
 <p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-8-1.gif" /><!-- --></p>
-<p>Starting with mtcars fataset</p>
+</div>
+<div id="section" class="section level2">
+<h2><br></h2>
+<div id="examples-1" class="section level4">
+<h4>Examples</h4>
+<p>mtcars dataset</p>
 <pre class="r"><code>ggplot(mtcars, aes(factor(cyl), mpg))+
   geom_boxplot(aes(fill = cyl))+
   mytheme()+
   scale_color_brewer(palette = &quot;Dark2&quot;)+
   transition_states(gear)</code></pre>
 <p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-9-1.gif" /><!-- --></p>
+<p><br>
+gapminder dataset</p>
 <pre class="r"><code>library(gapminder)
 
 ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
@@ -118,30 +126,20 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
   transition_time(year) +
   ease_aes(&#39;linear&#39;)</code></pre>
 <p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-10-1.gif" /><!-- --></p>
-</div>
-<div id="more-animation-examples" class="section level4">
-<h4>More Animation Examples</h4>
-<pre class="r"><code>library(tidyverse)
-library(gganimate)
-df &lt;- read.csv(&quot;D:/git/vidyasagarblog/Data/world_gdp.csv&quot;, stringsAsFactors = FALSE)</code></pre>
-<pre class="r"><code>df1 &lt;- gather(df,&quot;year&quot;, &quot;gdp&quot; ,2:59)
-
+<p><br>
+gdp dataset</p>
+<pre class="r"><code>df &lt;- read.csv(&quot;D:/git/vidyasagarblog/Data/world_gdp.csv&quot;, stringsAsFactors = FALSE)
+df1 &lt;- gather(df,&quot;year&quot;, &quot;gdp&quot; ,2:59)
 df1 &lt;- df1 %&gt;% arrange(Country.Name, year)
-
-
 df1 &lt;- df1 %&gt;% rename(country =Country.Name)
-df1$year &lt;- as.numeric(gsub(&quot;[a-zA-Z ]&quot;, &quot;&quot;, df1$year))</code></pre>
-<pre class="r"><code>s_total &lt;- df1 %&gt;%
+df1$year &lt;- as.numeric(gsub(&quot;[a-zA-Z ]&quot;, &quot;&quot;, df1$year))
+s_total &lt;- df1 %&gt;%
   group_by(country) %&gt;% 
-  count()</code></pre>
-<pre class="r"><code>df1[is.na(df1)] &lt;- 0
-
-
-
+  count()
+df1[is.na(df1)] &lt;- 0
 df2&lt;- df1 %&gt;% filter(country%in%c(&quot;United States&quot;, &quot;China&quot;, &quot;India&quot;, &quot;United Kingdom&quot;,&quot;Japan&quot;, &quot;France&quot; ,&quot;Germany&quot;))
-
-df2$year &lt;- as.integer(df2$year)
-p &lt;- ggplot(df2, aes(year,gdp, color = country,group = country))+
+df2$year &lt;- as.integer(df2$year)</code></pre>
+<pre class="r"><code>p &lt;- ggplot(df2, aes(year,gdp, color = country,group = country))+
   geom_path()+
   geom_point()+
   facet_wrap(~country)+
@@ -153,11 +151,9 @@ p &lt;- ggplot(df2, aes(year,gdp, color = country,group = country))+
     mytheme()+
   scale_color_brewer(palette = &quot;Dark2&quot;)
 animate(p, 200, 300)</code></pre>
-<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-14-1.gif" /><!-- --></p>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-12-1.gif" /><!-- --></p>
 <p><br></p>
-</div>
-<div id="china-vs-india-gdp-comparison-over-the-years" class="section level4">
-<h4>China Vs India GDP Comparison over the years</h4>
+<p>China Vs India GDP Comparison over the years</p>
 <pre class="r"><code>df2&lt;- df1 %&gt;% filter(country%in%c(&quot;India&quot;,&quot;China&quot;))
 df2$year &lt;- as.integer(df2$year)
 
@@ -171,5 +167,20 @@ p &lt;- ggplot(df2, aes(year,gdp, color = country,group = country))+
     mytheme()+
   scale_color_brewer(palette = &quot;Dark2&quot;)
 animate(p, 200, 300)</code></pre>
-<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-15-1.gif" /><!-- --></p>
+<p><img src="/post/2019-05-01-animation-in-r_files/figure-html/unnamed-chunk-13-1.gif" /><!-- --></p>
+<hr />
+<p>rayshader 🔥</p>
+<p>rayshader is an open source package for producing 2D and 3D data visualizations in R.It allows the user to translate ggplot2 objects into beautiful 3D data visualization. To learn more about this package click <a href="https://www.rayshader.com/">here</a>.</p>
+<pre class="r"><code>library(rayshader)
+
+gg = ggplot(diamonds, aes(x, depth)) +
+  stat_density_2d(aes(fill = stat(nlevel)), 
+                  geom = &quot;polygon&quot;,
+                  n = 100,bins = 10,contour = TRUE) +
+  facet_wrap(clarity~.) +
+  scale_fill_viridis_c(option = &quot;A&quot;)#
+
+plot_gg(gg,multicore=TRUE,width=5,height=5,scale=250)</code></pre>
+<p><img src="https://lh6.googleusercontent.com/jOzQoKDN9v754vvHJTDiPyYSo8k73_w0XqtAzurTXXO0W9AEEs45r_N5z5o=w2400" /></p>
+</div>
 </div>
