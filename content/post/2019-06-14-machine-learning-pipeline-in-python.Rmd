@@ -17,7 +17,7 @@ keywords:
 
 
 
-In this post we will see introduction to machine learning using python. We will train model on two different datasets using  two  different type of machine learning algorithm one for classifier and other for regression.The learning algorithm finds the pattern in the training data which maps the input data features to target variable and it outputs an machine learning model that captures these patterns. Also we will learn about scikit-learn library in detail (coming soon). 
+In this post we will see demo of  two machine learning problems using python. We will train model on two different datasets using  two  different type of machine learning algorithm one for classifier and other for regression.The learning algorithm finds the pattern in the training data which maps the input data features to target variable and it outputs an machine learning model that captures these patterns. Also we will learn about scikit-learn library in detail (coming soon). 
 
 
 <style type="text/css">
@@ -28,7 +28,7 @@ In this post we will see introduction to machine learning using python. We will 
    .gist-meta a:hover{text-decoration:underline}
 </style>
 
-
+#### Demo classifier problem in python  
 
 <script src="https://gist.github.com/vidyasagarbhargava/f54a6fcc13e1ec2d32e70ee7fdbd0790.js"></script>
 
@@ -36,16 +36,11 @@ In this post we will see introduction to machine learning using python. We will 
 <br>
 
 
-#### Pipeline for regression problem in python    
+#### Demo regression problem in python    
 
 
 <script type="application/javascript" src="https://gist.github.com/vidyasagarbhargava/41f195a6a037bcdf4ffd522826c42c11.js"></script>
 
-
-
-
-
-<iframe src="https://trello.com/b/rbpEfMld/data-science" frameBorder="0" width="100%" height="600"></iframe> 
 
 ```{r, include= FALSE}
 #### Shiny app embeded
