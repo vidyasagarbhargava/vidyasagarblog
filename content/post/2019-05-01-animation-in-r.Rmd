@@ -68,10 +68,12 @@ mytheme <- function(...){
 lets draw a simple plot first without any animation  
 
 ```{r}
+
 p <- ggplot(iris, aes(x = Petal.Width, y = Petal.Length))+
   geom_point(aes(color = Species))+
   mytheme()+
   scale_color_brewer(palette = "Dark2")
+
 plot(p)
 ```
 
