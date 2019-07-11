@@ -46,16 +46,16 @@ In this post we will see demo of  two machine learning problems using python. We
 
 
 ```{r, include= FALSE}
-#### Shiny app embeded
+#Shiny app embeded
 
 
-#<iframe width="750" height="800" scrolling="no" frameborder="0" src #="https://hadley.shinyapps.io/cran-downloads/"></iframe>
+
 
 ```
 
 
 
-
+<iframe width="750" height="800" scrolling="no" frameborder="0" src ="https://hadley.shinyapps.io/cran-downloads/"></iframe>
 
 
 

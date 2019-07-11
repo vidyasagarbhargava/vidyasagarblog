@@ -17,7 +17,7 @@
       <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/2019/05/animation-in-r/</guid>
-      <description>Nowadays many data scientist are beginning to think about how to make their visualization more compelling with animation. Animation might help a viewer work through the logic behind anidea by showing the intermediate steps and transitions, or show how data collected over time changes. A moving image might offer a fresh perspective, or invite users to look deeper into the data presented. An animation might also smooth the change between two views, even if there is no temporal component to the data.</description>
+      <description>Nowadays many data scientist are beginning to think about how to make their visualization more compelling with animation. Animation might help a viewer work through the logic behind an idea by showing the intermediate steps and transitions, or show how data collected over time changes. A moving image might offer a fresh perspective, or invite users to look deeper into the data presented. An animation might also smooth the change between two views, even if there is no temporal component to the data.</description>
     </item>
     
   </channel>
