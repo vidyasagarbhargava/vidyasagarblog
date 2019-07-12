@@ -17,7 +17,7 @@
       <pubDate>Thu, 27 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>/2019/06/hypothesis-testing-made-simple/</guid>
-      <description>In this post we will use a very elegant and simple approach to test any hypothesis. This approach is based on growing trend of emphasizing data and simulations instead of classical probability theory and complex statistical tests. Since We know that its hard to wrap the head around how to reject null hypotheses and interpret p-values.
+      <description>In this post we will use a very elegant and simple approach to test any hypothesis. This approach is based on growing trend of emphasizingdata and simulations instead of classical probability theory and complex statistical tests. Since We know that its hard to wrap the head around how to reject null hypotheses and interpret p-values.
 
 The new approach however has this philosphy that there is only one statistical test and that at their core, all statistical tests (be they t-tests, chi-squared tests, signed Wilcoxon rank tests, etc.</description>
     </item>
@@ -37,7 +37,7 @@ The new approach however has this philosphy that there is only one statistical t
       <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/2019/05/animation-in-r/</guid>
-      <description>Nowadays many data scientist are beginning to think about how to make their visualization more compelling with animation. Animation might help a viewer work through the logic behind an idea by showing the intermediate steps and transitions, or show how data collected over time changes. A moving image might offer a fresh perspective, or invite users to look deeper into the data presented. An animation might also smooth the change between two views, even if there is no temporal component to the data.</description>
+      <description>Nowadays many data scientist are beginning to think about how to make their visualization more compelling with animation. Animation might help a viewer work through the logic behind anidea by showing the intermediate steps and transitions, or show how data collected over time changes. A moving image might offer a fresh perspective, or invite users to look deeper into the data presented. An animation might also smooth the change between two views, even if there is no temporal component to the data.</description>
     </item>
     
   </channel>
