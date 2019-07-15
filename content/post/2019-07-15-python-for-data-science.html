@@ -1,0 +1,278 @@
+---
+title: Python for Data Science 🐍 
+author: Vidyasagar Bhargava
+date: '2019-07-15'
+slug: python-for-data-science
+categories:
+  - python
+  - Data Science
+tags:
+  - python
+  - Data Science
+keywords:
+  - tech
+---
+
+
+
+<ol style="list-style-type: decimal">
+<li>Help and Documentation in Python</li>
+<li>Numpy</li>
+<li>Pandas</li>
+<li>Matplotlib</li>
+<li>Scikit-learn</li>
+</ol>
+<div id="help-and-documentation-in-python" class="section level4">
+<h4>Help and Documentation in python:</h4>
+<p>Every python object contains the reference to a string, known as <em>doc string</em>, which contain a concise summary of the object and how to use it. Python has built-in <code>help()</code> function that can
+access this information and prints the result.</p>
+<p>For example to see the documentation of built-in function <code>len()</code> :-</p>
+<pre class="python"><code>help(len)</code></pre>
+<pre><code>## Help on built-in function len in module builtins:
+## 
+## len(obj, /)
+##     Return the number of items in a container.</code></pre>
+<blockquote>
+<p>👉 In Ipython the other option is to use <code>?</code> character as a shorthand for accessing the documentation and other relevant information.</p>
+</blockquote>
+<p>Note that this <code>help()</code> function or <code>?</code> shorthand also works for functions and other objects which we create by ourself.</p>
+<p>Lets define a simple function with a docstring.</p>
+<pre class="python"><code>def cube(a):
+    &quot;&quot;&quot;Return the cube of a. &quot;&quot;&quot;
+    return a ** 3
+    </code></pre>
+<p>Now we will use <code>help()</code> function to find the docstring.</p>
+<pre class="python"><code>help(cube)</code></pre>
+<pre><code>## Help on function cube in module __main__:
+## 
+## cube(a)
+##     Return the cube of a.</code></pre>
+<blockquote>
+<p>👉This quick access to documentation via docstrings is one reason you should get in the habit of always adding such inline documentation to the code you write!</p>
+</blockquote>
+<p><strong>Important Points regarding help and documentation.</strong></p>
+<ul>
+<li>To read the source code of the object use <code>??</code> shorthand in Ipython.<br />
+</li>
+<li>To see a list of all available attributes of an object type the name of object followed by a period <code>.</code> character and the TAB key.<code>L.&lt;TAB&gt;</code></li>
+<li>To list private/internal attributes or methods by explicitly typing the underscrore. <code>L._&lt;TAB&gt;</code></li>
+</ul>
+<hr />
+</div>
+<div id="numpy" class="section level4">
+<h4>Numpy</h4>
+<p>Numpy (Short for Numerical Python) provides an efficient interface to Store and operate on arrays of number.Its somewhat looks like python’s builtin <code>list</code> type but much more efficient as the arrays grows in size.</p>
+<pre class="python"><code>import numpy as np
+np.__version__</code></pre>
+<pre><code>## &#39;1.16.4&#39;</code></pre>
+<p>How numpy improves the performances as compare to base python operartions on arrays of data?</p>
+<p>Python is dynamic typing language unlike C and JAVA, statically type language which requires variable to be declare explicitly.</p>
+<pre><code>/* C code */
+int result = 0;
+for(int i=0; i&lt;100; i++){
+    result += i;
+}</code></pre>
+<p>While in python the equivalent operation could be written this way :</p>
+<pre class="python"><code>result = 0
+for i in range(100):
+    result +=i</code></pre>
+<p>If you notice the difference data type of each variables are explicitly declared in C while in python types are dynamically inferred. So we can assign any type of data to any variable in python.</p>
+<pre class="python"><code>#python code
+x = 4
+x = &quot;four&quot;</code></pre>
+<p>Same thing in C would lead to compilation error.</p>
+<pre><code>/* C code */
+int x = 4;
+x = &quot;four&quot; //fails
+</code></pre>
+<p>This type of flexibility makes python convenient and easy to use but this type-flexibility also points to the fact that python variables are more than just their value. They also contains the extra information about the type of value.</p>
+<blockquote>
+<p>👉 The standard python implementation was written in C.</p>
+</blockquote>
+<p>When we define an integer in python for example <code>x = 100</code> is not just a “raw” integer. It is actually a pointer to a compound C structure which contains several values. If we see the source code of python 3.4 or above we find that integer in python actually contains 4 pieces.</p>
+<ul>
+<li><code>ob_refcnt</code> a reference count that helps Python silently handle memory allocation and deallocation<br />
+</li>
+<li><code>ob_type</code> which encodes the type of the variable<br />
+</li>
+<li><code>ob_size</code> which specifies the size of the following data members<br />
+</li>
+<li><code>ob_digit</code> which contains the actual integer value that we expect the Python variable to represent.</li>
+</ul>
+<p>….More explanation sooon….</p>
+</div>
+<div id="fixed-type-arrays-in-python" class="section level1">
+<h1>Fixed type arrays in python</h1>
+<p>The built in array module helps in creating dense arrays of a uniform type.</p>
+<pre class="python"><code>import array
+L = list(range(10))
+A = array.array(&#39;i&#39;,L)
+A</code></pre>
+<pre><code>## array(&#39;i&#39;, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])</code></pre>
+<p>Here <code>'i'</code>is a type code indicating the contents are integers.</p>
+<p>Python’s <code>array</code> object provides efficient storage of array-based data, NumPy adds to this efficient operations on that data.</p>
+<pre class="python"><code>import numpy as np
+np.array([1,2,3,5,6])</code></pre>
+<pre><code>## array([1, 2, 3, 5, 6])</code></pre>
+<blockquote>
+<p>👉 NumPy is constrained to arrays that all contain the same type. If types do not match, NumPy will upcast if possible.</p>
+</blockquote>
+<pre class="python"><code>np.array([3.14, 1, 2.0,3 ,5])</code></pre>
+<pre><code>## array([3.14, 1.  , 2.  , 3.  , 5.  ])</code></pre>
+<p>Explicity set the data type using keyword <code>dtype</code>.</p>
+<pre class="python"><code>np.array([1,2,3,4], dtype=&#39;float32&#39;)</code></pre>
+<pre><code>## array([1., 2., 3., 4.], dtype=float32)</code></pre>
+<p>numpy array can be multi-dimensional unlike python lists.</p>
+<pre class="python"><code># nested lists result in multi-dimensional arrays
+np.array([range(i, i + 3) for i in [2, 4, 6]])</code></pre>
+<pre><code>## array([[2, 3, 4],
+##        [4, 5, 6],
+##        [6, 7, 8]])</code></pre>
+<p>Creating Arrays from scratch using routines built into NumPy.</p>
+<pre class="python"><code># Create a length-10 integer array filled with zeros
+np.zeros(10, dtype=int)
+
+# Create a 3x5 floating-point array filled with ones</code></pre>
+<pre><code>## array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])</code></pre>
+<pre class="python"><code>np.ones((3,5), dtype=float)
+
+# Create a 3x5 array filled with 3.14</code></pre>
+<pre><code>## array([[1., 1., 1., 1., 1.],
+##        [1., 1., 1., 1., 1.],
+##        [1., 1., 1., 1., 1.]])</code></pre>
+<pre class="python"><code>np.full((3,5),3.14)
+
+# Create an array filled with a linear sequence
+# Starting at 0, ending at 20, stepping by 2</code></pre>
+<pre><code>## array([[3.14, 3.14, 3.14, 3.14, 3.14],
+##        [3.14, 3.14, 3.14, 3.14, 3.14],
+##        [3.14, 3.14, 3.14, 3.14, 3.14]])</code></pre>
+<pre class="python"><code>np.arange(0, 20, 2)
+
+# Create an array of five values evenly spaced between 0 and 1</code></pre>
+<pre><code>## array([ 0,  2,  4,  6,  8, 10, 12, 14, 16, 18])</code></pre>
+<pre class="python"><code>np.linspace(0, 1, 5)
+
+# Create a 3x3 array of uniformly distributed
+# random values between 0 and 1</code></pre>
+<pre><code>## array([0.  , 0.25, 0.5 , 0.75, 1.  ])</code></pre>
+<pre class="python"><code>np.random.random((3, 3))
+# Create a 3x3 array of normally distributed random values
+# with mean 0 and standard deviation 1</code></pre>
+<pre><code>## array([[0.58546088, 0.7723452 , 0.64147849],
+##        [0.54431816, 0.43135967, 0.10316119],
+##        [0.94070938, 0.6814096 , 0.41718266]])</code></pre>
+<pre class="python"><code>np.random.normal(0, 1, (3, 3))
+
+# Create a 3x3 array of random integers in the interval [0, 10)</code></pre>
+<pre><code>## array([[-0.23759936, -0.97479683,  0.99419599],
+##        [ 0.15007048, -0.19490469, -0.07659041],
+##        [ 0.78499825,  0.86565142, -0.69410698]])</code></pre>
+<pre class="python"><code>np.random.randint(0, 10, (3, 3))
+# Create a 3x3 identity matrix</code></pre>
+<pre><code>## array([[7, 6, 5],
+##        [2, 1, 9],
+##        [3, 4, 8]])</code></pre>
+<pre class="python"><code>np.eye(3)
+
+# Create an uninitialized array of three integers
+# The values will be whatever happens to already exist at that memory location</code></pre>
+<pre><code>## array([[1., 0., 0.],
+##        [0., 1., 0.],
+##        [0., 0., 1.]])</code></pre>
+<pre class="python"><code>np.empty(3)</code></pre>
+<pre><code>## array([1., 1., 1.])</code></pre>
+<p>Now we will discuss few categories of basic array manipulation here :</p>
+<ul>
+<li>Attributes of arrays<br />
+</li>
+<li>Indexing of arrays<br />
+</li>
+<li>Slicing of arrays<br />
+</li>
+<li>Reshaping of arrays<br />
+</li>
+<li>Joining and splitting of arrays</li>
+</ul>
+<pre class="python"><code>import numpy as np
+np.random.seed(0) #for reproducibility
+
+x1 = np.random.randint(10, size= (3,4,5))
+x1</code></pre>
+<pre><code>## array([[[5, 0, 3, 3, 7],
+##         [9, 3, 5, 2, 4],
+##         [7, 6, 8, 8, 1],
+##         [6, 7, 7, 8, 1]],
+## 
+##        [[5, 9, 8, 9, 4],
+##         [3, 0, 3, 5, 0],
+##         [2, 3, 8, 1, 3],
+##         [3, 3, 7, 0, 1]],
+## 
+##        [[9, 9, 0, 4, 7],
+##         [3, 2, 7, 2, 0],
+##         [0, 4, 5, 5, 6],
+##         [8, 4, 1, 4, 9]]])</code></pre>
+<div id="attributes-of-arrays" class="section level4">
+<h4>Attributes of arrays</h4>
+<p>Each array has <code>ndim</code> , <code>shape</code> , <code>size</code>, <code>dtype</code>, <code>itemsize</code>, <code>nbytes</code> attributes.</p>
+<pre class="python"><code>print(x1.ndim)</code></pre>
+<pre><code>## 3</code></pre>
+<pre class="python"><code>print(x1.shape)</code></pre>
+<pre><code>## (3, 4, 5)</code></pre>
+<pre class="python"><code>print(x1.size)</code></pre>
+<pre><code>## 60</code></pre>
+<pre class="python"><code>print(x1.dtype)</code></pre>
+<pre><code>## int32</code></pre>
+<pre class="python"><code>print(x1.itemsize)</code></pre>
+<pre><code>## 4</code></pre>
+<pre class="python"><code>print(x1.nbytes)</code></pre>
+<pre><code>## 240</code></pre>
+</div>
+<div id="indexing-of-arrays" class="section level4">
+<h4>Indexing of arrays</h4>
+<p>python is zero indexed unlike R where indexing starts from 1.</p>
+<pre class="python"><code>x1 = np.array([1,2,3,5,8])
+x1[0]</code></pre>
+<pre><code>## 1</code></pre>
+<pre class="python"><code>x1[4]</code></pre>
+<pre><code>## 8</code></pre>
+<pre class="python"><code>x1[-1]</code></pre>
+<pre><code>## 8</code></pre>
+<pre class="python"><code>x1[-2]</code></pre>
+<pre><code>## 5</code></pre>
+</div>
+<div id="slicing-of-arrays" class="section level4">
+<h4>Slicing of arrays</h4>
+<p>Just as we can use square brackets to access individual array elements, we can also use them to access subarrays with the slice notation, marked by the colon (:) character.</p>
+<pre><code>x[start:stop:step]</code></pre>
+<pre class="python"><code>x = np.arange(10)
+x[5:] # elements after index 5</code></pre>
+<pre><code>## array([5, 6, 7, 8, 9])</code></pre>
+<pre class="python"><code>x[4:7] # middle sub-array</code></pre>
+<pre><code>## array([4, 5, 6])</code></pre>
+<pre class="python"><code>x[::2]  # every other element</code></pre>
+<pre><code>## array([0, 2, 4, 6, 8])</code></pre>
+<pre class="python"><code>x[::-1]  # all elements, reversed</code></pre>
+<pre><code>## array([9, 8, 7, 6, 5, 4, 3, 2, 1, 0])</code></pre>
+<pre class="python"><code>x[5::-2]  # reversed every other from index 5</code></pre>
+<pre><code>## array([5, 3, 1])</code></pre>
+<p>lets take another example using multi-dimensional sub-arrays.</p>
+<pre class="python"><code>x2 = np.random.randint(10,size= (3,4))
+x2</code></pre>
+<pre><code>## array([[8, 1, 1, 7],
+##        [9, 9, 3, 6],
+##        [7, 2, 0, 3]])</code></pre>
+<pre class="python"><code>x2[:2, :3]  # two rows, three columns</code></pre>
+<pre><code>## array([[8, 1, 1],
+##        [9, 9, 3]])</code></pre>
+<pre class="python"><code>x2[:3, ::2]  # all rows, every other column</code></pre>
+<pre><code>## array([[8, 1],
+##        [9, 3],
+##        [7, 0]])</code></pre>
+<pre class="python"><code>x2[::-1, ::-1]</code></pre>
+<pre><code>## array([[3, 0, 2, 7],
+##        [6, 3, 9, 9],
+##        [7, 1, 1, 8]])</code></pre>
+</div>
+</div>

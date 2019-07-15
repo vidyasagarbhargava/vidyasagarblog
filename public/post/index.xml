@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Vidyasagar Bhargava</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 07 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Python for Data Science 🐍</title>
+      <link>/2019/07/python-for-data-science/</link>
+      <pubDate>Mon, 15 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/07/python-for-data-science/</guid>
+      <description>Help and Documentation in PythonNumpyPandasMatplotlibScikit-learnHelp and Documentation in python:Every python object contains the reference to a string, known as doc string, which contain a concise summary of the object and how to use it. Python has built-in help() function that canaccess this information and prints the result.
+For example to see the documentation of built-in function len() :-
+help(len)## Help on built-in function len in module builtins:## ## len(obj, /)## Return the number of items in a container.</description>
+    </item>
     
     <item>
       <title>Basic Python Crash Course - Part 2</title>

@@ -1,0 +1,325 @@
+---
+title: Python for Data Science 🐍 
+author: Vidyasagar Bhargava
+date: '2019-07-15'
+slug: python-for-data-science
+categories:
+  - python
+  - Data Science
+tags:
+  - python
+  - Data Science
+keywords:
+  - tech
+---
+
+
+1. Help and Documentation in Python
+2. Numpy
+3. Pandas
+4. Matplotlib
+5. Scikit-learn
+
+
+
+#### Help and Documentation in python:  
+
+Every python object contains the reference to a string, known as *doc string*, which contain a concise summary of the object and  how to use it. Python has built-in `help()` function that can 
+access this information and prints the result.  
+
+For example to see the documentation of built-in function `len()` :-  
+ 
+
+```{python}
+help(len)
+```
+
+
+> 👉 In Ipython the other option is to use `?` character as a shorthand for accessing the documentation and other relevant information.  
+
+
+Note that this `help()` function or `?` shorthand also works for functions and other objects which we create by ourself.    
+
+Lets define a simple function with a docstring.  
+
+```{python}
+def cube(a):
+    """Return the cube of a. """
+    return a ** 3
+    
+```
+
+
+Now we will use `help()` function to find the docstring.  
+
+```{python}
+help(cube)
+```
+
+
+> 👉This quick access to documentation via docstrings is one reason you should get in the habit of always adding such inline documentation to the code you write!
+
+
+**Important Points regarding help and documentation.**    
+
+- To read the source code of the object use `??` shorthand in Ipython.      
+- To see a list of all available attributes of an object type the name of object followed by a period `.` character and the TAB key.`L.<TAB>`
+- To list private/internal attributes or methods by explicitly typing the underscrore. `L._<TAB>`
+
+
+
+
+--------------------------------------------------------------------------
+
+#### Numpy  
+
+Numpy (Short for Numerical Python) provides an efficient interface to Store and operate on arrays of number.Its somewhat looks like python's builtin `list` type but much more efficient as the arrays grows in size.  
+
+
+```{python} 
+import numpy as np
+np.__version__
+```
+
+
+How numpy improves the performances as compare to base python operartions on arrays of data?  
+
+
+Python is dynamic typing language unlike C and JAVA, statically type language which requires variable to be declare explicitly. 
+
+
+
+```
+/* C code */
+int result = 0;
+for(int i=0; i<100; i++){
+    result += i;
+}
+```
+
+While in python the equivalent operation  could be written this way :  
+
+```{python}
+result = 0
+for i in range(100):
+    result +=i
+```
+
+
+
+
+If you notice the difference data type of each variables are explicitly declared in C while in python types are dynamically inferred. So we can assign any type of data to any variable in python.  
+
+
+```{python}
+#python code
+x = 4
+x = "four"
+```
+
+Same thing in C would lead to compilation error.
+
+```
+/* C code */
+int x = 4;
+x = "four" //fails
+
+```
+
+This type of flexibility makes python convenient and easy to use but this type-flexibility also points to the fact that python variables are more than just their value. They also contains the extra information about the type of value.  
+
+
+
+> 👉  The standard python implementation was written in C.
+
+
+When we define an integer in python  for example `x = 100` is not just a "raw" integer. It is actually a pointer to a compound C structure which contains several values.   If we see the source code of python 3.4 or above we find that integer in python actually contains 4 pieces.  
+
+-  `ob_refcnt` a reference count that helps Python silently handle memory allocation and deallocation  
+-  `ob_type`  which encodes the type of the variable  
+-  `ob_size`  which specifies the size of the following data members  
+-  `ob_digit` which contains the actual integer value that we expect the Python variable to represent.  
+
+
+
+....More explanation sooon....
+
+
+
+# Fixed type arrays in python  
+
+The built in array module helps in creating dense arrays of a uniform type.  
+
+```{python}
+import array
+L = list(range(10))
+A = array.array('i',L)
+A
+```
+Here `'i' `is a type code indicating the contents are integers.
+
+
+Python's `array` object provides efficient storage of array-based data, NumPy adds to this efficient operations on that data.
+
+```{python}
+import numpy as np
+np.array([1,2,3,5,6])
+```
+ 
+
+> 👉  NumPy is constrained to arrays that all contain the same type. If types do not match, NumPy will upcast if possible.  
+
+
+```{python}
+np.array([3.14, 1, 2.0,3 ,5])
+```
+
+Explicity set the data type using keyword `dtype`.  
+
+
+```{python}
+np.array([1,2,3,4], dtype='float32')
+```
+
+
+numpy array can be multi-dimensional unlike python lists.  
+
+```{python}
+# nested lists result in multi-dimensional arrays
+np.array([range(i, i + 3) for i in [2, 4, 6]])
+```
+
+
+Creating Arrays from scratch using routines built into NumPy. 
+
+
+```{python}
+# Create a length-10 integer array filled with zeros
+np.zeros(10, dtype=int)
+
+# Create a 3x5 floating-point array filled with ones
+np.ones((3,5), dtype=float)
+
+# Create a 3x5 array filled with 3.14
+np.full((3,5),3.14)
+
+# Create an array filled with a linear sequence
+# Starting at 0, ending at 20, stepping by 2
+np.arange(0, 20, 2)
+
+# Create an array of five values evenly spaced between 0 and 1
+np.linspace(0, 1, 5)
+
+# Create a 3x3 array of uniformly distributed
+# random values between 0 and 1
+np.random.random((3, 3))
+# Create a 3x3 array of normally distributed random values
+# with mean 0 and standard deviation 1
+np.random.normal(0, 1, (3, 3))
+
+# Create a 3x3 array of random integers in the interval [0, 10)
+np.random.randint(0, 10, (3, 3))
+# Create a 3x3 identity matrix
+np.eye(3)
+
+# Create an uninitialized array of three integers
+# The values will be whatever happens to already exist at that memory location
+np.empty(3)
+
+```
+
+
+Now we will discuss few categories of basic array manipulation here :  
+
+
+-  Attributes of arrays    
+-  Indexing of arrays         
+-  Slicing of arrays    
+-  Reshaping of arrays     
+-  Joining and splitting of arrays    
+
+
+
+```{python}
+import numpy as np
+np.random.seed(0) #for reproducibility
+
+x1 = np.random.randint(10, size= (3,4,5))
+x1
+```
+
+#### Attributes of arrays
+
+Each array has `ndim` , `shape` , `size`, `dtype`, `itemsize`, `nbytes` attributes.
+
+```{python}
+print(x1.ndim)
+print(x1.shape)
+print(x1.size)
+print(x1.dtype)
+print(x1.itemsize)
+print(x1.nbytes)
+```
+
+
+#### Indexing of arrays
+
+python is zero indexed unlike R where indexing starts from 1.
+
+```{python}
+x1 = np.array([1,2,3,5,8])
+x1[0]
+x1[4]
+x1[-1]
+x1[-2]
+
+```
+
+
+#### Slicing of arrays  
+
+Just as we can use square brackets to access individual array elements, we can also use them to access subarrays with the slice notation, marked by the colon (:) character.  
+
+```
+x[start:stop:step]
+```
+
+
+```{python}
+x = np.arange(10)
+x[5:] # elements after index 5
+x[4:7] # middle sub-array
+x[::2]  # every other element
+x[::-1]  # all elements, reversed
+x[5::-2]  # reversed every other from index 5
+```
+
+lets take another example using multi-dimensional sub-arrays.  
+
+
+```{python}
+x2 = np.random.randint(10,size= (3,4))
+x2
+```
+
+
+```{python}
+x2[:2, :3]  # two rows, three columns
+```
+
+```{python}
+x2[:3, ::2]  # all rows, every other column
+x2[::-1, ::-1]
+```
+
+
+
+
+
+
+
+
+
+
+
+
