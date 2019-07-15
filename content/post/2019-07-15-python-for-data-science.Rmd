@@ -21,11 +21,16 @@ keywords:
 5. Scikit-learn
 
 
+```{r setup, include=FALSE}
+library(knitr)
+library(reticulate)
+knitr::knit_engines$set(python = reticulate::eng_python)
+```
+
 
 #### Help and Documentation in python:  
 
-Every python object contains the reference to a string, known as *doc string*, which contain a concise summary of the object and  how to use it. Python has built-in `help()` function that can 
-access this information and prints the result.  
+Every python object contains the reference to a string, known as *doc string*, which contain a concise summary of the object and  how to use it. Python has built-in `help()` function that can access this information and prints the result.  
 
 For example to see the documentation of built-in function `len()` :-  
  
@@ -286,6 +291,7 @@ x[start:stop:step]
 
 
 ```{python}
+x
 x = np.arange(10)
 x[5:] # elements after index 5
 x[4:7] # middle sub-array
@@ -312,14 +318,139 @@ x2[:3, ::2]  # all rows, every other column
 x2[::-1, ::-1]
 ```
 
+```{python}
+x2
+
+```
+ one common needed routine is accessing single rows or columns of an array. This can be done by combining indexing and slicing, using an empty slice marked by a single colon `(:)`
+
+```{python}
+print(x2[:,0])
+print(x2[0,:])
+```
+
+
+
+> 👉 In numpy array slices return views rather than copies  of array data. While in list slices will be copies.
+
+
+let's take an example.  
+
+```{python}
+print(x2)
+```
+
+The above is our 2-dimensional array.  
+
+```{python}
+x2_sub = x2[:2,:2]
+print(x2_sub)
+```
+
+Now if we modify this subarray, we will see that original array is changed.!
+
+```{python}
+x2_sub[0,0]=99
+print(x2_sub)
+```
+
+
+Observe below :  
+ 
+```{python}
+print(x2)
+```
+
+> 👉 The above property is useful while working with large datasets.  
+
+
+
+
+Despite nice features of array views its sometimes  useful to instead explicitly copy the data with in an array or a subarray. This can be mostly easily  done with `copy()` method.  
+
+```{python}
+x2_sub_copy = x2[:2, :2].copy()
+print(x2_sub_copy)
+```
+
+
+if we now modify this subarray, the original array is not touched.  
+```{python}
+x2_sub_copy[0,0] = 42
+print(x2_sub_copy)
+```
+
+
+```{python}
+print(x2)
+```
+
+
+
+##### Reshaping of arrays  
+
+lets take an example  
+
+```{python}
+grid  = np.arange(1,10).reshape((3,3))
+grid
+```
+
+```{python}
+x = np.array([1,2,3])
+x.reshape((1,3))
+```
+
+```{python}
+x[np.newaxis, :]
+```
+
+
+
+
+```{python}
+x.reshape
+```
+
+
+
+```{python}
+x[:, np.newaxis]
+```
 
 
 
 
 
 
+#### Array concatenation and splitting   
+
+Concatenation, or joining of two arrays in NumPy, is primarily accomplished using the routines `np.concatenate`, `np.vstack`, and `np.hstack`, `np.concatenate` takes a tuple or list of arrays as its first argument, as we can see here:
+
+```{python}
+x = np.array([1, 2, 3])
+y = np.array([3, 2, 1])
+np.concatenate([x, y])
+```
+It can also be used for two-dimensional arrays:
+
+```{python}
+grid = np.array([[1, 2, 3],
+                 [4, 5, 6]])
+                 
+```
 
 
+ concatenate along the first axis
 
+```{python}
+np.concatenate([grid, grid])
+```
 
+ concatenate along the second axis (zero-indexed)
 
+```{python}
+np.concatenate([grid, grid], axis=1)
+```
+
+For working with arrays of mixed dimensions, it can be clearer to use the np.vstack (vertical stack) and np.hstack (horizontal stack) functions:

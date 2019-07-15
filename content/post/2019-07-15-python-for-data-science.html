@@ -24,14 +24,15 @@ keywords:
 </ol>
 <div id="help-and-documentation-in-python" class="section level4">
 <h4>Help and Documentation in python:</h4>
-<p>Every python object contains the reference to a string, known as <em>doc string</em>, which contain a concise summary of the object and how to use it. Python has built-in <code>help()</code> function that can
-access this information and prints the result.</p>
+<p>Every python object contains the reference to a string, known as <em>doc string</em>, which contain a concise summary of the object and how to use it. Python has built-in <code>help()</code> function that can access this information and prints the result.</p>
 <p>For example to see the documentation of built-in function <code>len()</code> :-</p>
 <pre class="python"><code>help(len)</code></pre>
-<pre><code>## Help on built-in function len in module builtins:
+<pre><code>## Help on built-in function len in module __builtin__:
 ## 
-## len(obj, /)
-##     Return the number of items in a container.</code></pre>
+## len(...)
+##     len(object) -&gt; integer
+##     
+##     Return the number of items of a sequence or collection.</code></pre>
 <blockquote>
 <p>👉 In Ipython the other option is to use <code>?</code> character as a shorthand for accessing the documentation and other relevant information.</p>
 </blockquote>
@@ -64,7 +65,7 @@ access this information and prints the result.</p>
 <p>Numpy (Short for Numerical Python) provides an efficient interface to Store and operate on arrays of number.Its somewhat looks like python’s builtin <code>list</code> type but much more efficient as the arrays grows in size.</p>
 <pre class="python"><code>import numpy as np
 np.__version__</code></pre>
-<pre><code>## &#39;1.16.4&#39;</code></pre>
+<pre><code>## &#39;1.8.0rc1&#39;</code></pre>
 <p>How numpy improves the performances as compare to base python operartions on arrays of data?</p>
 <p>Python is dynamic typing language unlike C and JAVA, statically type language which requires variable to be declare explicitly.</p>
 <pre><code>/* C code */
@@ -118,10 +119,10 @@ np.array([1,2,3,5,6])</code></pre>
 <p>👉 NumPy is constrained to arrays that all contain the same type. If types do not match, NumPy will upcast if possible.</p>
 </blockquote>
 <pre class="python"><code>np.array([3.14, 1, 2.0,3 ,5])</code></pre>
-<pre><code>## array([3.14, 1.  , 2.  , 3.  , 5.  ])</code></pre>
+<pre><code>## array([ 3.14,  1.  ,  2.  ,  3.  ,  5.  ])</code></pre>
 <p>Explicity set the data type using keyword <code>dtype</code>.</p>
 <pre class="python"><code>np.array([1,2,3,4], dtype=&#39;float32&#39;)</code></pre>
-<pre><code>## array([1., 2., 3., 4.], dtype=float32)</code></pre>
+<pre><code>## array([ 1.,  2.,  3.,  4.], dtype=float32)</code></pre>
 <p>numpy array can be multi-dimensional unlike python lists.</p>
 <pre class="python"><code># nested lists result in multi-dimensional arrays
 np.array([range(i, i + 3) for i in [2, 4, 6]])</code></pre>
@@ -137,16 +138,16 @@ np.zeros(10, dtype=int)
 <pre class="python"><code>np.ones((3,5), dtype=float)
 
 # Create a 3x5 array filled with 3.14</code></pre>
-<pre><code>## array([[1., 1., 1., 1., 1.],
-##        [1., 1., 1., 1., 1.],
-##        [1., 1., 1., 1., 1.]])</code></pre>
+<pre><code>## array([[ 1.,  1.,  1.,  1.,  1.],
+##        [ 1.,  1.,  1.,  1.,  1.],
+##        [ 1.,  1.,  1.,  1.,  1.]])</code></pre>
 <pre class="python"><code>np.full((3,5),3.14)
 
 # Create an array filled with a linear sequence
 # Starting at 0, ending at 20, stepping by 2</code></pre>
-<pre><code>## array([[3.14, 3.14, 3.14, 3.14, 3.14],
-##        [3.14, 3.14, 3.14, 3.14, 3.14],
-##        [3.14, 3.14, 3.14, 3.14, 3.14]])</code></pre>
+<pre><code>## array([[ 3.14,  3.14,  3.14,  3.14,  3.14],
+##        [ 3.14,  3.14,  3.14,  3.14,  3.14],
+##        [ 3.14,  3.14,  3.14,  3.14,  3.14]])</code></pre>
 <pre class="python"><code>np.arange(0, 20, 2)
 
 # Create an array of five values evenly spaced between 0 and 1</code></pre>
@@ -155,33 +156,33 @@ np.zeros(10, dtype=int)
 
 # Create a 3x3 array of uniformly distributed
 # random values between 0 and 1</code></pre>
-<pre><code>## array([0.  , 0.25, 0.5 , 0.75, 1.  ])</code></pre>
+<pre><code>## array([ 0.  ,  0.25,  0.5 ,  0.75,  1.  ])</code></pre>
 <pre class="python"><code>np.random.random((3, 3))
 # Create a 3x3 array of normally distributed random values
 # with mean 0 and standard deviation 1</code></pre>
-<pre><code>## array([[0.58546088, 0.7723452 , 0.64147849],
-##        [0.54431816, 0.43135967, 0.10316119],
-##        [0.94070938, 0.6814096 , 0.41718266]])</code></pre>
+<pre><code>## array([[ 0.31090681,  0.30900547,  0.23353426],
+##        [ 0.04387793,  0.99854939,  0.63006853],
+##        [ 0.60952031,  0.89084549,  0.735408  ]])</code></pre>
 <pre class="python"><code>np.random.normal(0, 1, (3, 3))
 
 # Create a 3x3 array of random integers in the interval [0, 10)</code></pre>
-<pre><code>## array([[-0.23759936, -0.97479683,  0.99419599],
-##        [ 0.15007048, -0.19490469, -0.07659041],
-##        [ 0.78499825,  0.86565142, -0.69410698]])</code></pre>
+<pre><code>## array([[-0.1848438 , -0.35427205, -0.8830413 ],
+##        [-0.2209355 ,  0.77685467, -0.80958804],
+##        [-0.04844518,  0.69355924, -0.75820936]])</code></pre>
 <pre class="python"><code>np.random.randint(0, 10, (3, 3))
 # Create a 3x3 identity matrix</code></pre>
-<pre><code>## array([[7, 6, 5],
-##        [2, 1, 9],
-##        [3, 4, 8]])</code></pre>
+<pre><code>## array([[3, 7, 6],
+##        [0, 1, 8],
+##        [9, 5, 1]])</code></pre>
 <pre class="python"><code>np.eye(3)
 
 # Create an uninitialized array of three integers
 # The values will be whatever happens to already exist at that memory location</code></pre>
-<pre><code>## array([[1., 0., 0.],
-##        [0., 1., 0.],
-##        [0., 0., 1.]])</code></pre>
+<pre><code>## array([[ 1.,  0.,  0.],
+##        [ 0.,  1.,  0.],
+##        [ 0.,  0.,  1.]])</code></pre>
 <pre class="python"><code>np.empty(3)</code></pre>
-<pre><code>## array([1., 1., 1.])</code></pre>
+<pre><code>## array([ -3.10503618e+231,   2.32035257e+077,   1.35441149e-306])</code></pre>
 <p>Now we will discuss few categories of basic array manipulation here :</p>
 <ul>
 <li>Attributes of arrays<br />
@@ -223,11 +224,11 @@ x1</code></pre>
 <pre class="python"><code>print(x1.size)</code></pre>
 <pre><code>## 60</code></pre>
 <pre class="python"><code>print(x1.dtype)</code></pre>
-<pre><code>## int32</code></pre>
+<pre><code>## int64</code></pre>
 <pre class="python"><code>print(x1.itemsize)</code></pre>
-<pre><code>## 4</code></pre>
+<pre><code>## 8</code></pre>
 <pre class="python"><code>print(x1.nbytes)</code></pre>
-<pre><code>## 240</code></pre>
+<pre><code>## 480</code></pre>
 </div>
 <div id="indexing-of-arrays" class="section level4">
 <h4>Indexing of arrays</h4>
@@ -246,6 +247,8 @@ x1[0]</code></pre>
 <h4>Slicing of arrays</h4>
 <p>Just as we can use square brackets to access individual array elements, we can also use them to access subarrays with the slice notation, marked by the colon (:) character.</p>
 <pre><code>x[start:stop:step]</code></pre>
+<pre class="python"><code>x</code></pre>
+<pre><code>## &#39;four&#39;</code></pre>
 <pre class="python"><code>x = np.arange(10)
 x[5:] # elements after index 5</code></pre>
 <pre><code>## array([5, 6, 7, 8, 9])</code></pre>
@@ -274,5 +277,97 @@ x2</code></pre>
 <pre><code>## array([[3, 0, 2, 7],
 ##        [6, 3, 9, 9],
 ##        [7, 1, 1, 8]])</code></pre>
+<pre class="python"><code>x2</code></pre>
+<pre><code>## array([[8, 1, 1, 7],
+##        [9, 9, 3, 6],
+##        [7, 2, 0, 3]])</code></pre>
+<p>one common needed routine is accessing single rows or columns of an array. This can be done by combining indexing and slicing, using an empty slice marked by a single colon <code>(:)</code></p>
+<pre class="python"><code>print(x2[:,0])</code></pre>
+<pre><code>## [8 9 7]</code></pre>
+<pre class="python"><code>print(x2[0,:])</code></pre>
+<pre><code>## [8 1 1 7]</code></pre>
+<blockquote>
+<p>👉 In numpy array slices return views rather than copies of array data. While in list slices will be copies.</p>
+</blockquote>
+<p>let’s take an example.</p>
+<pre class="python"><code>print(x2)</code></pre>
+<pre><code>## [[8 1 1 7]
+##  [9 9 3 6]
+##  [7 2 0 3]]</code></pre>
+<p>The above is our 2-dimensional array.</p>
+<pre class="python"><code>x2_sub = x2[:2,:2]
+print(x2_sub)</code></pre>
+<pre><code>## [[8 1]
+##  [9 9]]</code></pre>
+<p>Now if we modify this subarray, we will see that original array is changed.!</p>
+<pre class="python"><code>x2_sub[0,0]=99
+print(x2_sub)</code></pre>
+<pre><code>## [[99  1]
+##  [ 9  9]]</code></pre>
+<p>Observe below :</p>
+<pre class="python"><code>print(x2)</code></pre>
+<pre><code>## [[99  1  1  7]
+##  [ 9  9  3  6]
+##  [ 7  2  0  3]]</code></pre>
+<blockquote>
+<p>👉 The above property is useful while working with large datasets.</p>
+</blockquote>
+<p>Despite nice features of array views its sometimes useful to instead explicitly copy the data with in an array or a subarray. This can be mostly easily done with <code>copy()</code> method.</p>
+<pre class="python"><code>x2_sub_copy = x2[:2, :2].copy()
+print(x2_sub_copy)</code></pre>
+<pre><code>## [[99  1]
+##  [ 9  9]]</code></pre>
+<p>if we now modify this subarray, the original array is not touched.</p>
+<pre class="python"><code>x2_sub_copy[0,0] = 42
+print(x2_sub_copy)</code></pre>
+<pre><code>## [[42  1]
+##  [ 9  9]]</code></pre>
+<pre class="python"><code>print(x2)</code></pre>
+<pre><code>## [[99  1  1  7]
+##  [ 9  9  3  6]
+##  [ 7  2  0  3]]</code></pre>
+<div id="reshaping-of-arrays" class="section level5">
+<h5>Reshaping of arrays</h5>
+<p>lets take an example</p>
+<pre class="python"><code>grid  = np.arange(1,10).reshape((3,3))
+grid</code></pre>
+<pre><code>## array([[1, 2, 3],
+##        [4, 5, 6],
+##        [7, 8, 9]])</code></pre>
+<pre class="python"><code>x = np.array([1,2,3])
+x.reshape((1,3))</code></pre>
+<pre><code>## array([[1, 2, 3]])</code></pre>
+<pre class="python"><code>x[np.newaxis, :]</code></pre>
+<pre><code>## array([[1, 2, 3]])</code></pre>
+<pre class="python"><code>x.reshape</code></pre>
+<pre><code>## &lt;built-in method reshape of numpy.ndarray object at 0x7fa69c9a2a40&gt;</code></pre>
+<pre class="python"><code>x[:, np.newaxis]</code></pre>
+<pre><code>## array([[1],
+##        [2],
+##        [3]])</code></pre>
+</div>
+</div>
+<div id="array-concatenation-and-splitting" class="section level4">
+<h4>Array concatenation and splitting</h4>
+<p>Concatenation, or joining of two arrays in NumPy, is primarily accomplished using the routines <code>np.concatenate</code>, <code>np.vstack</code>, and <code>np.hstack</code>, <code>np.concatenate</code> takes a tuple or list of arrays as its first argument, as we can see here:</p>
+<pre class="python"><code>x = np.array([1, 2, 3])
+y = np.array([3, 2, 1])
+np.concatenate([x, y])</code></pre>
+<pre><code>## array([1, 2, 3, 3, 2, 1])</code></pre>
+<p>It can also be used for two-dimensional arrays:</p>
+<pre class="python"><code>grid = np.array([[1, 2, 3],
+                 [4, 5, 6]])
+                 </code></pre>
+<p>concatenate along the first axis</p>
+<pre class="python"><code>np.concatenate([grid, grid])</code></pre>
+<pre><code>## array([[1, 2, 3],
+##        [4, 5, 6],
+##        [1, 2, 3],
+##        [4, 5, 6]])</code></pre>
+<p>concatenate along the second axis (zero-indexed)</p>
+<pre class="python"><code>np.concatenate([grid, grid], axis=1)</code></pre>
+<pre><code>## array([[1, 2, 3, 1, 2, 3],
+##        [4, 5, 6, 4, 5, 6]])</code></pre>
+<p>For working with arrays of mixed dimensions, it can be clearer to use the np.vstack (vertical stack) and np.hstack (horizontal stack) functions:</p>
 </div>
 </div>
