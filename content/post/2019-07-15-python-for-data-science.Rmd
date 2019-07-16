@@ -454,3 +454,5 @@ np.concatenate([grid, grid], axis=1)
 ```
 
 For working with arrays of mixed dimensions, it can be clearer to use the np.vstack (vertical stack) and np.hstack (horizontal stack) functions:
+
+

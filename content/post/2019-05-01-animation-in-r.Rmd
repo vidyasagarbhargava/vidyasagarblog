@@ -14,6 +14,8 @@ thumbnailImagePosition: left
 thumbnailImage: https://lh6.googleusercontent.com/jOzQoKDN9v754vvHJTDiPyYSo8k73_w0XqtAzurTXXO0W9AEEs45r_N5z5o=w2400
 coverImage: https://lh6.googleusercontent.com/jOzQoKDN9v754vvHJTDiPyYSo8k73_w0XqtAzurTXXO0W9AEEs45r_N5z5o=w2400
 coverSize: partial
+coverMeta: out
+metaAlignment: center
 ---
 
 Nowadays many data scientist are beginning to think about how to make their visualization more compelling with animation. Animation might help a viewer work through the logic behind an
