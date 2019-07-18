@@ -61,16 +61,3 @@ In this post we will see demo of  two machine learning problems using python. We
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
