@@ -4,25 +4,66 @@
   
   <url>
     <loc>/categories/</loc>
-    <lastmod>2019-07-15T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/data-science/</loc>
-    <lastmod>2019-07-15T00:00:00+00:00</lastmod>
+    <lastmod>2019-07-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/data-science/</loc>
-    <lastmod>2019-07-15T00:00:00+00:00</lastmod>
+    <lastmod>2019-07-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/data-science/</loc>
+    <lastmod>2019-07-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/numpy/</loc>
+    <lastmod>2019-07-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/numpy/</loc>
+    <lastmod>2019-07-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-07-15T00:00:00+00:00</lastmod>
+    <lastmod>2019-07-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/2019/07/python-for-data-science-numpy/</loc>
+    <lastmod>2019-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2019-07-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2019-07-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/python/</loc>
+    <lastmod>2019-07-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/python/</loc>
+    <lastmod>2019-07-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -32,38 +73,8 @@
   </url>
   
   <url>
-    <loc>/tags/</loc>
-    <lastmod>2019-07-15T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/</loc>
-    <lastmod>2019-07-15T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/python/</loc>
-    <lastmod>2019-07-15T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/python/</loc>
-    <lastmod>2019-07-15T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/2019/07/basic-python-crash-course-part-2/</loc>
     <lastmod>2019-07-07T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/classes-and-objects/</loc>
-    <lastmod>2019-07-07T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -73,13 +84,19 @@
   </url>
   
   <url>
-    <loc>/tags/object-oriented-programming/</loc>
+    <loc>/tags/classes-and-objects/</loc>
     <lastmod>2019-07-07T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/object-oriented-programming/</loc>
+    <lastmod>2019-07-07T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/object-oriented-programming/</loc>
     <lastmod>2019-07-07T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -95,25 +112,25 @@
   </url>
   
   <url>
-    <loc>/tags/r/</loc>
-    <lastmod>2019-06-27T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/categories/r/</loc>
     <lastmod>2019-06-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/hypothesis-testing/</loc>
+    <loc>/tags/r/</loc>
     <lastmod>2019-06-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/hypothesis-testing/</loc>
+    <lastmod>2019-06-27T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/hypothesis-testing/</loc>
     <lastmod>2019-06-27T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -141,13 +158,13 @@
   </url>
   
   <url>
-    <loc>/tags/softmax/</loc>
+    <loc>/categories/softmax/</loc>
     <lastmod>2019-06-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/softmax/</loc>
+    <loc>/tags/softmax/</loc>
     <lastmod>2019-06-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -158,13 +175,13 @@
   </url>
   
   <url>
-    <loc>/tags/gradient-descent/</loc>
+    <loc>/categories/gradient-descent/</loc>
     <lastmod>2019-06-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/gradient-descent/</loc>
+    <loc>/tags/gradient-descent/</loc>
     <lastmod>2019-06-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -182,13 +199,13 @@
   </url>
   
   <url>
-    <loc>/tags/classification/</loc>
+    <loc>/categories/classification/</loc>
     <lastmod>2019-06-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/classification/</loc>
+    <loc>/tags/classification/</loc>
     <lastmod>2019-06-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -211,13 +228,13 @@
   </url>
   
   <url>
-    <loc>/tags/animation/</loc>
+    <loc>/categories/animation/</loc>
     <lastmod>2019-05-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/categories/animation/</loc>
+    <loc>/tags/animation/</loc>
     <lastmod>2019-05-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
