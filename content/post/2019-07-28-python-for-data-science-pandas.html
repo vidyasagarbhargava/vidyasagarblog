@@ -1,0 +1,63 @@
+---
+title: Python for Data Science - Pandas
+author: Vidyasagar Bhargava
+date: '2019-07-28'
+slug: python-for-data-science-pandas
+categories:
+  - Pandas
+  - python
+tags:
+  - Pandas
+  - Python
+keywords:
+  - tech
+---
+
+
+
+<p>Pandas is a package which is built on top of Numpy and provides efficient implementation of <code>DataFrame</code>. These dataframes are multidimensional arrays with attached row and column labels and often with heterogenous types.In this post we will focus on <code>Series</code>, <code>DataFrame</code> and related structure effectively.</p>
+<div id="installing-and-using-pandas" class="section level4">
+<h4>Installing and Using Pandas</h4>
+<p>Once pandas is installed you can import and check the version.</p>
+<pre class="python"><code>import pandas as pd
+pd.__version__</code></pre>
+<pre><code>## u&#39;0.19.2&#39;</code></pre>
+</div>
+<div id="pandas-objects" class="section level4">
+<h4>Pandas Objects</h4>
+<p>There are three fundamental pandas objects or structures : the <code>Series</code>, <code>DataFrame</code> and <code>Index</code>.</p>
+</div>
+<div id="the-pandas-series-object" class="section level4">
+<h4>The Pandas Series Object</h4>
+<p>A Pandas <code>Series</code> is a one-dimensional array of indexed data. It can be created from a <code>list</code> or <code>array</code> as follows :</p>
+<pre class="python"><code>data = pd.Series([0.23,1,3,5.89,67])
+data</code></pre>
+<pre><code>## 0     0.23
+## 1     1.00
+## 2     3.00
+## 3     5.89
+## 4    67.00
+## dtype: float64</code></pre>
+<p>As <code>Series</code> wraps both sequence of values and sequence of indices,which we can access with the <code>values</code> and <code>index</code> attributes.</p>
+<p>** Value**</p>
+<pre class="python"><code>data.values</code></pre>
+<pre><code>## array([  0.23,   1.  ,   3.  ,   5.89,  67.  ])</code></pre>
+<pre class="python"><code>data.index</code></pre>
+<pre><code>## RangeIndex(start=0, stop=5, step=1)</code></pre>
+<p>Accessing data by associated index.</p>
+<pre class="python"><code>data[2]</code></pre>
+<pre><code>## 3.0</code></pre>
+<blockquote>
+<p>👉 Pandas Series is much more flexible and general as compare to one-dimensional numpy array.</p>
+</blockquote>
+<p>Numpy Array has an implicitly defined integer index used to access the values, the Pandas Series has an explicitly defined index associated with the values.</p>
+<p>This explicit index definition gives the Series object additional capabilities. For example, the index need not be an integer, but can consist of values of any desired type.</p>
+<pre class="python"><code>data = pd.Series([0,2,4,6,8], index = [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;])
+data</code></pre>
+<pre><code>## a    0
+## b    2
+## c    4
+## d    6
+## e    8
+## dtype: int64</code></pre>
+</div>

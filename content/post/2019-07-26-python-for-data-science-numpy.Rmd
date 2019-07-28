@@ -26,11 +26,10 @@ np.__version__
 ```
 
 
-How numpy improves the performances as compare to base python operartions on arrays of data?  
+> How numpy improves the performances as compare to base python operartions on arrays of data?  
 
 
-Python is dynamic typing language unlike C and JAVA, statically type language which requires variable to be declare explicitly. 
-
+Python is dynamic typing language unlike C and JAVA which are statically type language that requires variable to be declare explicitly. 
 
 
 ```
@@ -86,7 +85,10 @@ When we define an integer in python  for example `x = 100` is not just a "raw" i
 
 
 
-....More explanation sooon....
+> 👉  A C integer is a label for a position in memory whose bytes encode an integer value. A python integer is a pointer to a position in a memory containing
+all the python object information, including the bytes that contains the integer value.All this additional information information in Python types comes at additional cost.  
+
+
 
 
 
@@ -119,8 +121,8 @@ np.array([1,2,3,5,6])
 np.array([3.14, 1, 2.0,3 ,5])
 ```
 
-Explicity set the data type using keyword `dtype`.  
 
+Explicity set the data type using keyword `dtype`.  
 
 ```{python}
 np.array([1,2,3,4], dtype='float32')
