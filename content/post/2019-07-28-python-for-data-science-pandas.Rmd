@@ -90,9 +90,102 @@ data
 
 
 
+#### Series as specialized dictionary
+
+
+Constructing a `series` object directly from a Python dictionary.  
+
+```{python}
+mob_dict = {'Nokia': 37834,
+'Samsung':234893,
+'Apple':93849,
+'Oneplus':298343}
+mobile = pd.Series(mob_dict)
+mobile
+```
+
+> By default, a Series will be created where the index is drawn from the sorted keys.  
+
+
+Accessing items in dictionary style
+
+```{python}
+mobile['Oneplus']  
+```
+
+
+Series also supports array style operations such as slicing
+
+```{python}
+mobile['Nokia':'Samsung']
+```
 
 
 
+#### Constructing Series objects
+
+```
+pd.Series(data, index = index)
+```
+
+where `index` is optional argument and data can be one of many entities.  
+
+For ex:-  Data can be list or numpy array in which case index defaults to an integer sequence.
+
+
+
+```{python}
+pd.Series([2,4,5,9])
+```
+
+
+data can be `scalar`
+
+```{python}
+pd.Series(5, index = [100,200,300])
+```
+
+
+data can be dicitonary in which index defaults to the sorted dictionary keys  
+
+```{python}
+pd.Series({2:'a', 1:'b', 3:'c'})
+```
+
+
+
+#### DataFrame Object  
+
+If series is an analog of a one dimension array with flexible indices, a dataframe is analog of a two dimensional array with both flexible row indices and flexible column names.  
+
+
+```{python}
+mob_dict = {'Nokia': 35,
+'Samsung':65,
+'Apple':16,
+'Oneplus':10}
+models = pd.Series(mob_dict)
+models
+```
+
+We can use dictionary to construct a single two dimensional object containing this information.  
+
+```{python}
+mobiles = pd.DataFrame({'Sales' : mobile, 'models': models})
+mobiles
+```
+
+> Like the Series object, the DataFrame has an index attribute that gives access to the index labels
+
+```{python}
+mobiles.index
+```
+
+
+
+```{python}
+mobiles.columns
+```
 
 
 

@@ -61,3 +61,84 @@ data</code></pre>
 ## e    8
 ## dtype: int64</code></pre>
 </div>
+<div id="series-as-specialized-dictionary" class="section level4">
+<h4>Series as specialized dictionary</h4>
+<p>Constructing a <code>series</code> object directly from a Python dictionary.</p>
+<pre class="python"><code>mob_dict = {&#39;Nokia&#39;: 37834,
+&#39;Samsung&#39;:234893,
+&#39;Apple&#39;:93849,
+&#39;Oneplus&#39;:298343}
+mobile = pd.Series(mob_dict)
+mobile</code></pre>
+<pre><code>## Apple       93849
+## Nokia       37834
+## Oneplus    298343
+## Samsung    234893
+## dtype: int64</code></pre>
+<blockquote>
+<p>By default, a Series will be created where the index is drawn from the sorted keys.</p>
+</blockquote>
+<p>Accessing items in dictionary style</p>
+<pre class="python"><code>mobile[&#39;Oneplus&#39;]  </code></pre>
+<pre><code>## 298343</code></pre>
+<p>Series also supports array style operations such as slicing</p>
+<pre class="python"><code>mobile[&#39;Nokia&#39;:&#39;Samsung&#39;]</code></pre>
+<pre><code>## Nokia       37834
+## Oneplus    298343
+## Samsung    234893
+## dtype: int64</code></pre>
+</div>
+<div id="constructing-series-objects" class="section level4">
+<h4>Constructing Series objects</h4>
+<pre><code>pd.Series(data, index = index)</code></pre>
+<p>where <code>index</code> is optional argument and data can be one of many entities.</p>
+<p>For ex:- Data can be list or numpy array in which case index defaults to an integer sequence.</p>
+<pre class="python"><code>pd.Series([2,4,5,9])</code></pre>
+<pre><code>## 0    2
+## 1    4
+## 2    5
+## 3    9
+## dtype: int64</code></pre>
+<p>data can be <code>scalar</code></p>
+<pre class="python"><code>pd.Series(5, index = [100,200,300])</code></pre>
+<pre><code>## 100    5
+## 200    5
+## 300    5
+## dtype: int64</code></pre>
+<p>data can be dicitonary in which index defaults to the sorted dictionary keys</p>
+<pre class="python"><code>pd.Series({2:&#39;a&#39;, 1:&#39;b&#39;, 3:&#39;c&#39;})</code></pre>
+<pre><code>## 1    b
+## 2    a
+## 3    c
+## dtype: object</code></pre>
+</div>
+<div id="dataframe-object" class="section level4">
+<h4>DataFrame Object</h4>
+<p>If series is an analog of a one dimension array with flexible indices, a dataframe is analog of a two dimensional array with both flexible row indices and flexible column names.</p>
+<pre class="python"><code>mob_dict = {&#39;Nokia&#39;: 35,
+&#39;Samsung&#39;:65,
+&#39;Apple&#39;:16,
+&#39;Oneplus&#39;:10}
+models = pd.Series(mob_dict)
+models</code></pre>
+<pre><code>## Apple      16
+## Nokia      35
+## Oneplus    10
+## Samsung    65
+## dtype: int64</code></pre>
+<p>We can use dictionary to construct a single two dimensional object containing this information.</p>
+<pre class="python"><code>mobiles = pd.DataFrame({&#39;Sales&#39; : mobile, &#39;models&#39;: models})
+mobiles</code></pre>
+<pre><code>##           Sales  models
+## Apple     93849      16
+## Nokia     37834      35
+## Oneplus  298343      10
+## Samsung  234893      65</code></pre>
+<blockquote>
+<p>Like the Series object, the DataFrame has an index attribute that gives access to the index labels</p>
+</blockquote>
+<pre class="python"><code>mobiles.index</code></pre>
+<pre><code>## Index([u&#39;Apple&#39;, u&#39;Nokia&#39;, u&#39;Oneplus&#39;, u&#39;Samsung&#39;], dtype=&#39;object&#39;)</code></pre>
+<pre class="python"><code>mobiles.columns</code></pre>
+<pre><code>## Index([u&#39;Sales&#39;, u&#39;models&#39;], dtype=&#39;object&#39;)</code></pre>
+</div>
