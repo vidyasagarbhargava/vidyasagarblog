@@ -141,4 +141,65 @@ mobiles</code></pre>
 <pre><code>## Index([u&#39;Apple&#39;, u&#39;Nokia&#39;, u&#39;Oneplus&#39;, u&#39;Samsung&#39;], dtype=&#39;object&#39;)</code></pre>
 <pre class="python"><code>mobiles.columns</code></pre>
 <pre><code>## Index([u&#39;Sales&#39;, u&#39;models&#39;], dtype=&#39;object&#39;)</code></pre>
+<pre class="python"><code>mobiles[&#39;models&#39;]</code></pre>
+<pre><code>## Apple      16
+## Nokia      35
+## Oneplus    10
+## Samsung    65
+## Name: models, dtype: int64</code></pre>
+<p>A pandas dataframe can be constructed in many ways.Here are few examples</p>
+<ul>
+<li>From single Series object</li>
+</ul>
+<pre class="python"><code>pd.DataFrame(mobile, columns=[&#39;mobile&#39;])</code></pre>
+<pre><code>##          mobile
+## Apple     93849
+## Nokia     37834
+## Oneplus  298343
+## Samsung  234893</code></pre>
+<ul>
+<li>From list of dicts</li>
+</ul>
+<p>Any list of dictionaries can be made into dataframe.</p>
+<pre class="python"><code>data = [{&#39;a&#39;: i, &#39;b&#39;: 2 * i}
+        for i in range(3)]
+data</code></pre>
+<pre><code>## [{&#39;a&#39;: 0, &#39;b&#39;: 0}, {&#39;a&#39;: 1, &#39;b&#39;: 2}, {&#39;a&#39;: 2, &#39;b&#39;: 4}]</code></pre>
+<pre class="python"><code>pd.DataFrame(data)</code></pre>
+<pre><code>##    a  b
+## 0  0  0
+## 1  1  2
+## 2  2  4</code></pre>
+<ul>
+<li>From dictionary of series objects</li>
+</ul>
+<pre class="python"><code>pd.DataFrame({&#39;Sales&#39;:mobile, &#39;models&#39;: models})</code></pre>
+<pre><code>##           Sales  models
+## Apple     93849      16
+## Nokia     37834      35
+## Oneplus  298343      10
+## Samsung  234893      65</code></pre>
+<ul>
+<li>From two dimensional numpy array</li>
+</ul>
+<pre class="python"><code>import numpy as np
+pd.DataFrame(np.random.rand(3, 2),
+             columns=[&#39;foo&#39;, &#39;bar&#39;],
+             index=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;])</code></pre>
+<pre><code>##         foo       bar
+## a  0.087430  0.279363
+## b  0.874054  0.249732
+## c  0.179588  0.472322</code></pre>
+<ul>
+<li>From numpy structured array</li>
+</ul>
+<pre class="python"><code>A = np.zeros(3,dtype=[(&#39;A&#39;, &#39;i8&#39;), (&#39;B&#39;, &#39;f8&#39;)])
+A</code></pre>
+<pre><code>## array([(0, 0.0), (0, 0.0), (0, 0.0)], 
+##       dtype=[(&#39;A&#39;, &#39;&lt;i8&#39;), (&#39;B&#39;, &#39;&lt;f8&#39;)])</code></pre>
+<pre class="python"><code>pd.DataFrame(A)</code></pre>
+<pre><code>##    A    B
+## 0  0  0.0
+## 1  0  0.0
+## 2  0  0.0</code></pre>
 </div>

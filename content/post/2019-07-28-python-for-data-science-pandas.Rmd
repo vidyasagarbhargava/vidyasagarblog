@@ -188,18 +188,59 @@ mobiles.columns
 ```
 
 
+```{python}
+mobiles['models']
+```
+
+
+A pandas dataframe can be constructed in many ways.Here are few examples 
+
+- From single Series object  
+
+
+```{python}
+pd.DataFrame(mobile, columns=['mobile'])
+```
 
 
 
+- From list of dicts
+
+Any list of dictionaries can be made into dataframe.
+
+```{python}
+data = [{'a': i, 'b': 2 * i}
+        for i in range(3)]
+data
+pd.DataFrame(data)
+```
 
 
 
+- From dictionary of series objects
+
+```{python}
+pd.DataFrame({'Sales':mobile, 'models': models})
+```
+
+- From two dimensional numpy array
+
+```{python}
+import numpy as np
+pd.DataFrame(np.random.rand(3, 2),
+             columns=['foo', 'bar'],
+             index=['a', 'b', 'c'])
+```
+
+- From numpy structured array  
+
+```{python}
+A = np.zeros(3,dtype=[('A', 'i8'), ('B', 'f8')])
+A
+```
 
 
-
-
-
-
-
-
+```{python}
+pd.DataFrame(A)
+```
 
