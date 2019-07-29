@@ -2,12 +2,12 @@
 title: Softmax function from scratch
 author: Vidyasagar Bhargava
 date: '2019-06-14'
-slug: softmax-function-from-scratch
 categories:
-  - R
-  - Softmax
+  - Blog
 tags:
   - Softmax
+  - R
+slug: softmax-function-from-scratch
 keywords:
   - tech
 ---

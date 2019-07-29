@@ -2,15 +2,13 @@
 title: Python for Data Science - Numpy
 author: Vidyasagar Bhargava
 date: '2019-07-26'
-slug: python-for-data-science-numpy
 categories:
-  - python
-  - Numpy
-  - Data Science
+  - Tutorials
 tags:
   - Data Science
-  - python
   - Numpy
+  - python
+slug: python-for-data-science-numpy
 keywords:
   - tech
 ---

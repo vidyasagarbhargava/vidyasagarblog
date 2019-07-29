@@ -2,13 +2,12 @@
 title: Machine Learning in Python
 author: Vidyasagar Bhargava
 date: '2019-06-14'
-slug: machine-learning-in-python
 categories:
-  - python
-  - Machine learning
+  - Tutorials
 tags:
   - machine learning
   - python
+slug: machine-learning-in-python
 keywords:
   - tech
 ---

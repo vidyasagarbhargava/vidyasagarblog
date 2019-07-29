@@ -2,15 +2,13 @@
 title: Basic Python Crash Course - Part 2
 author: Vidyasagar Bhargava
 date: '2019-07-07'
-slug: basic-python-crash-course-part-2
 categories:
-  - python
-  - object oriented programming
-  - classes and objects
+  - Tutorials
 tags:
-  - python
-  - object oriented programming
   - classes and objects
+  - object oriented programming
+  - python
+slug: basic-python-crash-course-part-2
 keywords:
   - tech
 ---

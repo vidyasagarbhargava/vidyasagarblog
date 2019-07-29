@@ -2,11 +2,11 @@
 title: Basic python crash course - Part 1
 author: Vidyasagar Bhargava
 date: '2019-07-06'
-slug: basic-python-crash-course
 categories:
-  - python
+  - Tutorials
 tags:
   - python
+slug: basic-python-crash-course
 keywords:
   - tech
 ---

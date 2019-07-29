@@ -2,12 +2,12 @@
 title: Softmax function from scratch
 author: Vidyasagar Bhargava
 date: '2019-06-14'
-slug: softmax-function-from-scratch
 categories:
-  - R
-  - Softmax
+  - Blog
 tags:
   - Softmax
+  - R
+slug: softmax-function-from-scratch
 keywords:
   - tech
 ---
@@ -44,9 +44,9 @@ test &lt;- rnorm(n = 1000) + (rnorm(n = 1000) * 2)
 res &lt;- microbenchmark::microbenchmark(softmax_loops(test), softmax(test), times = 100)
 res</code></pre>
 <pre><code>## Unit: microseconds
-##                 expr     min      lq     mean   median       uq      max
-##  softmax_loops(test) 214.089 223.151 400.5612 338.5020 385.6995 9424.801
-##        softmax(test) 131.021 136.685 252.8818 170.1005 189.3575 5399.032
+##                 expr     min       lq     mean   median      uq      max
+##  softmax_loops(test) 209.558 221.8295 357.9284 262.4195 347.941 7226.899
+##        softmax(test) 125.735 136.6850 214.9951 170.1005 185.204 2735.574
 ##  neval
 ##    100
 ##    100</code></pre>

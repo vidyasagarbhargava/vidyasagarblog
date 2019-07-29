@@ -3,8 +3,7 @@ title: Python for Data Science - Introduction
 author: Vidyasagar Bhargava
 date: '2019-07-15'
 categories:
-  - Data Science
-  - python
+  - Tutorials
 tags:
   - Data Science
   - python

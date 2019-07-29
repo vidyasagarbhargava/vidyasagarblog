@@ -39,14 +39,14 @@ Softmax is a generalization of logistic regression which can be use for multi-cl
   
   
     
-      <meta property="article:section" content="R">
-    
-      <meta property="article:section" content="Softmax">
+      <meta property="article:section" content="Blog">
     
   
   
     
       <meta property="article:tag" content="Softmax">
+    
+      <meta property="article:tag" content="R">
     
   
 
@@ -288,9 +288,7 @@ if (!doNotTrack) {
   
     <span>in</span>
     
-      <a class="category-link" href="/categories/r">R</a>, 
-    
-      <a class="category-link" href="/categories/softmax">Softmax</a>
+      <a class="category-link" href="/categories/blog">Blog</a>
     
   
 
@@ -333,9 +331,9 @@ test &lt;- rnorm(n = 1000) + (rnorm(n = 1000) * 2)
 res &lt;- microbenchmark::microbenchmark(softmax_loops(test), softmax(test), times = 100)
 res</code></pre>
 <pre><code>## Unit: microseconds
-##                 expr     min      lq     mean   median       uq      max
-##  softmax_loops(test) 214.089 223.151 400.5612 338.5020 385.6995 9424.801
-##        softmax(test) 131.021 136.685 252.8818 170.1005 189.3575 5399.032
+##                 expr     min       lq     mean   median      uq      max
+##  softmax_loops(test) 209.558 221.8295 357.9284 262.4195 347.941 7226.899
+##        softmax(test) 125.735 136.6850 214.9951 170.1005 185.204 2735.574
 ##  neval
 ##    100
 ##    100</code></pre>
@@ -356,6 +354,8 @@ res</code></pre>
                     <span class="text-color-light text-small">TAGGED IN</span><br/>
                     
   <a class="tag tag--primary tag--small" href="/tags/softmax/">Softmax</a>
+
+  <a class="tag tag--primary tag--small" href="/tags/r/">R</a>
 
                   </div>
                 
@@ -607,7 +607,7 @@ import pandas as pdpd.__version__## &#39;0.24.2&#39;Pandas ObjectsThere are
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather">NumpyNumpy (Short for Numerical Python) provides an efficient interface to Store and operate on arrays of number.Its somewhat looks like python’s builtin list type but much more efficient as the arrays grows in size.
-import numpy as npnp.__version__## &#39;1.8.0rc1&#39;How numpy improves the performances as compare to base python operartions on arrays of data?
+import numpy as npnp.__version__## &#39;1.16.4&#39;How numpy improves the performances as compare to base python operartions on arrays of data?
 Python is dynamic typing language unlike C and JAVA which are statically type language that requires variable to be declare explicitly.</div>
             </div>
             <div style="clear:both;"></div>

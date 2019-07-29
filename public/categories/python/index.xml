@@ -6,42 +6,10 @@
     <description>Recent content in python on Vidyasagar Bhargava</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 28 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 07 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/python/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Python for Data Science - Pandas</title>
-      <link>/2019/07/python-for-data-science-pandas/</link>
-      <pubDate>Sun, 28 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/07/python-for-data-science-pandas/</guid>
-      <description>Pandas is a package which is built on top of Numpy and provides efficient implementation of DataFrame. These dataframes are multidimensional arrays with attached row and column labels and often with heterogenous types.In this post we will focus on Series, DataFrame and related structure effectively.
-Installing and Using PandasOnce pandas is installed you can import and check the version.
-import pandas as pdpd.__version__## &amp;#39;0.24.2&amp;#39;Pandas ObjectsThere are three fundamental pandas objects or structures : the Series, DataFrame and Index.</description>
-    </item>
-    
-    <item>
-      <title>Python for Data Science - Numpy</title>
-      <link>/2019/07/python-for-data-science-numpy/</link>
-      <pubDate>Fri, 26 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/07/python-for-data-science-numpy/</guid>
-      <description>NumpyNumpy (Short for Numerical Python) provides an efficient interface to Store and operate on arrays of number.Its somewhat looks like python’s builtin list type but much more efficient as the arrays grows in size.
-import numpy as npnp.__version__## &amp;#39;1.8.0rc1&amp;#39;How numpy improves the performances as compare to base python operartions on arrays of data?
-Python is dynamic typing language unlike C and JAVA which are statically type language that requires variable to be declare explicitly.</description>
-    </item>
-    
-    <item>
-      <title>Python for Data Science - Introduction</title>
-      <link>/2019/07/python-for-data-science/</link>
-      <pubDate>Mon, 15 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/07/python-for-data-science/</guid>
-      <description>Python was released with philosophy which emphasizes simplicity, code readibility and efficiency.Being an Object Oriented Programming language python groups data and code into objectsthat can interact with and modify one another. Data Science is small portion with in diverse python ecosystem. Python has deep learning and machine learning libraries which includesscikit-learn, Keras and tensorflow.
-Help and Documentation in python:Every python object contains the reference to a string, known as doc string, which contain a concise summary of the object and how to use it.</description>
-    </item>
     
     <item>
       <title>Basic Python Crash Course - Part 2</title>
@@ -64,15 +32,6 @@ Table of Contents:-Variable, Numbers and Strings
 Conditionals
 Functions
 List, dictionary, Set, Expression 1.</description>
-    </item>
-    
-    <item>
-      <title>Machine Learning in Python</title>
-      <link>/2019/06/machine-learning-in-python/</link>
-      <pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/06/machine-learning-in-python/</guid>
-      <description>In this post we will see demo of two machine learning problems using python. We will train model on two different datasets using two different type of machine learning algorithm one for classifier and other for regression.The learning algorithm finds the pattern in the training data which maps the input data features to target variable and it outputs an machine learning model that captures these patterns. Also we will learn about scikit-learn library in detail (coming soon).</description>
     </item>
     
   </channel>

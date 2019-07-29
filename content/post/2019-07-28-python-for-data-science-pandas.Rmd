@@ -2,13 +2,12 @@
 title: Python for Data Science - Pandas
 author: Vidyasagar Bhargava
 date: '2019-07-28'
-slug: python-for-data-science-pandas
 categories:
-  - Pandas
-  - python
+  - Tutorials
 tags:
   - Pandas
   - Python
+slug: python-for-data-science-pandas
 keywords:
   - tech
 ---

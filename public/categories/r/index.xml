@@ -22,35 +22,5 @@
 The new approach however has this philosphy that there is only one statistical test and that at their core, all statistical tests (be they t-tests, chi-squared tests, signed Wilcoxon rank tests, etc.</description>
     </item>
     
-    <item>
-      <title>Gradient Descent from scratch and visualization</title>
-      <link>/2019/06/gradient-descent-from-scratch-and-visualization/</link>
-      <pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/06/gradient-descent-from-scratch-and-visualization/</guid>
-      <description>Gradient descent is an optimization algorithm used to minimize some function by iteratively moving in the direction of steepest descent as defined by the negative of the gradient. In machine learning, we use gradient descent to update the parameters of our model. Parameters refer to coefficients in Linear Regression and weights in neural networks.
-Below video discusses about gradient descent algorithm. Its good to spend some time on this video and get intuition about it before we start writing code for it.</description>
-    </item>
-    
-    <item>
-      <title>Softmax function from scratch</title>
-      <link>/2019/06/softmax-function-from-scratch/</link>
-      <pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/06/softmax-function-from-scratch/</guid>
-      <description>Softmax is a generalization of logistic regression which can be use for multi-class classification. The softmax function squashes the outputs of each unit to be between 0 and 1, just like a sigmoid function. But it also divides each output such that the total sum of the outputs is equal to 1.
-Softmax Function :-
-Softmax is a generalization of logistic regression which can be use for multi-class classification.</description>
-    </item>
-    
-    <item>
-      <title>Learn Machine Learning using Kaggle Competition titanic 🚢 dataset</title>
-      <link>/2019/06/learn-machine-learning-using-kaggle-competition-titanic-dataset/</link>
-      <pubDate>Mon, 03 Jun 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/06/learn-machine-learning-using-kaggle-competition-titanic-dataset/</guid>
-      <description>This post is an effort of showing an approach of Machine learning in R using tidyverse and tidymodels. We will go through step by step from data import to final model evaluation process in machine learning. We will not just focus on coding part but also the statistical aspect should be taken into account behind the modelling process. In this tutorial we are using titanic dataset from Kaggle competition.</description>
-    </item>
-    
   </channel>
 </rss>
