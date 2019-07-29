@@ -70,17 +70,17 @@ enableEmojis = true
 
   [[menu.main]]
     weight = 4
-    identifier = "tags"
-    name = "Tags"
+    identifier = "blog"
+    name = "Blog"
     pre = "<i class=\"sidebar-button-icon fa fa-lg fa-tags\"></i>"
-    url = "/tags"
+    url = "/categories/blog"
 
   [[menu.main]]
     weight = 5
-    identifier = "archives"
-    name = "Archives"
+    identifier = "tutorials"
+    name = "Tutorials"
     pre = "<i class=\"sidebar-button-icon fa fa-lg fa-archive\"></i>"
-    url = "/archives"
+    url = "/categories/tutorials"
 
 
 [[menu.links]]
