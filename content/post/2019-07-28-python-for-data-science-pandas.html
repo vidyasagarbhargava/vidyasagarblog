@@ -21,7 +21,7 @@ keywords:
 <p>Once pandas is installed you can import and check the version.</p>
 <pre class="python"><code>import pandas as pd
 pd.__version__</code></pre>
-<pre><code>## u&#39;0.19.2&#39;</code></pre>
+<pre><code>## &#39;0.24.2&#39;</code></pre>
 </div>
 <div id="pandas-objects" class="section level4">
 <h4>Pandas Objects</h4>
@@ -38,10 +38,10 @@ data</code></pre>
 ## 3     5.89
 ## 4    67.00
 ## dtype: float64</code></pre>
-<p>As <code>Series</code> wraps both sequence of values and sequence of indices,which we can access with the <code>values</code> and <code>index</code> attributes.</p>
+<p>As <code>Series</code> wraps both sequence of values and sequence of indices, which we can access with the <code>values</code> and <code>index</code> attributes.</p>
 <p>** Value**</p>
 <pre class="python"><code>data.values</code></pre>
-<pre><code>## array([  0.23,   1.  ,   3.  ,   5.89,  67.  ])</code></pre>
+<pre><code>## array([ 0.23,  1.  ,  3.  ,  5.89, 67.  ])</code></pre>
 <pre class="python"><code>data.index</code></pre>
 <pre><code>## RangeIndex(start=0, stop=5, step=1)</code></pre>
 <p>Accessing data by associated index.</p>
@@ -70,10 +70,10 @@ data</code></pre>
 &#39;Oneplus&#39;:298343}
 mobile = pd.Series(mob_dict)
 mobile</code></pre>
-<pre><code>## Apple       93849
-## Nokia       37834
-## Oneplus    298343
+<pre><code>## Nokia       37834
 ## Samsung    234893
+## Apple       93849
+## Oneplus    298343
 ## dtype: int64</code></pre>
 <blockquote>
 <p>By default, a Series will be created where the index is drawn from the sorted keys.</p>
@@ -84,7 +84,6 @@ mobile</code></pre>
 <p>Series also supports array style operations such as slicing</p>
 <pre class="python"><code>mobile[&#39;Nokia&#39;:&#39;Samsung&#39;]</code></pre>
 <pre><code>## Nokia       37834
-## Oneplus    298343
 ## Samsung    234893
 ## dtype: int64</code></pre>
 </div>
@@ -107,8 +106,8 @@ mobile</code></pre>
 ## dtype: int64</code></pre>
 <p>data can be dicitonary in which index defaults to the sorted dictionary keys</p>
 <pre class="python"><code>pd.Series({2:&#39;a&#39;, 1:&#39;b&#39;, 3:&#39;c&#39;})</code></pre>
-<pre><code>## 1    b
-## 2    a
+<pre><code>## 2    a
+## 1    b
 ## 3    c
 ## dtype: object</code></pre>
 </div>
@@ -121,31 +120,31 @@ mobile</code></pre>
 &#39;Oneplus&#39;:10}
 models = pd.Series(mob_dict)
 models</code></pre>
-<pre><code>## Apple      16
-## Nokia      35
-## Oneplus    10
+<pre><code>## Nokia      35
 ## Samsung    65
+## Apple      16
+## Oneplus    10
 ## dtype: int64</code></pre>
 <p>We can use dictionary to construct a single two dimensional object containing this information.</p>
 <pre class="python"><code>mobiles = pd.DataFrame({&#39;Sales&#39; : mobile, &#39;models&#39;: models})
 mobiles</code></pre>
 <pre><code>##           Sales  models
-## Apple     93849      16
 ## Nokia     37834      35
-## Oneplus  298343      10
-## Samsung  234893      65</code></pre>
+## Samsung  234893      65
+## Apple     93849      16
+## Oneplus  298343      10</code></pre>
 <blockquote>
 <p>Like the Series object, the DataFrame has an index attribute that gives access to the index labels</p>
 </blockquote>
 <pre class="python"><code>mobiles.index</code></pre>
-<pre><code>## Index([u&#39;Apple&#39;, u&#39;Nokia&#39;, u&#39;Oneplus&#39;, u&#39;Samsung&#39;], dtype=&#39;object&#39;)</code></pre>
+<pre><code>## Index([&#39;Nokia&#39;, &#39;Samsung&#39;, &#39;Apple&#39;, &#39;Oneplus&#39;], dtype=&#39;object&#39;)</code></pre>
 <pre class="python"><code>mobiles.columns</code></pre>
-<pre><code>## Index([u&#39;Sales&#39;, u&#39;models&#39;], dtype=&#39;object&#39;)</code></pre>
+<pre><code>## Index([&#39;Sales&#39;, &#39;models&#39;], dtype=&#39;object&#39;)</code></pre>
 <pre class="python"><code>mobiles[&#39;models&#39;]</code></pre>
-<pre><code>## Apple      16
-## Nokia      35
-## Oneplus    10
+<pre><code>## Nokia      35
 ## Samsung    65
+## Apple      16
+## Oneplus    10
 ## Name: models, dtype: int64</code></pre>
 <p>A pandas dataframe can be constructed in many ways.Here are few examples</p>
 <ul>
@@ -153,10 +152,10 @@ mobiles</code></pre>
 </ul>
 <pre class="python"><code>pd.DataFrame(mobile, columns=[&#39;mobile&#39;])</code></pre>
 <pre><code>##          mobile
-## Apple     93849
 ## Nokia     37834
-## Oneplus  298343
-## Samsung  234893</code></pre>
+## Samsung  234893
+## Apple     93849
+## Oneplus  298343</code></pre>
 <ul>
 <li>From list of dicts</li>
 </ul>
@@ -175,10 +174,10 @@ data</code></pre>
 </ul>
 <pre class="python"><code>pd.DataFrame({&#39;Sales&#39;:mobile, &#39;models&#39;: models})</code></pre>
 <pre><code>##           Sales  models
-## Apple     93849      16
 ## Nokia     37834      35
-## Oneplus  298343      10
-## Samsung  234893      65</code></pre>
+## Samsung  234893      65
+## Apple     93849      16
+## Oneplus  298343      10</code></pre>
 <ul>
 <li>From two dimensional numpy array</li>
 </ul>
@@ -187,19 +186,300 @@ pd.DataFrame(np.random.rand(3, 2),
              columns=[&#39;foo&#39;, &#39;bar&#39;],
              index=[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;])</code></pre>
 <pre><code>##         foo       bar
-## a  0.087430  0.279363
-## b  0.874054  0.249732
-## c  0.179588  0.472322</code></pre>
+## a  0.139520  0.669621
+## b  0.167894  0.686346
+## c  0.285077  0.230716</code></pre>
 <ul>
 <li>From numpy structured array</li>
 </ul>
 <pre class="python"><code>A = np.zeros(3,dtype=[(&#39;A&#39;, &#39;i8&#39;), (&#39;B&#39;, &#39;f8&#39;)])
 A</code></pre>
-<pre><code>## array([(0, 0.0), (0, 0.0), (0, 0.0)], 
-##       dtype=[(&#39;A&#39;, &#39;&lt;i8&#39;), (&#39;B&#39;, &#39;&lt;f8&#39;)])</code></pre>
+<pre><code>## array([(0, 0.), (0, 0.), (0, 0.)], dtype=[(&#39;A&#39;, &#39;&lt;i8&#39;), (&#39;B&#39;, &#39;&lt;f8&#39;)])</code></pre>
 <pre class="python"><code>pd.DataFrame(A)</code></pre>
 <pre><code>##    A    B
 ## 0  0  0.0
 ## 1  0  0.0
 ## 2  0  0.0</code></pre>
+</div>
+<div id="data-indexing-and-selection" class="section level4">
+<h4>Data Indexing and Selection</h4>
+<p>As we know a series object acts in many ways like a one-dimensional Numpy array and in many ways like a standard python dictionary.</p>
+<pre class="python"><code>data = pd.Series([0.25, 0.5, 0.75, 1.0], index = [&#39;a&#39;,&#39;b&#39;, &#39;c&#39;,&#39;d&#39;])
+data</code></pre>
+<pre><code>## a    0.25
+## b    0.50
+## c    0.75
+## d    1.00
+## dtype: float64</code></pre>
+<pre class="python"><code>data[&#39;a&#39;]</code></pre>
+<pre><code>## 0.25</code></pre>
+<pre class="python"><code>data.keys()</code></pre>
+<pre><code>## Index([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;], dtype=&#39;object&#39;)</code></pre>
+<pre class="python"><code>list(data.items())</code></pre>
+<pre><code>## [(&#39;a&#39;, 0.25), (&#39;b&#39;, 0.5), (&#39;c&#39;, 0.75), (&#39;d&#39;, 1.0)]</code></pre>
+<p>you can extend a dictionary by assigning to a new key</p>
+<pre class="python"><code>data[&#39;e&#39;]=1.34
+data</code></pre>
+<pre><code>## a    0.25
+## b    0.50
+## c    0.75
+## d    1.00
+## e    1.34
+## dtype: float64</code></pre>
+</div>
+<div id="series-as-one-dimensional-array" class="section level4">
+<h4>Series as one-dimensional array</h4>
+<p>slice by explicit index</p>
+<pre class="python"><code>data[&#39;a&#39;:&#39;c&#39;]</code></pre>
+<pre><code>## a    0.25
+## b    0.50
+## c    0.75
+## dtype: float64</code></pre>
+<p>slice by implicit integer index</p>
+<pre class="python"><code>data[0:2]</code></pre>
+<pre><code>## a    0.25
+## b    0.50
+## dtype: float64</code></pre>
+<p>masking</p>
+<pre class="python"><code>data[(data &gt; 0.3) &amp; (data &lt; 0.8)]</code></pre>
+<pre><code>## b    0.50
+## c    0.75
+## dtype: float64</code></pre>
+<p>fancy indexing</p>
+<pre class="python"><code>data[[&#39;a&#39;,&#39;e&#39;]]</code></pre>
+<pre><code>## a    0.25
+## e    1.34
+## dtype: float64</code></pre>
+<blockquote>
+<p>👉 When slicing with an explicit index (i.e., data[‘a’:‘c’]), the final index is included in the slice, while when slicing with an implicit index (i.e., data[0:2]), the final index is excluded from the slice</p>
+</blockquote>
+</div>
+<div id="indexers-loc-iloc-and-ix" class="section level4">
+<h4>Indexers: loc, iloc and ix</h4>
+<pre class="python"><code>data = pd.Series([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;], index = [1,3,5])
+data</code></pre>
+<pre><code>## 1    a
+## 3    b
+## 5    c
+## dtype: object</code></pre>
+<p>explicit index when indexing</p>
+<pre class="python"><code>data[1]</code></pre>
+<pre><code>## &#39;a&#39;</code></pre>
+<p>implicit index when slicing</p>
+<pre class="python"><code>data[1:3]</code></pre>
+<pre><code>## 3    b
+## 5    c
+## dtype: object</code></pre>
+<p>Due to above confusion in case of integer indexes, pandas provide some special indexer attributes explicitly expose certain indexing schemes.</p>
+<p>First, the <code>loc</code> attribute allows indexing and slicing that always references the explicit index:</p>
+<pre class="python"><code>data.loc[1]</code></pre>
+<pre><code>## &#39;a&#39;</code></pre>
+<pre class="python"><code>data.loc[1:3]</code></pre>
+<pre><code>## 1    a
+## 3    b
+## dtype: object</code></pre>
+<p>The <code>iloc</code> attribute allows indexing and slicing that always references the implicit Python-style index</p>
+<pre class="python"><code>data.iloc[1]</code></pre>
+<pre><code>## &#39;b&#39;</code></pre>
+<pre class="python"><code>data.iloc[1:3]</code></pre>
+<pre><code>## 3    b
+## 5    c
+## dtype: object</code></pre>
+<p>A third indexing attribute, <code>ix</code>, is a hybrid of the two, and for <code>Series</code> objects is equivalent to standard []-based indexing.The purpose of the <code>ix</code> indexer will become more apparent in the context of <code>DataFrame</code>.</p>
+</div>
+<div id="data-selection-in-data-frame" class="section level4">
+<h4>Data Selection in Data Frame</h4>
+<p>A <code>DataFrame</code> acts in many ways like a two-dimensional or structured array, and in other ways like a dictionary of <code>Series</code> structures sharing the same index. These analogies can be helpful to keep in mind as we explore data selection within this structure.</p>
+<p><strong>Data Frame as a Dictionary</strong></p>
+<pre class="python"><code>area = pd.Series({&#39;California&#39;: 423967, &#39;Texas&#39;: 695662,
+                  &#39;New York&#39;: 141297, &#39;Florida&#39;: 170312,
+                  &#39;Illinois&#39;: 149995})
+pop = pd.Series({&#39;California&#39;: 38332521, &#39;Texas&#39;: 26448193,
+                 &#39;New York&#39;: 19651127, &#39;Florida&#39;: 19552860,
+                 &#39;Illinois&#39;: 12882135})
+data = pd.DataFrame({&#39;area&#39;:area, &#39;pop&#39;:pop})
+data</code></pre>
+<pre><code>##               area       pop
+## California  423967  38332521
+## Texas       695662  26448193
+## New York    141297  19651127
+## Florida     170312  19552860
+## Illinois    149995  12882135</code></pre>
+<p>The individual Series that make up the columns of the DataFrame can be accessed via dictionary-style indexing of the column name:</p>
+<pre class="python"><code>data[&#39;area&#39;]</code></pre>
+<pre><code>## California    423967
+## Texas         695662
+## New York      141297
+## Florida       170312
+## Illinois      149995
+## Name: area, dtype: int64</code></pre>
+<p>Equivalently, we can use attribute-style access with column names that are strings:</p>
+<pre class="python"><code>data.area</code></pre>
+<pre><code>## California    423967
+## Texas         695662
+## New York      141297
+## Florida       170312
+## Illinois      149995
+## Name: area, dtype: int64</code></pre>
+<p>This attribute-style column access actually accesses the exact same object as the dictionary-style access</p>
+<pre class="python"><code>data.area is data[&#39;area&#39;]</code></pre>
+<pre><code>## True</code></pre>
+<blockquote>
+<p>👉 If the column names are not strings, or if the column names conflict with methods of the DataFrame, this attribute-style access is not possible.</p>
+</blockquote>
+<pre class="python"><code>data.pop is data[&#39;pop&#39;]</code></pre>
+<pre><code>## False</code></pre>
+<blockquote>
+<p>You should avoid the temptation to try column assignment via attribute.</p>
+</blockquote>
+<p>Dictionary-style syntax can also be used to modify the object, in this case adding a new column</p>
+<pre class="python"><code>data[&#39;Density&#39;] = data[&#39;pop&#39;]/data[&#39;area&#39;]
+data</code></pre>
+<pre><code>##               area       pop     Density
+## California  423967  38332521   90.413926
+## Texas       695662  26448193   38.018740
+## New York    141297  19651127  139.076746
+## Florida     170312  19552860  114.806121
+## Illinois    149995  12882135   85.883763</code></pre>
+<p>** DataFrame as 2-dimensional Array</p>
+<p>As mentioned previously, we can also view the DataFrame as an enhanced two-dimensional array. We can examine the raw underlying data array using the values attribute :</p>
+<pre class="python"><code>data.values</code></pre>
+<pre><code>## array([[4.23967000e+05, 3.83325210e+07, 9.04139261e+01],
+##        [6.95662000e+05, 2.64481930e+07, 3.80187404e+01],
+##        [1.41297000e+05, 1.96511270e+07, 1.39076746e+02],
+##        [1.70312000e+05, 1.95528600e+07, 1.14806121e+02],
+##        [1.49995000e+05, 1.28821350e+07, 8.58837628e+01]])</code></pre>
+<p>With this picture in mind, many familiar array-like observations can be done on the DataFrame itself. For example, we can transpose the full DataFrame to swap rows and columns</p>
+<pre class="python"><code>data.T</code></pre>
+<pre><code>##            California         Texas      New York       Florida      Illinois
+## area     4.239670e+05  6.956620e+05  1.412970e+05  1.703120e+05  1.499950e+05
+## pop      3.833252e+07  2.644819e+07  1.965113e+07  1.955286e+07  1.288214e+07
+## Density  9.041393e+01  3.801874e+01  1.390767e+02  1.148061e+02  8.588376e+01</code></pre>
+<p>When it comes to indexing of DataFrame objects, however, it is clear that the dictionary-style indexing of columns precludes our ability to simply treat it as a NumPy array. In particular, passing a single index to an array accesses a row:</p>
+<pre class="python"><code>data.values[0]</code></pre>
+<pre><code>## array([4.23967000e+05, 3.83325210e+07, 9.04139261e+01])</code></pre>
+<p>and passing a single “index” to a DataFrame accesses a column:</p>
+<pre class="python"><code>data[&#39;area&#39;]</code></pre>
+<pre><code>## California    423967
+## Texas         695662
+## New York      141297
+## Florida       170312
+## Illinois      149995
+## Name: area, dtype: int64</code></pre>
+<p>Thus for array-style indexing, we need another convention. Here Pandas again uses the loc, iloc, and ix indexers mentioned earlier. Using the iloc indexer, we can index the underlying array as if it is a simple NumPy array (using the implicit Python-style index), but the DataFrame index and column labels are maintained in the result:</p>
+<pre class="python"><code>data</code></pre>
+<pre><code>##               area       pop     Density
+## California  423967  38332521   90.413926
+## Texas       695662  26448193   38.018740
+## New York    141297  19651127  139.076746
+## Florida     170312  19552860  114.806121
+## Illinois    149995  12882135   85.883763</code></pre>
+<pre class="python"><code>data.iloc[:3, :2]</code></pre>
+<pre><code>##               area       pop
+## California  423967  38332521
+## Texas       695662  26448193
+## New York    141297  19651127</code></pre>
+<p>Similarly, using the loc indexer we can index the underlying data in an array-like style but using the explicit index and column names:</p>
+<pre class="python"><code>data.loc[:&#39;Illinois&#39;, :&#39;pop&#39;]</code></pre>
+<pre><code>##               area       pop
+## California  423967  38332521
+## Texas       695662  26448193
+## New York    141297  19651127
+## Florida     170312  19552860
+## Illinois    149995  12882135</code></pre>
+<p>The <code>ix</code> indexer allows a hybrid of these two approaches:</p>
+<pre class="python"><code>data.ix[:3, :&#39;pop&#39;]</code></pre>
+<pre><code>##               area       pop
+## California  423967  38332521
+## Texas       695662  26448193
+## New York    141297  19651127</code></pre>
+<p>In the loc indexer we can combine masking and fancy indexing as in the following:</p>
+<pre class="python"><code>data.loc[data.Density &gt; 100, [&#39;pop&#39;, &#39;Density&#39;]]</code></pre>
+<pre><code>##                pop     Density
+## New York  19651127  139.076746
+## Florida   19552860  114.806121</code></pre>
+<p>Any of these indexing conventions may also be used to set or modify values; this is done in the standard way that you might be accustomed to from working with NumPy:</p>
+<pre class="python"><code>data.iloc[0, 2] = 90
+data</code></pre>
+<pre><code>##               area       pop     Density
+## California  423967  38332521   90.000000
+## Texas       695662  26448193   38.018740
+## New York    141297  19651127  139.076746
+## Florida     170312  19552860  114.806121
+## Illinois    149995  12882135   85.883763</code></pre>
+<p>Quick analysis of any data</p>
+<pre class="python"><code>data.describe()</code></pre>
+<pre><code>##                 area           pop     Density
+## count       5.000000  5.000000e+00    5.000000
+## mean   316246.600000  2.337337e+07   93.557074
+## std    242437.411951  9.640386e+06   37.681565
+## min    141297.000000  1.288214e+07   38.018740
+## 25%    149995.000000  1.955286e+07   85.883763
+## 50%    170312.000000  1.965113e+07   90.000000
+## 75%    423967.000000  2.644819e+07  114.806121
+## max    695662.000000  3.833252e+07  139.076746</code></pre>
+<p>To get the complete information about the data set we can use <code>info()</code> function.</p>
+<pre class="python"><code>data.info()</code></pre>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## Index: 5 entries, California to Illinois
+## Data columns (total 3 columns):
+## area       5 non-null int64
+## pop        5 non-null int64
+## Density    5 non-null float64
+## dtypes: float64(1), int64(2)
+## memory usage: 320.0+ bytes</code></pre>
+<p>To sort the <code>DataFrame</code></p>
+<pre class="python"><code>data.sort_values(by = [&#39;area&#39;], ascending=True, inplace= False)</code></pre>
+<pre><code>##               area       pop     Density
+## New York    141297  19651127  139.076746
+## Illinois    149995  12882135   85.883763
+## Florida     170312  19552860  114.806121
+## California  423967  38332521   90.000000
+## Texas       695662  26448193   38.018740</code></pre>
+<blockquote>
+<p>👉 Inplace = True will make changes to the data</p>
+</blockquote>
+<p>We can sort by multiple columns as well</p>
+<pre class="python"><code>data.sort_values(by = [&#39;area&#39;, &#39;pop&#39;], ascending=[True,False], inplace= False)</code></pre>
+<pre><code>##               area       pop     Density
+## New York    141297  19651127  139.076746
+## Illinois    149995  12882135   85.883763
+## Florida     170312  19552860  114.806121
+## California  423967  38332521   90.000000
+## Texas       695662  26448193   38.018740</code></pre>
+<p>How to remove duplicate rows ?</p>
+<p>consider below <code>DataFrame</code></p>
+<pre class="python"><code>data = pd.DataFrame({&#39;k1&#39;:[&#39;one&#39;]*3 + [&#39;two&#39;]*4, &#39;k2&#39;:[3,2,1,3,3,4,4]})
+data</code></pre>
+<pre><code>##     k1  k2
+## 0  one   3
+## 1  one   2
+## 2  one   1
+## 3  two   3
+## 4  two   3
+## 5  two   4
+## 6  two   4</code></pre>
+<p>To sort values</p>
+<pre class="python"><code>data.sort_values(by = &#39;k2&#39;)</code></pre>
+<pre><code>##     k1  k2
+## 2  one   1
+## 1  one   2
+## 0  one   3
+## 3  two   3
+## 4  two   3
+## 5  two   4
+## 6  two   4</code></pre>
+<p>remove duplicates</p>
+<pre class="python"><code>data.drop_duplicates()</code></pre>
+<pre><code>##     k1  k2
+## 0  one   3
+## 1  one   2
+## 2  one   1
+## 3  two   3
+## 5  two   4</code></pre>
+<p>We can even removes duplicates based on particular column. Let’s remove duplicate values from the k1 column.</p>
+<pre class="python"><code>data.drop_duplicates(subset=&#39;k1&#39;)</code></pre>
+<pre><code>##     k1  k2
+## 0  one   3
+## 3  two   3</code></pre>
 </div>

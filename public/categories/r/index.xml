@@ -17,7 +17,7 @@
       <pubDate>Thu, 27 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>/2019/06/hypothesis-testing-made-simple/</guid>
-      <description>In this post we will use a very elegant and simple approach to test any hypothesis. This approach is based on growing trend of emphasizing data and simulations instead of classical probability theory and complex statistical tests. Since We know that its hard to wrap the head around how to reject null hypotheses and interpret p-values.
+      <description>In this post we will use a very elegant and simple approach to test any hypothesis. This approach is based on growing trend of emphasizingdata and simulations instead of classical probability theory and complex statistical tests. Since We know that its hard to wrap the head around how to reject null hypotheses and interpret p-values.
 
 The new approach however has this philosphy that there is only one statistical test and that at their core, all statistical tests (be they t-tests, chi-squared tests, signed Wilcoxon rank tests, etc.</description>
     </item>
@@ -39,7 +39,7 @@ Below video discusses about gradient descent algorithm. Its good to spend some t
       
       <guid>/2019/06/softmax-function-from-scratch/</guid>
       <description>Softmax is a generalization of logistic regression which can be use for multi-class classification. The softmax function squashes the outputs of each unit to be between 0 and 1, just like a sigmoid function. But it also divides each output such that the total sum of the outputs is equal to 1.
-Softmax Function :- 
+Softmax Function :-
 Softmax is a generalization of logistic regression which can be use for multi-class classification.</description>
     </item>
     
