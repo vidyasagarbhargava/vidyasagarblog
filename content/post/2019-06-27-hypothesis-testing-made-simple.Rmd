@@ -2,14 +2,12 @@
 title: Hypothesis Testing made simple
 author: Vidyasagar Bhargava
 date: '2019-06-27'
-slug: hypothesis-testing-made-simple
 categories:
-  - R
-  - hypothesis testing
-  - simulation
+  - Blog
 tags:
-  - R
   - hypothesis testing
+  - R
+slug: hypothesis-testing-made-simple
 keywords:
   - tech
 thumbnailImagePosition: left

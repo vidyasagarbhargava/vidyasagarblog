@@ -79,7 +79,7 @@ enableEmojis = true
     weight = 5
     identifier = "tutorials"
     name = "Tutorials"
-    pre = "<i class=\"sidebar-button-icon fa fa-lg fa-archive\"></i>"
+    pre = "<i class=\"sidebar-button-icon fa fa-lg fa-graduation-cap\"></i>"
     url = "/categories/tutorials"
 
 
