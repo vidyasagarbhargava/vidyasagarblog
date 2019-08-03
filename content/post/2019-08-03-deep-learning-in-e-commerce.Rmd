@@ -1,0 +1,371 @@
+---
+title: 'Deep learning  in E-Commerce '
+author: Vidyasagar Bhargava
+date: '2019-08-03'
+slug: deep-learning-in-e-commerce
+categories:
+  - Blog
+tags:
+  - deep learning
+  - Keras
+  - Tensorflow
+keywords:
+  - tech
+thumbnailImagePosition: left
+thumbnailImage: https://i0.wp.com/clipground.com/images/old-trolley-clipart-17.jpg?w=200
+---
+
+Most of the E-commerce companies moved from inventory-led model to market place model in recent times. Mainly because in inventory led model one simply don't harness the potential of internet as platform. Where as in Market place model you empowers someone who can source an item and you let someone buy who is looking for an item. In market place model there is a buyer on one side and seller on one side and the company in middle simply manage the payment and fulfillment and catalogue along with other aspects.
+
+The market place model give opportunity to a large number of sellers to sell their products on the e-commerce website by a simple registeration process and sharing the product information like images, description etc.
+
+So with increase in number of sellers on platform the catalogue size on these market place model e-commerce companies increases and  it becomes much more difficult to maintain relevant and accurate information. I think AI can be really helpful in this. 
+
+I have worked in e-commerce companies like Snapdeal shopclues etc. Shopclues started as pure marketplace companies unlike other e-commerce companies like snapdeal, flipkart, etc. Now these companies have marketplace model where a large number of sellers want their products to be listed on website. However sometimes these sellers provide images only and no description about the product. In such case catalogue team verify these images and write description about the product manually one by one which is very time consuming and not scalable. I think with the help of AI we can classify product images and extract attribute details from the product images and also beautiful description about the product.  
+
+
+For ex- garment type :- Shirt/Tshirt  
+Color :- red/blue  
+Pattern :- solid/Stripes  
+Sleevelength :- half/full  
+
+
+-----------------------------------------------------------------------------
+
+In this blog we will use the Fashion MNIST database which contains 70,000 black and white images from 10 different categories. Images feature individual low-resolution garments (28 by 28 pixels). We'll use 60,000 images to train the network and 10,000 images to gauge how well the network has learned to classify images. 
+
+```{r setup, include=FALSE}
+library(knitr)
+library(reticulate)
+use_python("/Users/vidyasagarbhargava/anaconda/bin/python")
+#knitr::knit_engines$set(python = reticulate::eng_python)
+```
+
+
+
+```{python}
+#loading libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow import keras
+
+```
+
+You can access the Fashion MNIST database directly from TensorFlow by simply importing the data  
+
+```{python}
+fashion_mnist = keras.datasets.fashion_mnist
+(train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+```
+
+
+
+Loading the database returns four NumPy arrays:
+
+- The `train_images` and `train_labels` arrays are the training set - the data the model uses to learn
+- The model is tested against the test set, the `test_images`, and `test_labels` arrays
+
+
+The images are 28x28 Numpy arrays, where the values of each pixel range from 0 to 255. Labels are an integer vector, ranging from 0 to 9.  
+
+Each image is mapped to a single label. Since class names are not included in the database, we save here for later use in the graphics of the images:  
+```{python}
+class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
+               'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+```
+
+#### Explore the data
+Let's explore the format of the dataset before training the model. The following shows there are 60,000 images in the training set, with each image represented as 28 x 28 pixels:  
+
+```{python}
+train_images.shape
+
+```
+
+
+
+Each label is an integer between 0 and 9:
+```{python}
+train_labels
+```
+
+There are 10,000 images in the test set. Again, each image is represented as 28 x 28 pixels:
+```{python}
+test_images.shape
+```
+
+#### Data Preprocessing  
+
+Data must be preprocessed before training the network. If you look at the first image of the training data, you will see that the value of each pixel will be in the range 0 to 255:  
+
+```{python}
+plt.figure()
+plt.imshow(train_images[1])
+plt.colorbar()
+plt.grid(False)
+plt.show()
+```
+
+
+
+We scaled these values to be in the range 0 to 1 before entering the neural model. To do this, we divide the values by 255. It is important that training data and test data are processed in the same way:  
+
+
+```{python}
+train_images = train_images / 255.0
+
+test_images = test_images / 255.0
+```
+
+
+Show the first 25 images of the training data and the class it belongs to under each image. Make sure the data is in the correct format and we are ready to build and train the network.  
+
+
+```{python}
+plt.figure(figsize=(10,10))
+for i in range(25):
+    plt.subplot(5,5,i+1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.grid(False)
+    plt.imshow(train_images[i], cmap=plt.cm.binary)
+    plt.xlabel(class_names[train_labels[i]])
+plt.show()
+```
+
+
+#### Build the model  
+
+
+Building the neural network requires configuring the model layers, and then compiling the model. 
+
+
+**Configure the layers**  
+The basic block of a neural network is the layer. Layers extract representations of the data that feeds them. And hopefully, these representations have more meaning to the problem at hand.
+
+Most deep learning consists of chaining simple layers together. Most layers, like `tf.keras.layers.Dense`, have parameters that are learned during training.
+
+
+
+```{python}
+# Configure the layers
+model = keras.Sequential([
+    keras.layers.Flatten(input_shape=(28, 28)),
+    keras.layers.Dense(128, activation=tf.nn.relu),
+    keras.layers.Dense(10, activation=tf.nn.softmax)
+])
+```
+The first layer of this network `tf.keras.layers.Flatten` transforms the image format of a 2D vector (28 by 28 pixels) into a 1D vector of 28 * 28 = 784 pixels.This layer has no parameters to learn; just reformat the data.  
+
+
+
+
+Once the pixels are aligned, the mesh consists of a two-layer sequence `tf.keras.layers.Dense`. These are categorized as densely-connected , or fully-connected . The first layer Densehas 128 nodes (or neurons). The second (and last) is a 10-node softmax layer - this returns a vector with 10 probability values that sum to 1. Each node contains the value that indicates the probability that the current image belongs to one of 10 classes.  
+
+
+
+
+**Compile the model**
+
+
+Before the model is ready to train, it needs some more setup. These are added in the compile step :  
+
+-  `Cost Function` - This measures how well the model ranks during training. We want to minimize this function to fit the model in the right direction.
+-  `Optimizer` - This is used to update the model based on data and cost function.
+-  `Metrics` - These are used to monitor training and test steps. The next example uses accuracy , the fraction of images that are correctly classified.  
+
+
+
+
+
+```{python}
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+```
+
+**Train the model**  
+
+Training the neural network model requires the following steps:   
+
+1. Feed the model with training data, in this case the vectors `train_images` `train_labels`.  
+2. The model learns to associate images and labels.  
+3. We ask the model to make a prediction on the test data - in this example, the vector `test_images`. We check the predictions with the labels vector `test_labels`.  
+
+<br>
+To start training, we call the method `model.fit` - the model will be the approximate one to describe the training data:
+
+
+
+```{python}
+model.fit(train_images, train_labels, epochs=5)
+```
+
+
+As the model trains, the cost function and accuracy metrics are shown. This model achieves an accuracy of about 0.88 (or 88%) in training data.
+
+
+#### Evaluate accuracy
+
+Then compare how the model behaves in the test data:
+```{python}
+test_loss, test_acc = model.evaluate(test_images, test_labels)
+
+print('Test accuracy:', test_acc)
+```
+
+
+Apparently the accuracy of the test data is slightly lower than the accuracy of the training data. This gap between training and test accuracy is an example of overfitting . Which means when a machine learning model works worse on new data than it was trained on.  
+
+
+
+#### Make predictions  
+
+With the trained model, we can use it to make predictions about some images.  
+```{python}
+predictions = model.predict(test_images)
+```
+
+
+
+Here, the model predicted the label for each image in the training data. Let's look at the first prediction:  
+
+```{python}
+predictions[0]
+```
+
+The forecast is a vector of 10 numbers. These describe the model's "confidence" that this image belongs to each of the 10 different articles of clothing. We can see which label has the most confidence:  
+
+```{python}
+np.argmax(predictions[0])
+```
+
+So the model is more confident that the image is ankle boot , or class_names[9]. And we can check the test label to verify that it is correct:  
+  
+
+```{python}
+test_labels[0]
+```
+
+
+
+We can create the graph to observe all 10 channels.  
+```{python}
+def plot_image(i, predictions_array, true_label, img):
+  predictions_array, true_label, img = predictions_array[i], true_label[i], img[i]
+  plt.grid(False)
+  plt.xticks([])
+  plt.yticks([])
+  
+  plt.imshow(img, cmap=plt.cm.binary)
+  
+  predicted_label = np.argmax(predictions_array)
+  if predicted_label == true_label:
+    color = 'blue'
+  else:
+    color = 'red'
+  
+  plt.xlabel("{} {:2.0f}% ({})".format(class_names[predicted_label],
+                                100*np.max(predictions_array),
+                                class_names[true_label]),
+                                color=color)
+
+def plot_value_array(i, predictions_array, true_label):
+  predictions_array, true_label = predictions_array[i], true_label[i]
+  plt.grid(False)
+  plt.xticks([])
+  plt.yticks([])
+  thisplot = plt.bar(range(10), predictions_array, color="#777777")
+  plt.ylim([0, 1])
+  predicted_label = np.argmax(predictions_array)
+  
+  thisplot[predicted_label].set_color('red')
+  thisplot[true_label].set_color('blue')
+```
+
+Let's look at image 0, the predictions, and the forecast vector.  
+
+
+```{python}
+i = 0
+plt.figure(figsize=(6,3))
+plt.subplot(1,2,1)
+plot_image(i, predictions, test_labels, test_images)
+plt.subplot(1,2,2)
+plot_value_array(i, predictions,  test_labels)
+plt.show()
+```
+
+
+
+```{python}
+i = 12
+plt.figure(figsize=(6,3))
+plt.subplot(1,2,1)
+plot_image(i, predictions, test_labels, test_images)
+plt.subplot(1,2,2)
+plot_value_array(i, predictions,  test_labels)
+plt.show()
+```
+
+Let's create the graph with multiple images and their predictions. The correct forecasts are in blue and the incorrect forecasts in red. The number indicates the percentage (in 100) for the predicted label. Note that it may be wrong even when the confidence level is high.  
+
+```{python}
+# Plot the first X test images, their predicted label, and the true label
+# Color correct predictions in blue, incorrect predictions in red
+num_rows = 5
+num_cols = 3
+num_images = num_rows*num_cols
+plt.figure(figsize=(2*2*num_cols, 2*num_rows))
+for i in range(num_images):
+  plt.subplot(num_rows, 2*num_cols, 2*i+1)
+  plot_image(i, predictions, test_labels, test_images)
+  plt.subplot(num_rows, 2*num_cols, 2*i+2)
+  plot_value_array(i, predictions, test_labels)
+plt.show()
+```
+
+Finally, use the trained model to make predictions about a single image.  
+
+
+```{python}
+img = test_images[0]
+
+print(img.shape)
+```
+
+Templates tf.kerasare optimized for forecasting in a batch , or collection, of examples at once. So even though we are only using an image we have to add it to a list:  
+
+
+
+```{python}
+img = (np.expand_dims(img,0))
+
+print(img.shape)
+```
+
+
+Now make a prediction about the image:
+
+
+```{python}
+predictions_single = model.predict(img)
+
+print(predictions_single)
+```
+
+
+```{python}
+plot_value_array(0, predictions_single, test_labels)
+_ = plt.xticks(range(10), class_names, rotation=45)
+```
+
+
+
+
+```{python}
+np.argmax(predictions_single[0])
+```
+
+And as before, the model provides the label 9.

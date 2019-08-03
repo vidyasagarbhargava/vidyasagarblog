@@ -6,10 +6,19 @@
     <description>Recent content on Vidyasagar Bhargava</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 28 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 03 Aug 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Deep learning  in E-Commerce </title>
+      <link>/2019/08/deep-learning-in-e-commerce/</link>
+      <pubDate>Sat, 03 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/08/deep-learning-in-e-commerce/</guid>
+      <description>Most of the E-commerce companies moved from inventory-led model to market place model in recent times. Mainly because in inventory led model one simply don’t harness the potential of internet as platform. Where as in Market place model you empowers someone who can source an item and you let someone buy who is looking for an item. In market place model there is a buyer on one side and seller on one side and the company in middle simply manage the payment and fulfillment and catalogue along with other aspects.</description>
+    </item>
     
     <item>
       <title>Python for Data Science - Pandas</title>
