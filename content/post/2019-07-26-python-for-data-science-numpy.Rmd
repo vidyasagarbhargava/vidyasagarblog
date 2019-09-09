@@ -15,7 +15,7 @@ keywords:
 
 #### Numpy  
 
-Numpy (Short for Numerical Python) provides an efficient interface to Store and operate on arrays of number.Its somewhat looks like python's builtin `list` type but much more efficient as the arrays grows in size.  
+Numpy (Short for Numerical Python) provides an efficient interface to Store and operate on arrays of number. Its somewhat looks like python's builtin `list` type but much more efficient as the arrays grows in size.  
 
 
 ```{python} 
@@ -27,8 +27,9 @@ np.__version__
 > How numpy improves the performances as compare to base python operartions on arrays of data?  
 
 
-Python is dynamic typing language unlike C and JAVA which are statically type language that requires variable to be declare explicitly. 
+Python is dynamic typing language unlike C and JAVA which are statically type language that requires variable to be declare explicitly.  
 
+Let's take a C code example  
 
 ```
 /* C code */
@@ -38,15 +39,13 @@ for(int i=0; i<100; i++){
 }
 ```
 
-While in python the equivalent operation  could be written this way :  
+Now the equivalent operation in python can be written as :   
 
 ```{python}
 result = 0
 for i in range(100):
     result +=i
 ```
-
-
 
 
 If you notice the difference data type of each variables are explicitly declared in C while in python types are dynamically inferred. So we can assign any type of data to any variable in python.  
@@ -70,8 +69,7 @@ x = "four" //fails
 This type of flexibility makes python convenient and easy to use but this type-flexibility also points to the fact that python variables are more than just their value. They also contains the extra information about the type of value.  
 
 
-
-> 👉  The standard python implementation was written in C.
+> The standard python implementation was written in C.
 
 
 When we define an integer in python  for example `x = 100` is not just a "raw" integer. It is actually a pointer to a compound C structure which contains several values.   If we see the source code of python 3.4 or above we find that integer in python actually contains 4 pieces.  
@@ -83,9 +81,8 @@ When we define an integer in python  for example `x = 100` is not just a "raw" i
 
 
 
-> 👉  A C integer is a label for a position in memory whose bytes encode an integer value. A python integer is a pointer to a position in a memory containing
+> A C integer is a label for a position in memory whose bytes encode an integer value. A python integer is a pointer to a position in a memory containing
 all the python object information, including the bytes that contains the integer value.All this additional information information in Python types comes at additional cost.  
-
 
 
 
@@ -112,7 +109,7 @@ np.array([1,2,3,5,6])
 ```
  
 
-> 👉  NumPy is constrained to arrays that all contain the same type. If types do not match, NumPy will upcast if possible.  
+> NumPy is constrained to arrays that all contain the same type. If types do not match, NumPy will upcast if possible.  
 
 
 ```{python}
@@ -136,7 +133,6 @@ np.array([range(i, i + 3) for i in [2, 4, 6]])
 
 
 Creating Arrays from scratch using routines built into NumPy. 
-
 
 ```{python}
 # Create a length-10 integer array filled with zeros
@@ -454,6 +450,231 @@ left, right = np.hsplit(grid, [2])
 print(left)
 print(right)
 ```
+
+
+
+#### List Vs Array
+
+
+
+```{python}
+#Lets consider a list
+
+L  = [1,2,3]
+
+# Lets consider an array
+A  = np.array([1,2,3])
+```
+
+
+Lets print each element of List  
+
+```{python}
+
+
+for e in L:
+    print(e)
+```
+
+
+Lets print each element of Array
+```{python}
+for e in A:
+    print(e)
+```
+
+
+We don't see any difference here. Let's append some value in both `list`  
+
+```{python}
+L.append(4)
+L
+```
+
+
+now let's see what happens when we append value to numpy array.  
+
+```
+A.append(4)
+```
+
+> So there is no method that append in numpy array.  
+
+There is another method to append value to list.  
+```{python}
+L = L + [5]
+L
+```
+
+Lets try with numpy array  
+```
+A = A + [4, 5]
+A
+```
+
+It also doesn't work.
+
+
+Now let's try vector addition. To make simple we will add vector to itself.  
+
+```{python}
+L2 =[]
+for e in L:
+    L2.append(e + e)
+L2
+```
+
+
+How to do in numpy? 
+
+```{python}
+A + A
+```
+
+It exactly did what we wanted.  
+
+> `+` sign in list does concatenation however with numpy array it does vector addition. If you have matrix which is 2 dimensional array it will do matrix addition.  
+
+
+Lets do another operation on list and numpy array.  
+
+
+```{python}
+2*A
+```
+
+lets try with list  
+
+```{python}
+2*L
+```
+
+> If you want to multiply every element of list you have to use for loop.
+
+Now let's try element wise squaring
+
+```{python}
+L2 =[]
+for e in L:
+    L2.append(e*e)
+    
+L2
+```
+
+> L**2 will give error. Try urself.  
+
+
+Lets try with numpy   
+
+```{python}
+A**2
+```
+
+> In numpy most function work element wise.  
+
+Some operation on numpy array  
+```{python}
+np.sqrt(A)
+np.log(A)
+np.exp(A)
+```
+
+For doing above operation on list you need to use for loop and individually apply the operation. 
+
+> numpy array is more convenient in representing the vector as comparison to list. As to do operation on list we need to use for loop. You will see now how for loop in python is very slow.  
+
+
+#### Dot Product  
+Dot product is type of multiplication you can perform on vectors.  There are two definition of dot product.  
+
+1. a\cdot b\ =\ a^T\ b
+
+2. a\cdot b\ = \left|a\right|\left|b\right|\cosθ
+
+
+
+```{python}
+a = np.array([1,2])
+b = np.array([3,4])
+dot = 0
+for e, f in zip(a,b):
+    dot += e*f
+dot
+```
+
+
+another interesting operation numpy array is to multiply array together.  
+
+```{python}
+a*b
+```
+
+So this gives us element wise multiplication of two arrays.  Now we need to sum everything together.  
+
+```{python}
+np.sum(a*b)
+```
+
+> Sum function is instance method of numpy array itself.  
+
+so an alternative way is  
+```{python}
+(a*b).sum()
+```
+
+There is more convenient way in numpy  
+
+```{python}
+np.dot(a,b)
+#or
+a.dot(b)
+```
+
+
+lets calculate the cosine angle using two available formula.
+
+```{python}
+# Calculating the magnitude `a` using simple method
+
+amag = np.sqrt((a*a).sum())
+amag
+```
+
+
+numpy has function for the same it is part of `linalg` module of numpy.  
+
+```{python}
+amag = np.linalg.norm(a)
+amag
+```
+
+We get the same answer.  
+
+
+
+Lets calculate the cosine angle :-  
+
+
+```{python}
+cosangle = a.dot(b)/(np.linalg.norm(a)* np.linalg.norm(b))
+cosangle
+angle = np.arccos(cosangle)
+angle
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
