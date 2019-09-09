@@ -34,7 +34,7 @@ enableEmojis = true
 [author]
   name = "Vidyasagar Bhargava"
   bio = "Data Scientist. Machine Learning Engineer."
-  job = "Data Scientist - Wipro"
+  job = "Data Scientist"
   location = "London UK"
   # Your Gravatar email. Overwrite `author.picture` everywhere in the blog
   gravatarEmail = "vsagar19@gmail.com"
