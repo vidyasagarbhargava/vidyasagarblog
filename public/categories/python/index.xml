@@ -6,32 +6,22 @@
     <description>Recent content in python on Vidyasagar Bhargava</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 07 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 15 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/python/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Basic Python Crash Course - Part 2</title>
-      <link>/2019/07/basic-python-crash-course-part-2/</link>
-      <pubDate>Sun, 07 Jul 2019 00:00:00 +0000</pubDate>
+      <title>Basic python crash course - Part 3</title>
+      <link>/2019/11/basic-python-crash-course-part-3/</link>
+      <pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>/2019/07/basic-python-crash-course-part-2/</guid>
-      <description>Python is an “Object Oriented Programming language” or OOP for short. It is a programming paradigm which focuses on reusable pattern of code, in contrast to procedural programming, which focuses on explicit sequenced instructions. When working on complex programs, object oriented programming let you reuse code and write code that is more readable, which in turn makes it more maintainable.
-Table of contentsClasses and objectsAttributes and methods in classInstance attributeClass attributeObject inheritanceParent Vs Child class 1.</description>
-    </item>
-    
-    <item>
-      <title>Basic python crash course - Part 1</title>
-      <link>/2019/07/basic-python-crash-course/</link>
-      <pubDate>Sat, 06 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/07/basic-python-crash-course/</guid>
-      <description>Python is most popular programming language among data scientists across the world and like high level languages, python is easy to read, take less time to write and is portable. So in this post we will learn about basics of python which includes variables, numbers conditionals, functions, list, dictionary, set, expression etc…
-Table of Contents:-Variable, Numbers and Strings
-Conditionals
-Functions
-List, dictionary, Set, Expression 1.</description>
+      <guid>/2019/11/basic-python-crash-course-part-3/</guid>
+      <description> Table of Contents Role of underscore
+ Role of Asterisk
+ Decorators    1. Role of underscore(_) Underscore (_) is a unique character in python. It has special meaning in different situations.
+Lets see first situation where it automatically stores the value of last expression and can be assign value to another variable. Check below example.
+5+4 ## 9 _ ## 9 _ + 9 ## 18 a = _ a ## 18  </description>
     </item>
     
   </channel>
