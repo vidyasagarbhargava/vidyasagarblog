@@ -37,4 +37,49 @@ keywords:
 <pre class="python"><code>a = _
 a</code></pre>
 <pre><code>## 18</code></pre>
+<p>Secondly you can use it as variable in loop. Lets take an example.</p>
+<pre class="python"><code>
+for _ in range(4):
+    print(_)</code></pre>
+<pre><code>## 0
+## 1
+## 2
+## 3</code></pre>
+<p>Thirdly (_) can be used to name variables,functions and classes etc..</p>
+<ul>
+<li>Single Pre Underscore (_variable)<br />
+</li>
+<li>Single Post Underscore (variable_)<br />
+</li>
+<li>Double Pre Underscore (__variable)<br />
+</li>
+<li>Double Pre and Post Underscore (<strong>variable</strong>)</li>
+</ul>
+<blockquote>
+<p>Single Pre Underscore is used for internal use only</p>
+</blockquote>
+<pre class="python"><code>#single Pre underscore := _variable
+class SinglePreUnderScore:
+
+    def __init__(self):
+            self.name = &quot;Ram&quot;
+            self._age = 21
+
+obj = SinglePreUnderScore()
+print(obj.name)</code></pre>
+<pre><code>## Ram</code></pre>
+<pre class="python"><code>print(obj._age)</code></pre>
+<pre><code>## 21</code></pre>
+<p>You can access single underscore variable as in above case however when it effects the name that
+are imported from the module.</p>
+<p>Lets create a file name myfile</p>
+<pre class="python"><code># filename = myfile.py
+
+def func():
+    return &quot;Vidya&quot;
+
+
+def _private_func():
+    return 7</code></pre>
+<p>Now if you import all the names from myfile.py(like <code>from myfile import *</code>), python doesn’t import the names which starts with single Pre underscore. However you can avoid that error by importing normally (like <code>import myfile</code>).</p>
 </div>

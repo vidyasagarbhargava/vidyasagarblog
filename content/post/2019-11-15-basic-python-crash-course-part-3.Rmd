@@ -38,6 +38,84 @@ a
 
 
 
+Secondly you can use it as variable in loop. Lets take an example.  
+
+```{python}
+
+for _ in range(4):
+    print(_)
+```
+
+
+Thirdly (_) can be used to name variables,functions and classes etc..
+
+* Single Pre Underscore (_variable)   
+* Single Post Underscore (variable_)  
+* Double Pre Underscore (__variable)  
+* Double Pre and Post Underscore (__variable__)  
+
+
+
+> Single Pre Underscore is used for internal use only
+
+
+
+```{python}
+#single Pre underscore := _variable
+class SinglePreUnderScore:
+
+    def __init__(self):
+            self.name = "Ram"
+            self._age = 21
+
+obj = SinglePreUnderScore()
+print(obj.name)
+print(obj._age)
+
+```
+
+You can access single underscore variable as in above case however when it effects the name that
+are imported from the module.  
+
+Lets create a file name myfile
+
+```{python}
+# filename = myfile.py
+
+def func():
+    return "Vidya"
+
+
+def _private_func():
+    return 7
+```
+
+
+
+Now if you import all the names from myfile.py(like `from myfile import *`), python doesn't import the names which starts with single Pre underscore.  However you can avoid that error by importing normally (like `import myfile`).  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
