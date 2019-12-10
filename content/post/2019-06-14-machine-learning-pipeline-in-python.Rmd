@@ -37,23 +37,3 @@ In this post we will see demo of  two machine learning problems using python. We
 
 
 <script type="application/javascript" src="https://gist.github.com/vidyasagarbhargava/41f195a6a037bcdf4ffd522826c42c11.js"></script>
-
-
-
-
-
-```{r, include= FALSE}
-#Shiny app embeded
-
-
-
-
-```
-
-
-
-<iframe width="750" height="800" scrolling="no" frameborder="0" src ="https://hadley.shinyapps.io/cran-downloads/"></iframe>
-
-<img src="http://ghchart.rshah.org/vidyasagarbhargava" alt="2016rshah's Github chart" />
-
-
