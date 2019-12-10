@@ -54,4 +54,6 @@ In this post we will see demo of  two machine learning problems using python. We
 
 <iframe width="750" height="800" scrolling="no" frameborder="0" src ="https://hadley.shinyapps.io/cran-downloads/"></iframe>
 
+<img src="http://ghchart.rshah.org/vidyasagarbhargava" alt="2016rshah's Github chart" />
+
 
