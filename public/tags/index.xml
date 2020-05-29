@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Vidyasagar Bhargava</title>
@@ -10,6 +10,15 @@
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>deep learning</title>
+      <link>/tags/deep-learning/</link>
+      <pubDate>Sat, 03 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/deep-learning/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Keras</title>
@@ -30,78 +39,6 @@
     </item>
     
     <item>
-      <title>deep learning</title>
-      <link>/tags/deep-learning/</link>
-      <pubDate>Sat, 03 Aug 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/deep-learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Pandas</title>
-      <link>/tags/pandas/</link>
-      <pubDate>Sun, 28 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/pandas/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>python</title>
-      <link>/tags/python/</link>
-      <pubDate>Sun, 28 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Data Science</title>
-      <link>/tags/data-science/</link>
-      <pubDate>Fri, 26 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/data-science/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Numpy</title>
-      <link>/tags/numpy/</link>
-      <pubDate>Fri, 26 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/numpy/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>classes and objects</title>
-      <link>/tags/classes-and-objects/</link>
-      <pubDate>Sun, 07 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/classes-and-objects/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>object oriented programming</title>
-      <link>/tags/object-oriented-programming/</link>
-      <pubDate>Sun, 07 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/object-oriented-programming/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>/tags/r/</link>
-      <pubDate>Thu, 27 Jun 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/r/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>hypothesis testing</title>
       <link>/tags/hypothesis-testing/</link>
       <pubDate>Thu, 27 Jun 2019 00:00:00 +0000</pubDate>
@@ -111,11 +48,11 @@
     </item>
     
     <item>
-      <title>Softmax</title>
-      <link>/tags/softmax/</link>
-      <pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate>
+      <title>R</title>
+      <link>/tags/r/</link>
+      <pubDate>Thu, 27 Jun 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/softmax/</guid>
+      <guid>/tags/r/</guid>
       <description></description>
     </item>
     
@@ -134,6 +71,24 @@
       <pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/machine-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>/tags/python/</link>
+      <pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Softmax</title>
+      <link>/tags/softmax/</link>
+      <pubDate>Fri, 14 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/softmax/</guid>
       <description></description>
     </item>
     
